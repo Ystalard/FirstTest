@@ -17,7 +17,6 @@ namespace FirstTest.Handler
             }else{
                 IWebElement loginTab = MyDriver.FindElement(Program.settings.Login.LoginTab);
                 
-                Random random = new();
                 if(!loginTab.GetAttribute("class").Contains("active")){
                     MyDriver.MoveToElement(Program.settings.Login.LoginTab, ref act).Click().Build().Perform();
                 }
@@ -34,11 +33,13 @@ namespace FirstTest.Handler
                 GoToLastGame(ref act);
             }
 
-            
-            
-            // Save cookies
-            CookieManager cookieManager = new CookieManager(Program._driver, Program.settings.Cookies);
-            cookieManager.SaveCookies();
+            Random random = new Random();
+            long startTicks = TimeSpan.FromSeconds(1).Ticks;
+            long endTicks = TimeSpan.FromSeconds(2).Ticks;
+            long randomTicks = startTicks + (long)(random.NextDouble() * (endTicks - startTicks));
+            TimeSpan randomDuration = TimeSpan.FromTicks(randomTicks); 
+            act.Pause(randomDuration);
+            act.Build().Perform(); // wait for the page to be fully loaded
         }
 
         public static void GoToLastGame(ref Actions act){

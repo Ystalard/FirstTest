@@ -25,6 +25,8 @@ namespace FirstTest.Handler
 
         public void StartTimer()
         {
+            if(isRunning) throw new MustRestartException("Timer can't be overrided.");
+
             isRunning = true;
             lock (lockObject)
             {
@@ -36,6 +38,7 @@ namespace FirstTest.Handler
 
         public void StopTimer()
         {
+            if(!isRunning) throw new MustRestartException("Timer should not be stopped");
             isRunning = false;
             timer.Change(Timeout.Infinite, 1000); // Stop the timer
         }

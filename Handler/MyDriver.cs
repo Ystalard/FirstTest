@@ -18,6 +18,9 @@ namespace FirstTest.Handler
 
         }
 
+        /// <summary>
+        /// Use this method if you need to get the element. The driver will timeout after 20 ~ 30 seconds not finding it.
+        /// </summary>
         public static IWebElement FindElement(string cssSelector){
             //use this method if you expect to find the element
             AssertStillWorking();
@@ -54,8 +57,10 @@ namespace FirstTest.Handler
             
         }
 
+        /// <summary>
+        /// Use this method if a quick check is enough.
+        /// </summary>
         public static bool ElementExists(string cssSelector){
-            //use this method if you expect not to found the element
             AssertStillWorking();
             WebDriverWait webDriverWait = new(Program._driver, new TimeSpan(0,0,Program.random.Next(2,4))); //after 2 ~ 4 seconds we will consider the element does not exist. 
            

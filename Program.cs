@@ -70,12 +70,8 @@ class Program
 
             }
             
-            
-            // if(cookieManager.cookiedLoaded){
-            //     Connector.GoToLastGame(ref act);
-            // }else{
-                Connector.Connect(ref act); //connect and start the game
-            // }
+            Connector.Connect(ref act);
+          
             Resources resources = new(ref act);
         Start:
         try{ 
