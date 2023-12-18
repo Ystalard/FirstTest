@@ -655,6 +655,9 @@ public partial class TechnologyDetails
     [JsonProperty("energieNecessaire")]
     public string EnergieNecessaire { get; set; }
 
+    [JsonProperty("energieGainPerSatelitte")]
+    public string EnergieGainPerSatelitte { get; set; }
+
     [JsonProperty("niveau")]
     public string Niveau { get; set; }
 

@@ -184,8 +184,14 @@ public class Resources: NavigationMenu
         DevelopResource(Program.settings.Supplies.CentraleFusion, ref act);
     }
 
-    public void BuildSatteliteSolaire(ref Actions act){
-        DevelopResource(Program.settings.Supplies.SatelitteSolaire, ref act);
+    public void BuildSatteliteSolaire(int missing_energie, ref Actions act){
+        OpenDetails(Program.settings.Supplies.SatelitteSolaire, ref act);
+
+        IWebElement satelitte = MyDriver.FindElement(Program.settings.Supplies.TechnologyDetails.EnergieGainPerSatelitte);
+        int energieGainPerHour = int.Parse(satelitte.GetAttribute("data-value"));
+        int numberSatelitteToDevelop = (int)Math.Ceiling(missing_energie / (float)energieGainPerHour);
+        
+        DevelopResource(Program.settings.Supplies.SatelitteSolaire, numberSatelitteToDevelop, ref act);
     }
 
     public void BuildHangarMetal(ref Actions act){
@@ -384,15 +390,29 @@ public class Resources: NavigationMenu
         return true;         
     }
     
-    public bool HaveEnoughEnergie(string cssSelector, ref Actions act){
+    public bool HaveEnoughEnergie(string cssSelector, ref Actions act, ref int missing_energie){
         GoTo(Menu.Ressources, ref act);
         OpenDetails(cssSelector, ref act);
         
-        if(GetCurrentEnergie() - EnergieRequired() > - 3){
+        missing_energie = GetCurrentEnergie() - EnergieRequired();
+        if(missing_energie > - 3){
             return true;
         }
 
         return false;
+    }
+
+    public void DevelopEnergie(int missing_energie, ref Actions act){
+        if(GetCurrentLevel(Program.settings.Supplies.CentraleSolaire, ref act) < 16){
+            if(CanBuildResource(Program.settings.Supplies.CentraleSolaire, ref act)){
+                BuildCentraleSolaire(ref act);
+            }else{
+                WaitForResourcesAvailable(Program.settings.Supplies.CentraleSolaire, ref act);
+            }
+        }else{
+            BuildSatteliteSolaire(missing_energie, ref act);
+        }
+        
     }
 
     public void DevelopResource(string resource, ref Actions act) {
@@ -426,6 +446,30 @@ public class Resources: NavigationMenu
         
         Set_details_opened_on_resource = "";
         timer.StartTimer();
+    }
+
+    public void DevelopResource(string resource, int number, ref Actions act) {
+        GoTo(Menu.Ressources, ref act);
+        OpenDetails(resource, ref act);
+        
+
+        int numberToBuild = 0;
+        int maximum = 0;
+        if(resource == Program.settings.Supplies.SatelitteSolaire){
+            maximum = int.Parse(MyDriver.FindElement(Program.settings.Supplies.TechnologyDetails.BuildAmount).GetAttribute("max"));
+            numberToBuild = maximum > number ? number : maximum;
+        }
+
+        if(maximum == 0){
+            WaitForResourcesAvailable(resource, ref act);
+        }else{
+            TimeToBuild = GetTimeToBuild(resource) * numberToBuild;
+            MyDriver.MoveToElement(Program.settings.Supplies.TechnologyDetails.BuildAmount, ref act).Click().SendKeys(numberToBuild.ToString());
+            MyDriver.MoveToElement(Program.settings.Supplies.TechnologyDetails.Develop, ref act).Click().Build().Perform();
+
+            Set_details_opened_on_resource = "";
+            timer.StartTimer();
+        }
     }
 
     public void WaitForResourcesAvailable(string resource, ref Actions act){

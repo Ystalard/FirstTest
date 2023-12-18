@@ -102,14 +102,11 @@ class Program
                 string cssSelectorNextResourceToBuild = Resources.NextResourceToBuild(ref act);  
 
                 if(resources.CanBuildResource(cssSelectorNextResourceToBuild, ref act)){
-                    if(resources.HaveEnoughEnergie(cssSelectorNextResourceToBuild, ref act)){
+                    int missing_energie = 0;
+                    if(resources.HaveEnoughEnergie(cssSelectorNextResourceToBuild, ref act, ref missing_energie)){
                         resources.DevelopResource(cssSelectorNextResourceToBuild, ref act);
                     }else{
-                        if(resources.CanBuildResource(settings.Supplies.CentraleSolaire, ref act)){
-                            resources.DevelopResource(settings.Supplies.CentraleSolaire, ref act);
-                        }else{
-                            resources.WaitForResourcesAvailable(cssSelectorNextResourceToBuild, ref act);
-                        }
+                        resources.DevelopEnergie(missing_energie, ref act);
                     }
                 }else{
                     resources.WaitForResourcesAvailable(cssSelectorNextResourceToBuild, ref act);
