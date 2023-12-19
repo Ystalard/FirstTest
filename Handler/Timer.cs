@@ -1,10 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Threading;
-
-
 namespace FirstTest.Handler
 {
     public class Timer
@@ -64,7 +57,7 @@ namespace FirstTest.Handler
             return lastKnownTimeSpan; // Return the last known TimeSpan
         }
 
-        private void OnTimedEvent(Object? state)
+        private void OnTimedEvent(Object state)
         {
             lock (lockObject)
             {

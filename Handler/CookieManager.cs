@@ -1,7 +1,6 @@
 namespace FirstTest.Handler;
 
 using OpenQA.Selenium;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Text.Json;
 
