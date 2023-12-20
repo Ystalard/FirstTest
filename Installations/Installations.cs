@@ -1,55 +1,51 @@
 using OpenQA.Selenium.Interactions;
 using FirstTest.Handler;
 
-
 namespace FirstTest
 {
-    public class Installations: NavigationMenu
+    public class Installations: Buildable
     {
+        #region "constructor"
+        public Installations(Actions act): base(act, Menu.Installations){}
 
-        private static void BuildInstallations(string cssSelector, Actions act)
-        {
-            GoTo(Menu.Installations, act);
+        public Installations(Actions act, SharedProperties sharedProperties): base(act, Menu.Installations, sharedProperties){}
+        #endregion "constructor"
 
-            MyDriver.MoveToElement(cssSelector, act).Click().Build().Perform();
-
-            MyDriver.MoveToElement(Program.settings.Facilities.Details.Develop, act).Click().Build().Perform();
-        }
 
         #region "public"
-        public static void BuildUsineRobot(Actions act)
+        public void BuildUsineRobot()
         {
-            BuildInstallations(Program.settings.Facilities.UsineRobot, act);
+            Develop(Program.settings.Facilities.UsineRobot);
         }
 
-        public static void BuildLaboRecherche(Actions act)
+        public void BuildLaboRecherche()
         {
-            BuildInstallations(Program.settings.Facilities.LaboRecherche, act);
+            Develop(Program.settings.Facilities.LaboRecherche);
         }
 
-        public static void BuildDepotRavitaillement(Actions act)
+        public  void BuildDepotRavitaillement()
         {
-            BuildInstallations(Program.settings.Facilities.DepotRavitaillement, act);
+            Develop(Program.settings.Facilities.DepotRavitaillement);
         }
 
-        public static void BuildSiloMissible(Actions act)
+        public void BuildSiloMissible()
         {
-            BuildInstallations(Program.settings.Facilities.SiloMissible, act);
+            Develop(Program.settings.Facilities.SiloMissible);
         }
 
-        public static void BuildNanites(Actions act)
+        public void BuildNanites()
         {
-            BuildInstallations(Program.settings.Facilities.Nanites, act);
+            Develop(Program.settings.Facilities.Nanites);
         }
 
-        public static void BuildTerraformeur(Actions act)
+        public void BuildTerraformeur()
         {
-            BuildInstallations(Program.settings.Facilities.Terraformeur, act);
+            Develop(Program.settings.Facilities.Terraformeur);
         }
 
-        public static void BuildDocker(Actions act)
+        public void BuildDocker()
         {
-            BuildInstallations(Program.settings.Facilities.Docker, act);
+            Develop(Program.settings.Facilities.Docker);
         }
         #endregion
     }

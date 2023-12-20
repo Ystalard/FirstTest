@@ -71,8 +71,13 @@ class Program
             }
             
             Connector.Connect(act);
-          
-            Resources resources = new(act);
+
+            
+
+            SharedProperties sharedProperties = new SharedProperties{ Timer = new Timer(), TimeToBuild = TimeSpan.Zero};
+            Resources resources = new(act, sharedProperties);
+            Installations installations = new(act, sharedProperties);
+            Installations installations2 = new(act);
         Start:
         try{ 
             if(refresh)
@@ -93,35 +98,47 @@ class Program
                     act = new(_driver);
                     resources = new(act);
                 }
-                NavigationMenu.GoTo(NavigationMenu.Menu.Ressources, act, force: true);
+                // NavigationMenu.GoTo(NavigationMenu.Menu.Ressources, act, force: true);
                 refresh = false; //the refresh solve the issue so we reset the value;
             }
             
             while(true)
             {   
-                if(resources.IsBusy())
+                if(!resources.IsBusy())
                 {
-                    continue;
-                }
+                    string cssSelectorNextResourceToBuild = resources.NextResourceToBuild();  
 
-                string cssSelectorNextResourceToBuild = resources.NextResourceToBuild();  
-
-                if(resources.CanBuildResource(cssSelectorNextResourceToBuild))
-                {
-                    if(resources.HaveEnoughEnergie(cssSelectorNextResourceToBuild))
+                    if(resources.CanBuildResource(cssSelectorNextResourceToBuild))
                     {
-                        resources.DevelopResource(cssSelectorNextResourceToBuild);
-                    }else{
-                        if(resources.CanBuildResource(settings.Supplies.CentraleSolaire))
+                        if(resources.HaveEnoughEnergie(cssSelectorNextResourceToBuild))
                         {
-                            resources.DevelopResource(settings.Supplies.CentraleSolaire);
+                            resources.DevelopResource(cssSelectorNextResourceToBuild);
                         }else{
-                            resources.WaitForResourcesAvailable(cssSelectorNextResourceToBuild);
+                            if(resources.CanBuildResource(settings.Supplies.CentraleSolaire))
+                            {
+                                resources.DevelopResource(settings.Supplies.CentraleSolaire);
+                            }else{
+                                resources.WaitForResourcesAvailable(cssSelectorNextResourceToBuild);
+                            }
                         }
+                    }else{
+                        resources.WaitForResourcesAvailable(cssSelectorNextResourceToBuild);
                     }
-                }else{
-                    resources.WaitForResourcesAvailable(cssSelectorNextResourceToBuild);
                 }
+
+                if(!installations.IsBusy())
+                {
+                    if(installations.CanBuildElement(settings.Facilities.UsineRobot))
+                    {
+                        installations.BuildUsineRobot();
+                    }
+                }
+
+                if(!installations2.IsBusy())
+                {
+                    Console.WriteLine("it is not busy ! :)");
+                }
+                
             }
         }
         catch(Exception ex)

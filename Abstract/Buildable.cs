@@ -4,36 +4,101 @@ using OpenQA.Selenium;
 
 namespace FirstTest
 {
-    public abstract class Buildable(Actions act, NavigationMenu.Menu menu) : NavigationMenu
+    public class SharedProperties
     {
-        #region "property"
-        #region "public property"
-            
-        #endregion "public property"
+        public Handler.Timer Timer { get; set; }
+        public TimeSpan TimeToBuild { get; set; }
+    }
 
+    public abstract class Buildable: NavigationMenu
+    {
+        #region "constructor"
+        public Buildable(Actions act, NavigationMenu.Menu menu, SharedProperties sharedProperties)
+        {
+            this.SharedProperties = sharedProperties;
+            this.act = act;
+            this.menu = menu;
+            GoTo(menu, act);
+            CheckDecompteTimer(menu);
+        }
+
+        public Buildable(Actions act, NavigationMenu.Menu menu)
+        {
+            Timer = new();
+            this.act = act;
+            this.menu = menu;
+            GoTo(menu, act);
+            CheckDecompteTimer(menu);
+        }
+        #endregion "constructor"
+
+        #region "property"
         #region "private property"
-        private readonly Handler.Timer timer = new();
+        private Handler.Timer _timer;
+        private TimeSpan _TimeToBuild;
+        private Handler.Timer Timer 
+        {
+            get
+            {
+                if(SharedProperties != null){
+                    return SharedProperties.Timer;
+                }else{
+                    return _timer;
+                }
+            }
+            set
+            {
+                _timer = value;
+                if(SharedProperties != null){
+                    SharedProperties.Timer = value;
+                }
+            }
+        }
+
+        private SharedProperties SharedProperties = null;
         #endregion "private property"
 
         #region "protected property"
-        protected TimeSpan TimeToBuild {get; set;}
-        protected readonly Actions act = act;   
+        protected TimeSpan TimeToBuild 
+        {
+            get
+            {
+                if(SharedProperties != null)
+                {
+                    return SharedProperties.TimeToBuild;
+                }
+                else
+                {
+                    return _TimeToBuild;
+                }
+            }
+            set
+            {
+                _TimeToBuild = value;
+                if(SharedProperties != null)
+                {
+                    
+                    SharedProperties.TimeToBuild = value;
+                }
+            }
+        }
+        protected readonly Actions act;   
         
-        protected Menu menu = menu;
+        protected Menu menu;
             
         protected TimeSpan? RemainingTime {
             get{
-                if(timer == null)
+                if(Timer == null)
                 {
                     return null;
                 }
-                if(timer.CheckIsRunning)
+                if(Timer.CheckIsRunning)
                 {
-                    TimeSpan time = timer.GetTimeSpan();
+                    TimeSpan time = Timer.GetTimeSpan();
                 
                     if(TimeToBuild <= time)
                     {
-                        timer.StopTimer(); // the construction of the resource ends
+                        Timer.StopTimer(); // the construction of the resource ends
                         TimeToBuild = TimeSpan.Zero;
                         return TimeSpan.Zero; // no remaining time to wait.
                     }
@@ -94,25 +159,28 @@ namespace FirstTest
         /// This method requires the details tab of the element to be opened.
         /// </summary>
         /// <returns>the metal required</returns>
-        public abstract int MetalRequired();
+        public int MetalRequired()
+        {
+            return GetResourceRequired(Program.settings.Details.MetalRequired);
+        }
         
         /// <summary>
         /// This method requires the details tab of the element to be opened.
         /// </summary>
         /// <returns>the cristal required</returns>
-        public abstract int CristalRequired();
+        public int CristalRequired()
+        {
+            return GetResourceRequired(Program.settings.Details.CristalRequired);
+        }
         
         /// <summary>
         /// This method requires the details tab of the element to be opened.
         /// </summary>
         /// <returns>the deuterium required</returns>
-        public abstract int DeuteriumRequired();
-        
-        /// <summary>
-        /// This method requires the details tab of the element to be opened.
-        /// </summary>
-        /// <returns>the energie required</returns>
-        public abstract int EnergieRequired();
+        public int DeuteriumRequired()
+        {
+            return GetResourceRequired(Program.settings.Details.DeuteriumRequired);
+        }
         #endregion "required resources"
 
         /// <summary>
@@ -156,7 +224,7 @@ namespace FirstTest
             if(timeToWait != TimeSpan.Zero)
             {
                 TimeToBuild = timeToWait;
-                timer.StartTimer();
+                Timer.StartTimer();
             }
         }
 
@@ -165,7 +233,17 @@ namespace FirstTest
         /// </summary>
         /// <param name="cssSelector">the css selector of the element to check</param>
         /// <returns>true if you have the resources, false otherwise</returns>
-        public abstract bool HaveResourceToBuild(string cssSelector);
+        public bool HaveResourceToBuild(string cssSelector)
+        {
+            OpenDetails(cssSelector);
+        
+            if(MetalRequired() <= GetCurrentMetal() && CristalRequired() <= GetCurrentCristal())
+            {
+                return true;
+            }
+
+            return false;
+        }
 
         /// <summary>
         /// Inform about the availability of the builder.
@@ -175,7 +253,7 @@ namespace FirstTest
         public bool IsBusy()
         {
             TimeSpan? remainingTime = RemainingTime;
-            if (remainingTime != null && timer.CheckIsRunning)
+            if (remainingTime != null && Timer.CheckIsRunning)
             {
                 return true;
             }
@@ -226,10 +304,74 @@ namespace FirstTest
                 else if (cssSelector == Program.settings.Supplies.CentraleSolaire)
                 {
                     if(!MyDriver.ElementExists(Program.settings.Supplies.DevelopCentralSolaire))
-                {
+                    {
                         return false;
                     }
                     buildElement = MyDriver.FindElement(Program.settings.Supplies.DevelopCentralSolaire);
+                }
+                else if( cssSelector == Program.settings.Facilities.UsineRobot)
+                {
+                    if(!MyDriver.ElementExists(Program.settings.Facilities.DevelopUsineRobot))
+                    {
+                        return false;
+                    }
+                    buildElement = MyDriver.FindElement(Program.settings.Facilities.DevelopUsineRobot);
+                }
+                else if( cssSelector == Program.settings.Facilities.ChantierSpatial)
+                {
+                    if(!MyDriver.ElementExists(Program.settings.Facilities.DevelopChantierSpatial))
+                    {
+                        return false;
+                    }
+                    buildElement = MyDriver.FindElement(Program.settings.Facilities.DevelopChantierSpatial);
+                }
+                else if( cssSelector == Program.settings.Facilities.LaboRecherche)
+                {
+                    if(!MyDriver.ElementExists(Program.settings.Facilities.DevelopLaboRecherche))
+                    {
+                        return false;
+                    }
+                    buildElement = MyDriver.FindElement(Program.settings.Facilities.DevelopLaboRecherche);
+                }
+                else if( cssSelector == Program.settings.Facilities.DepotRavitaillement)
+                {
+                    if(!MyDriver.ElementExists(Program.settings.Facilities.DevelopDepotRavitaillement))
+                    {
+                        return false;
+                    }
+                    buildElement = MyDriver.FindElement(Program.settings.Facilities.DevelopDepotRavitaillement);
+                }
+                else if( cssSelector == Program.settings.Facilities.SiloMissible)
+                {
+                    if(!MyDriver.ElementExists(Program.settings.Facilities.DevelopSiloMissible))
+                    {
+                        return false;
+                    }
+                    buildElement = MyDriver.FindElement(Program.settings.Facilities.DevelopSiloMissible);
+                }
+                else if( cssSelector == Program.settings.Facilities.Nanites)
+                {
+                    if(!MyDriver.ElementExists(Program.settings.Facilities.DevelopNanites))
+                    {
+                        return false;
+                    }
+                    buildElement = MyDriver.FindElement(Program.settings.Facilities.DevelopNanites);
+                }
+                else if( cssSelector == Program.settings.Facilities.Terraformeur)
+                {
+                    if(!MyDriver.ElementExists(Program.settings.Facilities.DevelopTerraformeur))
+                    {
+                        return false;
+                    }
+                    buildElement = MyDriver.FindElement(Program.settings.Facilities.DevelopTerraformeur);
+                }
+                else if( cssSelector == Program.settings.Facilities.Docker)
+                {
+                    if(!MyDriver.ElementExists(Program.settings.Facilities.DevelopDocker))
+                    {
+                        return false;
+                    }
+                    buildElement = MyDriver.FindElement(Program.settings.Facilities.DevelopDocker);
                 }
                 else
                 {
@@ -249,6 +391,11 @@ namespace FirstTest
         #region "protected method"
         protected void CheckDecompteTimer(Menu menu)
         {
+            if(Timer.CheckIsRunning)
+            {
+                // the timer is already running. No need to check if it needs to be started.
+                return;
+            }
             GoTo(menu, act);
 
             // we want to be sure everything is loaded before checking the DecompteTempsDeConstruction element. 
@@ -259,7 +406,7 @@ namespace FirstTest
             {
                 IWebElement resourceInConstruction = MyDriver.FindElement(Program.settings.Supplies.DecompteTempsDeConstruction);
                 TimeToBuild = Iso8601Duration.Parse(resourceInConstruction.GetAttribute("datetime"));
-                timer.StartTimer();
+                Timer.StartTimer();
             }
         }
 
@@ -289,7 +436,10 @@ namespace FirstTest
         /// </summary>
         /// <param name="cssSelector"></param>
         /// <returns>The time a construction must take.</returns>
-        protected abstract TimeSpan GetTimeToBuild();
+        protected TimeSpan GetTimeToBuild()
+        {  
+            return GetTimeToBuild(Program.settings.Details.TempsProduction);
+        }
 
         /// <summary>
         ///  
@@ -315,24 +465,17 @@ namespace FirstTest
         }
 
         /// <summary>
-        /// In the subclass, this method must call OpenDetails(string element, string closeButton) and define the relevant element and closebutton css selectors.
-        /// </summary>
-        /// <param name="element"></param>
-        protected abstract void OpenDetails(string element);
-
-        /// <summary>
         /// Open the details tab of the element
         /// </summary>
-        /// <param name="element">css selector of the element</param>
-        /// <param name="closeButton">css selector of the close button which closes the details tab</param>
-        protected void OpenDetails(string element, string closeButton)
-        {
+        /// <param name="element">cssSelector of the element to check</param>
+        protected void OpenDetails(string element)
+        { 
             //when the details tab is opened there is a closebutton visible.
-            if(MyDriver.ElementExists(Program.settings.Supplies.TechnologyDetails.CloseButton))
+            if(MyDriver.ElementExists(Program.settings.Details.CloseButton))
             {
                 //close the details as it needs to be refreshed, the wrong details might be opened.
-                MyDriver.MoveToElement(Program.settings.Supplies.TechnologyDetails.CloseButton, act).Click().Build().Perform();
-                MyDriver.AssertElementDisappear(Program.settings.Supplies.TechnologyDetails.CloseButton);
+                MyDriver.MoveToElement(Program.settings.Details.CloseButton, act).Click().Build().Perform();
+                MyDriver.AssertElementDisappear(Program.settings.Details.CloseButton);
             }
 
             // open the details by clicking on the resource.
@@ -340,14 +483,14 @@ namespace FirstTest
             act.Pause(TimeSpan.FromSeconds(2 + Program.random.NextDouble())).Build().Perform();
             act.Pause(TimeSpan.FromSeconds(1 + Program.random.NextDouble())).Build().Perform();
 
-            if(!Details_opened(closeButton))
+            if(!Details_opened(Program.settings.Details.CloseButton))
             {
                 GoTo(Menu.Ressources, act);//re-load the resources page by clicking on the resources nav button.
                 MyDriver.MoveToElement(element, act).Click().Build().Perform();// open the details by clicking on the resource.
 
                 act.Pause(TimeSpan.FromSeconds(2 + Program.random.NextDouble())).Build().Perform();
 
-                if(!Details_opened(closeButton))
+                if(!Details_opened(Program.settings.Details.CloseButton))
                 {
                     throw new MustRestartException();
                 }
@@ -358,6 +501,8 @@ namespace FirstTest
                 throw new MustRestartException();
             }
         }
+
+       
 
         /// <summary>
         /// Must click on the button which would develop the element chosen.
@@ -386,6 +531,38 @@ namespace FirstTest
             {
                 buildElement = MyDriver.FindElement(Program.settings.Supplies.DevelopCentralSolaire);
             }
+            else if ( cssSelectorToDevelop == Program.settings.Facilities.UsineRobot)
+            {
+                buildElement = MyDriver.FindElement(Program.settings.Facilities.DevelopUsineRobot);
+            }
+            else if ( cssSelectorToDevelop == Program.settings.Facilities.ChantierSpatial)
+            {
+                buildElement = MyDriver.FindElement(Program.settings.Facilities.DevelopChantierSpatial);
+            }
+            else if ( cssSelectorToDevelop == Program.settings.Facilities.LaboRecherche)
+            {
+                buildElement = MyDriver.FindElement(Program.settings.Facilities.DevelopLaboRecherche);
+            }
+            else if ( cssSelectorToDevelop == Program.settings.Facilities.DepotRavitaillement)
+            {
+                buildElement = MyDriver.FindElement(Program.settings.Facilities.DevelopDepotRavitaillement);
+            }
+            else if ( cssSelectorToDevelop == Program.settings.Facilities.SiloMissible)
+            {
+                buildElement = MyDriver.FindElement(Program.settings.Facilities.DevelopSiloMissible);
+            }
+            else if ( cssSelectorToDevelop == Program.settings.Facilities.Nanites)
+            {
+                buildElement = MyDriver.FindElement(Program.settings.Facilities.DevelopNanites);
+            }
+            else if ( cssSelectorToDevelop == Program.settings.Facilities.Terraformeur)
+            {
+                buildElement = MyDriver.FindElement(Program.settings.Facilities.DevelopTerraformeur);
+            }
+            else if ( cssSelectorToDevelop == Program.settings.Facilities.Docker)
+            {
+                buildElement = MyDriver.FindElement(Program.settings.Facilities.DevelopDocker);
+            }
             else
             {
                 throw new Handler.NotImplementedException();
@@ -393,7 +570,7 @@ namespace FirstTest
 
             MyDriver.MoveToElement(buildElement, act).Click().Build().Perform();
             
-            timer.StartTimer();
+            Timer.StartTimer();
         }            
         #endregion "protected method"
         

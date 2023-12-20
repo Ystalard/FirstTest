@@ -6,26 +6,12 @@ using OpenQA.Selenium.Interactions;
 public class Resources: Buildable
 {
     #region  "constructor"
-    public Resources(Actions act): base(act, Menu.Ressources)
-    {
-        GoTo(menu, act);
-        CheckDecompteTimer(menu);
-    }
-    #endregion
+    public Resources(Actions act): base(act, Menu.Ressources){}
+
+    public Resources(Actions act, SharedProperties sharedProperties): base(act, Menu.Ressources, sharedProperties){}
+    #endregion "constructor"
 
     #region "method"
-    #region "private method"
-    
-    protected override TimeSpan GetTimeToBuild()
-    {  
-        return GetTimeToBuild(Program.settings.Supplies.TechnologyDetails.TempsProduction);
-    }
-
-    protected override void OpenDetails(string ressource_to_check)
-    {
-        OpenDetails(ressource_to_check, Program.settings.Supplies.TechnologyDetails.CloseButton);
-    }
-    #endregion
 
     #region "public method"
     #region "Develop"
@@ -78,21 +64,7 @@ public class Resources: Buildable
         Develop(Program.settings.Supplies.Foreuse);
     }
 
-    public override int MetalRequired()
-    {
-        return GetResourceRequired(Program.settings.Supplies.TechnologyDetails.MetalRequested);
-    }
-
-    public override int CristalRequired()
-    {
-        return GetResourceRequired(Program.settings.Supplies.TechnologyDetails.CristalRequired);
-    }
-    public override int DeuteriumRequired()
-    {
-        return GetResourceRequired(Program.settings.Supplies.TechnologyDetails.DeuteriumRequired);
-    }
-
-    public override int EnergieRequired()
+    public int EnergieRequired()
     {
         return GetResourceRequired(Program.settings.Supplies.TechnologyDetails.EnergieNecessaire);
     }
@@ -191,18 +163,6 @@ public class Resources: Buildable
         }
 
         return  Program.settings.Supplies.MineCristal;
-    }
-
-    public override bool HaveResourceToBuild(string cssSelector)
-    {
-        OpenDetails(cssSelector);
-        
-        if(MetalRequired() <= GetCurrentMetal() && CristalRequired() <= GetCurrentCristal())
-        {
-            return true;
-        }
-
-        return false;
     }
 
     public bool CanBuildResource(string cssSelector)
