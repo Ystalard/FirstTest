@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium;
 using FirstTest.Handler;
@@ -10,42 +6,54 @@ namespace FirstTest
 {
     public class ChantierSpatial: NavigationMenu
     {
-        private static void BuildVaisseau(string cssSelector, int number, ref Actions act){
-            GoTo(Menu.ChantierSpatial, ref act);
+        private Actions act;
+
+        public ChantierSpatial(Actions act)
+        {
+            this.act = act;
+        }
+        private void BuildVaisseau(string cssSelector, int number)
+        {
+            GoTo(Menu.ChantierSpatial, act);
            
-            MyDriver.MoveToElement(cssSelector, ref act).Click().Build().Perform();
+            MyDriver.MoveToElement(cssSelector, act).Click().Build().Perform();
             
           
-            SendKeysAmount(number, ref act);
+            SendKeysAmount(number);
 
-            MyDriver.MoveToElement(Program.settings.ChantierSpatial.Details.Develop, ref act).Click();
+            MyDriver.MoveToElement(Program.settings.ChantierSpatial.Details.Develop, act).Click();
             act.Build().Perform();
         }
 
-        private static Actions SendKeysAmount(int number, ref Actions act){
+        private Actions SendKeysAmount(int number)
+        {
             IWebElement amount = Handler.MyDriver.FindElement(Program.settings.ChantierSpatial.Details.BuildAmount);
             int maximum = int.Parse(amount.GetAttribute("max"));
             number = maximum < number ? maximum : number;
 
-            MyDriver.MoveToElement(Program.settings.ChantierSpatial.Details.BuildAmount, ref act).Click().SendKeys(number.ToString());
+            MyDriver.MoveToElement(Program.settings.ChantierSpatial.Details.BuildAmount, act).Click().SendKeys(number.ToString());
             return act;
         }
 
         #region "public"
-        public static void BuildVaisseauColonisation(int number, ref Actions act){
-            BuildVaisseau(Program.settings.ChantierSpatial.VaisseauColonisation,number, ref act);
+        public void BuildVaisseauColonisation(int number)
+        {
+            BuildVaisseau(Program.settings.ChantierSpatial.VaisseauColonisation,number);
         }
 
-        public static void BuildPetitTransporteur(int number, ref Actions act){
-            BuildVaisseau(Program.settings.ChantierSpatial.PetitTransporteur,number, ref act);
+        public void BuildPetitTransporteur(int number)
+        {
+            BuildVaisseau(Program.settings.ChantierSpatial.PetitTransporteur,number);
         }
 
-        public static void BuildGrandTransporteur(int number, ref Actions act){
-            BuildVaisseau(Program.settings.ChantierSpatial.GrandTransporteur, number, ref act);
+        public void BuildGrandTransporteur(int number)
+        {
+            BuildVaisseau(Program.settings.ChantierSpatial.GrandTransporteur, number);
         }
 
-        public static void BuildChasseurLeger(int number, ref Actions act){
-            BuildVaisseau(Program.settings.ChantierSpatial.ChasseurLeger, number, ref act);
+        public void BuildChasseurLeger(int number)
+        {
+            BuildVaisseau(Program.settings.ChantierSpatial.ChasseurLeger, number);
         }
         #endregion
     }

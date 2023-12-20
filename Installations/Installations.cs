@@ -1,52 +1,51 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using OpenQA.Selenium.Interactions;
-using OpenQA.Selenium;
 using FirstTest.Handler;
-
 
 namespace FirstTest
 {
-    public class Installations: NavigationMenu
+    public class Installations: Buildable
     {
+        #region "constructor"
+        public Installations(Actions act): base(act, Menu.Installations){}
 
-        private static void BuildInstallations(string cssSelector, ref Actions act){
-            GoTo(Menu.Installations, ref act);
+        public Installations(Actions act, SharedProperties sharedProperties): base(act, Menu.Installations, sharedProperties){}
+        #endregion "constructor"
 
-            MyDriver.MoveToElement(cssSelector, ref act).Click().Build().Perform();
-
-            MyDriver.MoveToElement(Program.settings.Facilities.Details.Develop, ref act).Click().Build().Perform();
-        }
 
         #region "public"
-        public static void BuildUsineRobot(ref Actions act){
-            BuildInstallations(Program.settings.Facilities.UsineRobot, ref act);
+        public void BuildUsineRobot()
+        {
+            Develop(Program.settings.Facilities.UsineRobot);
         }
 
-        public static void BuildLaboRecherche(ref Actions act){
-            BuildInstallations(Program.settings.Facilities.LaboRecherche, ref act);
+        public void BuildLaboRecherche()
+        {
+            Develop(Program.settings.Facilities.LaboRecherche);
         }
 
-        public static void BuildDepotRavitaillement(ref Actions act){
-            BuildInstallations(Program.settings.Facilities.DepotRavitaillement, ref act);
+        public  void BuildDepotRavitaillement()
+        {
+            Develop(Program.settings.Facilities.DepotRavitaillement);
         }
 
-        public static void BuildSiloMissible(ref Actions act){
-            BuildInstallations(Program.settings.Facilities.SiloMissible, ref act);
+        public void BuildSiloMissible()
+        {
+            Develop(Program.settings.Facilities.SiloMissible);
         }
 
-        public static void BuildNanites(ref Actions act){
-            BuildInstallations(Program.settings.Facilities.Nanites, ref act);
+        public void BuildNanites()
+        {
+            Develop(Program.settings.Facilities.Nanites);
         }
 
-        public static void BuildTerraformeur(ref Actions act){
-            BuildInstallations(Program.settings.Facilities.Terraformeur, ref act);
+        public void BuildTerraformeur()
+        {
+            Develop(Program.settings.Facilities.Terraformeur);
         }
 
-        public static void BuildDocker(ref Actions act){
-            BuildInstallations(Program.settings.Facilities.Docker, ref act);
+        public void BuildDocker()
+        {
+            Develop(Program.settings.Facilities.Docker);
         }
         #endregion
     }

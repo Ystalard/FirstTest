@@ -4,15 +4,13 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Interactions;
 using System;
-using System.Threading;
 using Microsoft.Extensions.Configuration;
 using FirstTest.Handler;
 using System.Diagnostics;
-using System.Runtime.Versioning;
 
 
 
-#pragma warning disable CS8618
+
 class Program
 {
     public static IWebDriver _driver;
@@ -66,19 +64,28 @@ class Program
                 act.MoveToElement(_driver.FindElement(By.CssSelector(settings.Cookie.CookieManageButtonSelector))).Click().Build().Perform();
             
                 act.MoveToElement(_driver.FindElement(By.CssSelector(settings.Cookie.CookieRefuseButtonSelector))).Click().Build().Perform();
-            }finally{
+            }
+            finally
+            {
 
             }
             
-            Connector.Connect(ref act);
-          
-            Resources resources = new(ref act);
+            Connector.Connect(act);
+
+            
+
+            SharedProperties sharedProperties = new SharedProperties{ Timer = new Timer(), TimeToBuild = TimeSpan.Zero};
+            Resources resources = new(act, sharedProperties);
+            Installations installations = new(act, sharedProperties);
+            Installations installations2 = new(act);
         Start:
         try{ 
-            if(refresh){
+            if(refresh)
+            {
                 bool initializeResources = true;
-                if(MyDriver.ElementExists(settings.Login.LastGame)){
-                    Connector.GoToLastGame(ref act);
+                if(MyDriver.ElementExists(settings.Login.LastGame))
+                {
+                    Connector.GoToLastGame(act);
                 }
                 else
                 {
@@ -86,47 +93,74 @@ class Program
                     initializeResources = false;
                 }
 
-                if(initializeResources){
+                if(initializeResources)
+                {
                     act = new(_driver);
-                    resources = new(ref act);
+                    resources = new(act);
                 }
-                NavigationMenu.GoTo(NavigationMenu.Menu.Ressources, ref act, force: true);
+                // NavigationMenu.GoTo(NavigationMenu.Menu.Ressources, act, force: true);
                 refresh = false; //the refresh solve the issue so we reset the value;
             }
             
-            while(true){   
-                if(resources.IsBusy(ref act)){
-                    continue;
-                }
+            while(true)
+            {   
+                if(!resources.IsBusy())
+                {
+                    string cssSelectorNextResourceToBuild = resources.NextResourceToBuild();  
 
-                string cssSelectorNextResourceToBuild = Resources.NextResourceToBuild(ref act);  
-
-                if(resources.CanBuildResource(cssSelectorNextResourceToBuild, ref act)){
-                    int missing_energie = 0;
-                    if(resources.HaveEnoughEnergie(cssSelectorNextResourceToBuild, ref act, ref missing_energie)){
-                        resources.DevelopResource(cssSelectorNextResourceToBuild, ref act);
+                    if(resources.CanBuildResource(cssSelectorNextResourceToBuild))
+                    {
+                        int missing_energie = 0;
+                        if(resources.HaveEnoughEnergie(cssSelectorNextResourceToBuild, ref missing_energie))
+                        {
+                            resources.DevelopResource(cssSelectorNextResourceToBuild);
+                        }else{
+                            if(resources.CanBuildResource(settings.Supplies.CentraleSolaire))
+                            {
+                                resources.DevelopEnergie(missing_energie);
+                            }else{
+                                resources.WaitForResourcesAvailable(cssSelectorNextResourceToBuild);
+                            }
+                        }
                     }else{
-                        resources.DevelopEnergie(missing_energie, ref act);
+                        resources.WaitForResourcesAvailable(cssSelectorNextResourceToBuild);
                     }
-                }else{
-                    resources.WaitForResourcesAvailable(cssSelectorNextResourceToBuild, ref act);
                 }
+
+                if(!installations.IsBusy())
+                {
+                    if(installations.CanBuildElement(settings.Facilities.UsineRobot))
+                    {
+                        installations.BuildUsineRobot();
+                    }
+                }
+
+                if(!installations2.IsBusy())
+                {
+                    Console.WriteLine("it is not busy ! :)");
+                }
+                
             }
         }
-        catch(Exception ex){            
+        catch(Exception ex)
+        {            
             act = new(_driver);
-            if(!refresh){
+            if(!refresh)
+            {
                 _driver?.Navigate().Refresh();
                 refresh = true;
                 goto Start;
-            }else{
+            }
+            else
+            {
                 // refresh did not succeed
 
                 Debug.WriteLine($"message: {ex.Message}");
                 Debug.WriteLine($"stack trace: {ex.StackTrace}");
 
                 int InnerExceptionCount = 0;
-                while(ex.InnerException != null){
+                while(ex.InnerException != null)
+                {
                     Debug.WriteLine($"InnerException {InnerExceptionCount}: {ex.InnerException?.ToString()}");
                     InnerExceptionCount++;
                     if(ex.InnerException != null)
@@ -138,4 +172,3 @@ class Program
         }
     }
 }
-#pragma warning restore CS8618

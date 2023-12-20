@@ -1,12 +1,8 @@
 namespace FirstTest;
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
-using OpenQA.Selenium.Support.UI;
 using Handler;
 
 
@@ -33,9 +29,11 @@ public class NavigationMenu
         Undefined
     }
 
-    public static void GoTo(Menu menu, ref Actions act, bool force = false){
+    public static void GoTo(Menu menu, Actions act, bool force = false)
+    {
         //force: when we want to refresh the resource wrapper.
-        if(!force && IsOpened == menu){
+        if(!force && IsOpened == menu)
+        {
             return;
         }
         
@@ -60,8 +58,10 @@ public class NavigationMenu
             _ => Program.settings.Nav.VueEnsemble,
         };
 
-        if(!force){
-            if (Opened_on(target_menu)){
+        if(!force)
+        {
+            if (Opened_on(target_menu))
+            {
                 IsOpened = menu;
                 return;
             }  
@@ -69,9 +69,10 @@ public class NavigationMenu
             IsOpened = Menu.Undefined;
         }
 
-        MyDriver.MoveToElement(target_menu, ref act).Click().Build().Perform();
+        MyDriver.MoveToElement(target_menu, act).Click().Build().Perform();
         int count=0;
-        while(!Opened_on(target_menu) || count > 200){ //in order to wait the lag
+        while(!Opened_on(target_menu) || count > 200)
+        { //in order to wait the lag
             count++;
         };
 
@@ -83,11 +84,14 @@ public class NavigationMenu
         return;
     }
 
-    private static bool Opened_on(string cssSelector){
+    private static bool Opened_on(string cssSelector)
+    {
         try{
             IWebElement element = MyDriver.FindElement(cssSelector);
             return element.GetAttribute("class").Contains("selected");
-        }catch(Exception){
+        }
+        catch(Exception)
+        {
             throw new MustRestartException();
         }
         

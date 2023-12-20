@@ -1,0 +1,3 @@
+On vscode
+-- go to extensions and install c#, nuget package manage
+-- in terminal run: dotnet restore --configfile .\nuget.config

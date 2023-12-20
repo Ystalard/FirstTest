@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace FirstTest.Handler
 {
     public class MustRestartException: Exception
@@ -12,12 +7,12 @@ namespace FirstTest.Handler
             
         }
 
-        public MustRestartException(string? message) : base(message)
+        public MustRestartException(string message) : base(message)
         {
             
         }
 
-        public MustRestartException(string? message, Exception? innerException) : base(message,innerException)
+        public MustRestartException(string message, Exception innerException) : base(message,innerException)
         {
 
         }
