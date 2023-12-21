@@ -38,7 +38,7 @@ public class Resources: Buildable
 
     public void BuildSatellite(int number)
     {
-        DevelopResource(Program.settings.Supplies.SatelitteSolaire, number);
+        Develop(Program.settings.Supplies.SatelitteSolaire, number);
     }
 
     public void BuildCentraleFusion()
@@ -70,7 +70,7 @@ public class Resources: Buildable
     }
 
     public void DevelopEnergie(int missing_energie){
-        if(GetCurrentLevel(Program.settings.Supplies.CentraleSolaire) < int.Parse(Program.settings.Supplies.LvlMaxCentralSolaire)){
+        if(GetCurrentLevel(Program.settings.Supplies.LevelCentralSolaire) < int.Parse(Program.settings.Supplies.LvlMaxCentralSolaire)){
             if(CanBuildResource(Program.settings.Supplies.CentraleSolaire)){
                 BuildCentraleSolaire();
             }else{

@@ -78,6 +78,7 @@ class Program
             Resources resources = new(act, sharedProperties);
             Installations installations = new(act, sharedProperties);
             Recherche recherche = new(act);
+            ChantierSpatial chantierSpatial = new(act);
         Start:
         try{ 
             if(refresh)
@@ -104,28 +105,59 @@ class Program
             
             while(true)
             {   
+                if(!chantierSpatial.IsBusy())
+                {
+                    if(chantierSpatial.CanBuildChasseurLeger() && chantierSpatial.AmountChasseurLeger() < 1)
+                    {
+                        chantierSpatial.BuildChasseurLeger(1);
+                    }
+                }
+
                 if(!recherche.IsBusy())
                 {
-                    NavigationMenu.GoTo(NavigationMenu.Menu.Recherche, act);
-                    if(recherche.CanBuildTechnoEnergie())
+                    if(recherche.CanBuildTechnoEnergie() && recherche.GetLevelTechnoEnergie() < 1)
                     {
                         recherche.BuildTechnoEnergie();
                     }
-                    else
+                    else if(recherche.CanBuildReacteurCombustion() && recherche.GetLevelReacteurCombustion() < 1)
+                    {
+                        recherche.BuildReacteurCombustion();
+                    }
+                    else if(recherche.GetLevelTechnoEnergie() < 1)
                     {
                         recherche.WaitForResourcesAvailable(settings.Recherche.TechnoEnergie);
+                    }
+                    else if(recherche.GetLevelReacteurCombustion() < 1)
+                    {
+                        recherche.WaitForResourcesAvailable(settings.Recherche.ReacteurCombustion);
                     }
                 }
 
                 if(!installations.IsBusy())
                 {
-                    NavigationMenu.GoTo(NavigationMenu.Menu.Installations, act);
-                    if(installations.CanBuildLaboRecherche()){
-                        installations.BuildLaboRecherche();
-                    }
-                    else if(installations.CanBuildUsineRobot())
+                    if(installations.CanBuildUsineRobot() && installations.GetLevelUsineRobot() < 2)
                     {
                         installations.BuildUsineRobot();
+                    }
+                    else if(installations.CanBuildChantierSpatial() && installations.GetLevelChantierSpatial() < 1)
+                    {
+                        installations.BuildChantierSpatiale();
+                    }
+                    else if(installations.CanBuildLaboRecherche() && installations.GetLevelLaboRecherche() < 1)
+                    {
+                        installations.BuildLaboRecherche();
+                    }
+                    else if(installations.GetLevelUsineRobot() < 2)
+                    {
+                        installations.WaitForResourcesAvailable(settings.Facilities.UsineRobot);
+                    }
+                    else if(installations.GetLevelChantierSpatial() < 1)
+                    {
+                        installations.WaitForResourcesAvailable(settings.Facilities.ChantierSpatial);
+                    }
+                    else if(installations.GetLevelLaboRecherche() < 1)
+                    {
+                        installations.WaitForResourcesAvailable(settings.Facilities.LaboRecherche);
                     }
                 }   
 

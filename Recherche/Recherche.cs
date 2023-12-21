@@ -168,6 +168,71 @@ namespace FirstTest
         {
             return CanBuildElement(Program.settings.Recherche.TechnoProtectionVaisseaux);
         }
+
+        public int GetLevelTechnoEnergie()
+        {
+            return GetCurrentLevel(Program.settings.Recherche.LevelTechnoEnergie);
+        }
+        public int GetLevelTechnoLaser()
+        {
+            return GetCurrentLevel(Program.settings.Recherche.LevelTechnoLaser);
+        }
+        public int GetLevelTechnoIons()
+        {
+            return GetCurrentLevel(Program.settings.Recherche.LevelTechnoIons);
+        }
+        public int GetLevelTechnoHyperespace()
+        {
+            return GetCurrentLevel(Program.settings.Recherche.LevelTechnoHyperespace);
+        }
+        public int GetLevelTechnoPlasma()
+        {
+            return GetCurrentLevel(Program.settings.Recherche.LevelTechnoPlasma);
+        }
+        public int GetLevelReacteurCombustion()
+        {
+            return GetCurrentLevel(Program.settings.Recherche.LevelReacteurCombustion);
+        }
+        public int GetLevelReacteurImpulsion()
+        {
+            return GetCurrentLevel(Program.settings.Recherche.LevelReacteurImpulsion);
+        }
+        public int GetLevelPropulsionHyperespace()
+        {
+            return GetCurrentLevel(Program.settings.Recherche.LevelPropulsionHyperespace);
+        }
+        public int GetLevelTechnoEspionnage()
+        {
+            return GetCurrentLevel(Program.settings.Recherche.LevelTechnoEspionnage);
+        }
+        public int GetLevelTechnoOrdinateur()
+        {
+            return GetCurrentLevel(Program.settings.Recherche.LevelTechnoOrdinateur);
+        }
+        public int GetLevelTechnoAstro()
+        {
+            return GetCurrentLevel(Program.settings.Recherche.LevelTechnoAstro);
+        }
+        public int GetLevelReseauRecherche()
+        {
+            return GetCurrentLevel(Program.settings.Recherche.LevelReseauRecherche);
+        }
+        public int GetLevelTechnoGraviton()
+        {
+            return GetCurrentLevel(Program.settings.Recherche.LevelTechnoGraviton);
+        }
+        public int GetLevelTechnoArme()
+        {
+            return GetCurrentLevel(Program.settings.Recherche.LevelTechnoArme);
+        }
+        public int GetLevelTechnoBouclier()
+        {
+            return GetCurrentLevel(Program.settings.Recherche.LevelTechnoBouclier);
+        }
+        public int GetLevelTechnoProtectionVaisseaux()
+        {
+            return GetCurrentLevel(Program.settings.Recherche.LevelTechnoProtectionVaisseaux);
+        }
         #endregion
         #endregion
     }
