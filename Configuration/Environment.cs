@@ -719,6 +719,9 @@ public partial class Supplies
     [JsonProperty("developCentralSolaire")]
     public string DevelopCentralSolaire { get; set; }
 
+    [JsonProperty("lvlMaxCentralSolaire")]
+    public string LvlMaxCentralSolaire { get; set; }
+
     [JsonProperty("centraleFusion")]
     public string CentraleFusion { get; set; }
 
