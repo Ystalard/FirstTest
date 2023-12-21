@@ -373,6 +373,134 @@ namespace FirstTest
                     }
                     buildElement = MyDriver.FindElement(Program.settings.Facilities.DevelopDocker);
                 }
+                else if (cssSelector == Program.settings.Recherche.TechnoEnergie)
+                {
+                    if(!MyDriver.ElementExists(Program.settings.Recherche.DevelopTechnoEnergie))
+                    {
+                        return false;
+                    }
+                    buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopTechnoEnergie);
+                }
+                else if (cssSelector == Program.settings.Recherche.TechnoLaser)
+                {
+                    if(!MyDriver.ElementExists(Program.settings.Recherche.DevelopTechnoLaser))
+                    {
+                        return false;
+                    }
+                    buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopTechnoLaser);
+                }
+                else if (cssSelector == Program.settings.Recherche.TechnoIons)
+                {
+                    if(!MyDriver.ElementExists(Program.settings.Recherche.DevelopTechnoIons))
+                    {
+                        return false;
+                    }
+                    buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopTechnoIons);
+                }
+                else if (cssSelector == Program.settings.Recherche.TechnoHyperespace)
+                {
+                    if(!MyDriver.ElementExists(Program.settings.Recherche.DevelopTechnoHyperespace))
+                    {
+                        return false;
+                    }
+                    buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopTechnoHyperespace);
+                }
+                else if (cssSelector == Program.settings.Recherche.TechnoPlasma)
+                {
+                    if(!MyDriver.ElementExists(Program.settings.Recherche.DevelopTechnoPlasma))
+                    {
+                        return false;
+                    }
+                    buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopTechnoPlasma);
+                }
+                else if (cssSelector == Program.settings.Recherche.ReacteurCombustion)
+                {
+                    if(!MyDriver.ElementExists(Program.settings.Recherche.DevelopReacteurCombustion))
+                    {
+                        return false;
+                    }
+                    buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopReacteurCombustion);
+                }
+                else if (cssSelector == Program.settings.Recherche.ReacteurImpulsion)
+                {
+                    if(!MyDriver.ElementExists(Program.settings.Recherche.DevelopReacteurImpulsion))
+                    {
+                        return false;
+                    }
+                    buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopReacteurImpulsion);
+                }
+                else if (cssSelector == Program.settings.Recherche.PropulsionHyperespace)
+                {
+                    if(!MyDriver.ElementExists(Program.settings.Recherche.DevelopPropulsionHyperespace))
+                    {
+                        return false;
+                    }
+                    buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopPropulsionHyperespace);
+                }
+                else if (cssSelector == Program.settings.Recherche.TechnoEspionnage)
+                {
+                    if(!MyDriver.ElementExists(Program.settings.Recherche.DevelopTechnoEspionnage))
+                    {
+                        return false;
+                    }
+                    buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopTechnoEspionnage);
+                }
+                else if (cssSelector == Program.settings.Recherche.TechnoOrdinateur)
+                {
+                    if(!MyDriver.ElementExists(Program.settings.Recherche.DevelopTechnoOrdinateur))
+                    {
+                        return false;
+                    }
+                    buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopTechnoOrdinateur);
+                }
+                else if (cssSelector == Program.settings.Recherche.TechnoAstro)
+                {
+                    if(!MyDriver.ElementExists(Program.settings.Recherche.DevelopTechnoAstro))
+                    {
+                        return false;
+                    }
+                    buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopTechnoAstro);
+                }
+                else if (cssSelector == Program.settings.Recherche.ReseauRecherche)
+                {
+                    if(!MyDriver.ElementExists(Program.settings.Recherche.DevelopReseauRecherche))
+                    {
+                        return false;
+                    }
+                    buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopReseauRecherche);
+                }
+                else if (cssSelector == Program.settings.Recherche.TechnoGraviton)
+                {
+                    if(!MyDriver.ElementExists(Program.settings.Recherche.DevelopTechnoGraviton))
+                    {
+                        return false;
+                    }
+                    buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopTechnoGraviton);
+                }
+                else if (cssSelector == Program.settings.Recherche.TechnoArme)
+                {
+                    if(!MyDriver.ElementExists(Program.settings.Recherche.DevelopTechnoArme))
+                    {
+                        return false;
+                    }
+                    buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopTechnoArme);
+                }
+                else if (cssSelector == Program.settings.Recherche.TechnoBouclier)
+                {
+                    if(!MyDriver.ElementExists(Program.settings.Recherche.DevelopTechnoBouclier))
+                    {
+                        return false;
+                    }
+                    buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopTechnoBouclier);
+                }
+                else if (cssSelector == Program.settings.Recherche.TechnoProtectionVaisseaux)
+                {
+                    if(!MyDriver.ElementExists(Program.settings.Recherche.DevelopTechnoProtectionVaisseaux))
+                    {
+                        return false;
+                    }
+                    buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopTechnoProtectionVaisseaux);
+                }
                 else
                 {
                     throw new Handler.NotImplementedException();
@@ -432,7 +560,7 @@ namespace FirstTest
         }
 
         /// <summary>
-        /// This method must call GetTimeToBuild(string cssSelector).
+        /// The details tab on the element to check the time of production must be opened
         /// </summary>
         /// <param name="cssSelector"></param>
         /// <returns>The time a construction must take.</returns>
@@ -451,17 +579,18 @@ namespace FirstTest
             return Iso8601Duration.Parse(MyDriver.FindElement(cssSelector).GetAttribute("datetime"));
         }
 
-        /// <summary>
-        /// Get the production per hour of the resource
-        /// </summary>
-        /// <param name="cssSelector">css selector of the resource</param>
-        /// <returns></returns>
-        protected int GetProductionPerHour(string cssSelector)
+        protected int GetMetalProductionPerHour()
         {
-            MyDriver.MoveToElement(cssSelector, act).Build().Perform(); // hover the ressource
-            act.Pause(TimeSpan.FromSeconds(2)).Build().Perform(); // wait for js to display the tooltip
-            IWebElement tooltip = MyDriver.FindElement(Program.settings.ProductionTooltip); // access tooltip
-            return int.Parse(tooltip.Text.TrimStart('+'));
+            return GetProductionPerHour(Program.settings.Resources.Metal);
+        }
+
+        protected int GetCristalProductionPerHour()
+        {
+            return GetProductionPerHour(Program.settings.Resources.Cristal);
+        }
+        protected int GetDeuteriumProductionPerHour()
+        {
+            return GetProductionPerHour(Program.settings.Resources.Deuterium);
         }
 
         /// <summary>
@@ -476,6 +605,7 @@ namespace FirstTest
                 //close the details as it needs to be refreshed, the wrong details might be opened.
                 MyDriver.MoveToElement(Program.settings.Details.CloseButton, act).Click().Build().Perform();
                 MyDriver.AssertElementDisappear(Program.settings.Details.CloseButton);
+                act.Pause(TimeSpan.FromSeconds(1 + Program.random.NextDouble())).Build().Perform();
             }
 
             // open the details by clicking on the resource.
@@ -485,7 +615,7 @@ namespace FirstTest
 
             if(!Details_opened(Program.settings.Details.CloseButton))
             {
-                GoTo(Menu.Ressources, act);//re-load the resources page by clicking on the resources nav button.
+                GoTo(menu, act);//re-load the resources page by clicking on the resources nav button.
                 MyDriver.MoveToElement(element, act).Click().Build().Perform();// open the details by clicking on the resource.
 
                 act.Pause(TimeSpan.FromSeconds(2 + Program.random.NextDouble())).Build().Perform();
@@ -563,6 +693,70 @@ namespace FirstTest
             {
                 buildElement = MyDriver.FindElement(Program.settings.Facilities.DevelopDocker);
             }
+            else if ( cssSelectorToDevelop == Program.settings.Recherche.TechnoEnergie)
+            {
+                buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopTechnoEnergie);
+            }
+            else if ( cssSelectorToDevelop == Program.settings.Recherche.TechnoLaser)
+            {
+                buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopTechnoLaser);
+            }
+            else if ( cssSelectorToDevelop == Program.settings.Recherche.TechnoIons)
+            {
+                buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopTechnoIons);
+            }
+            else if ( cssSelectorToDevelop == Program.settings.Recherche.TechnoHyperespace)
+            {
+                buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopTechnoHyperespace);
+            }
+            else if ( cssSelectorToDevelop == Program.settings.Recherche.TechnoPlasma)
+            {
+                buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopTechnoPlasma);
+            }
+            else if ( cssSelectorToDevelop == Program.settings.Recherche.ReacteurCombustion)
+            {
+                buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopReacteurCombustion);
+            }
+            else if ( cssSelectorToDevelop == Program.settings.Recherche.ReacteurImpulsion)
+            {
+                buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopReacteurImpulsion);
+            }
+            else if ( cssSelectorToDevelop == Program.settings.Recherche.PropulsionHyperespace)
+            {
+                buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopPropulsionHyperespace);
+            }
+            else if ( cssSelectorToDevelop == Program.settings.Recherche.TechnoEspionnage)
+            {
+                buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopTechnoEspionnage);
+            }
+            else if ( cssSelectorToDevelop == Program.settings.Recherche.TechnoOrdinateur)
+            {
+                buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopTechnoOrdinateur);
+            }
+            else if ( cssSelectorToDevelop == Program.settings.Recherche.TechnoAstro)
+            {
+                buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopTechnoAstro);
+            }
+            else if ( cssSelectorToDevelop == Program.settings.Recherche.ReseauRecherche)
+            {
+                buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopReseauRecherche);
+            }
+            else if ( cssSelectorToDevelop == Program.settings.Recherche.TechnoGraviton)
+            {
+                buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopTechnoGraviton);
+            }
+            else if ( cssSelectorToDevelop == Program.settings.Recherche.TechnoArme)
+            {
+                buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopTechnoArme);
+            }
+            else if ( cssSelectorToDevelop == Program.settings.Recherche.TechnoBouclier)
+            {
+                buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopTechnoBouclier);
+            }
+            else if ( cssSelectorToDevelop == Program.settings.Recherche.TechnoProtectionVaisseaux)
+            {
+                buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopTechnoProtectionVaisseaux);
+            }
             else
             {
                 throw new Handler.NotImplementedException();
@@ -599,6 +793,19 @@ namespace FirstTest
         #endregion "protected method"
         
         #region "private method"
+        /// <summary>
+        /// Get the production per hour of the resource
+        /// </summary>
+        /// <param name="cssSelector">css selector of the resource</param>
+        /// <returns></returns>
+        private int GetProductionPerHour(string cssSelector)
+        {
+            MyDriver.MoveToElement(cssSelector, act).Build().Perform(); // hover the ressource
+            act.Pause(TimeSpan.FromSeconds(2)).Build().Perform(); // wait for js to display the tooltip
+            IWebElement tooltip = MyDriver.FindElement(Program.settings.ProductionTooltip); // access tooltip
+            return int.Parse(tooltip.Text.TrimStart('+'));
+        }
+
         private static bool Details_opened(string cssSelector)
         {
             return MyDriver.FindElement(cssSelector) != null;

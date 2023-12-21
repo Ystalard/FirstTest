@@ -3,95 +3,170 @@ using FirstTest.Handler;
 
 namespace FirstTest
 {
-    public class Recherche: NavigationMenu
+    public class Recherche: Buildable
     {
 
-        private static void BuildRecherche(string cssSelector, Actions act)
-        {
-            GoTo(Menu.Recherche, act);
-         
-            MyDriver.MoveToElement(cssSelector, act).Click().Build().Perform();
-
-            MyDriver.MoveToElement(Program.settings.Recherche.Details.Develop, act).Click().Build().Perform();
-        }
+        #region "Constructor"
+        public Recherche(Actions act): base(act, Menu.Recherche){}
+        #endregion
 
         #region "public"
         #region "Recherche fondamentales"
-        public static void BuildTechnoEnergie(Actions act)
+        public void BuildTechnoEnergie()
         {
-            BuildRecherche(Program.settings.Recherche.TechnoEnergie, act);
+            Develop(Program.settings.Recherche.TechnoEnergie);
         }
 
-        public static void BuildTechnoLaser(Actions act)
+        public bool CanBuildTechnoEnergie()
         {
-            BuildRecherche(Program.settings.Recherche.TechnoLaser, act);
+            return CanBuildElement(Program.settings.Recherche.TechnoEnergie);
         }
 
-        public static void BuildTechnoIons(Actions act)
+        public void BuildTechnoLaser()
         {
-            BuildRecherche(Program.settings.Recherche.TechnoIons, act);
+            Develop(Program.settings.Recherche.TechnoLaser);
         }
 
-        public static void BuildTechnoHyperespace(Actions act)
+        public bool CanBuildTechnoLaser()
         {
-            BuildRecherche(Program.settings.Recherche.TechnoHyperespace, act);
+            return CanBuildElement(Program.settings.Recherche.TechnoLaser);
         }
-        public static void BuildTechnoPlasma(Actions act)
+
+        public void BuildTechnoIons()
         {
-                    BuildRecherche(Program.settings.Recherche.TechnoPlasma, act);
-                }
+            Develop(Program.settings.Recherche.TechnoIons);
+        }
+
+        public bool CanBuildTechnoIons()
+        {
+            return CanBuildElement(Program.settings.Recherche.TechnoIons);
+        }
+
+        public void BuildTechnoHyperespace()
+        {
+            Develop(Program.settings.Recherche.TechnoHyperespace);
+        }
+
+        public bool CanBuildTechnoHyperespace()
+        {
+            return CanBuildElement(Program.settings.Recherche.TechnoHyperespace);
+        }
+        public void BuildTechnoPlasma()
+        {
+            Develop(Program.settings.Recherche.TechnoPlasma);
+        }
+
+        public bool CanBuildTechnoPlasma()
+        {
+            return CanBuildElement(Program.settings.Recherche.TechnoPlasma);
+        }
         #endregion
 
         #region "Recherche en Propulsion"
-        public static void BuildReacteurCombustion(Actions act)
+        public void BuildReacteurCombustion()
         {
-                    BuildRecherche(Program.settings.Recherche.ReacteurCombustion, act);
-                }
-        public static void BuildReacteurImpulsion(Actions act)
+            Develop(Program.settings.Recherche.ReacteurCombustion);
+        }
+
+        public bool CanBuildReacteurCombustion()
         {
-                    BuildRecherche(Program.settings.Recherche.ReacteurImpulsion, act);
-                }
-        public static void BuildPropulsionHyperespace(Actions act)
+            return CanBuildElement(Program.settings.Recherche.ReacteurCombustion);
+        }
+        public void BuildReacteurImpulsion()
         {
-                    BuildRecherche(Program.settings.Recherche.PropulsionHyperespace, act);
-                }
+            Develop(Program.settings.Recherche.ReacteurImpulsion);
+        }
+
+        public bool CanBuildReacteurImpulsion()
+        {
+            return CanBuildElement(Program.settings.Recherche.ReacteurImpulsion);
+        }
+        public void BuildPropulsionHyperespace()
+        {
+            Develop(Program.settings.Recherche.PropulsionHyperespace);
+        }
+
+        public bool CanBuildPropulsionHyperespace()
+        {
+            return CanBuildElement(Program.settings.Recherche.PropulsionHyperespace);
+        }
         #endregion
 
         #region "Recherche avancée"
-        public static void BuildTechnoEspionnage(Actions act)
+        public void BuildTechnoEspionnage()
         {
-                    BuildRecherche(Program.settings.Recherche.TechnoEspionnage, act);
-                }
-        public static void BuildTechnoOrdinateur(Actions act)
+            Develop(Program.settings.Recherche.TechnoEspionnage);
+        }
+
+        public bool CanBuildTechnoEspionnage()
         {
-                    BuildRecherche(Program.settings.Recherche.TechnoOrdinateur, act);
-                }
-        public static void BuildTechnoAstro(Actions act)
+            return CanBuildElement(Program.settings.Recherche.TechnoEspionnage);
+        }
+        public void BuildTechnoOrdinateur()
         {
-                    BuildRecherche(Program.settings.Recherche.TechnoAstro, act);
-                }
-        public static void BuildReseauRecherche(Actions act)
+            Develop(Program.settings.Recherche.TechnoOrdinateur);
+        }
+
+        public bool CanBuildTechnoOrdinateur()
         {
-                    BuildRecherche(Program.settings.Recherche.ReseauRecherche, act);
-                }
-        public static void BuildTechnoGraviton(Actions act)
+            return CanBuildElement(Program.settings.Recherche.TechnoOrdinateur);
+        }
+        public void BuildTechnoAstro()
         {
-                    BuildRecherche(Program.settings.Recherche.TechnoGraviton, act);
-                }
+            Develop(Program.settings.Recherche.TechnoAstro);
+        }
+
+        public bool CanBuildTechnoAstro()
+        {
+            return CanBuildElement(Program.settings.Recherche.TechnoAstro);
+        }
+        public void BuildReseauRecherche()
+        {
+            Develop(Program.settings.Recherche.ReseauRecherche);
+        }
+
+        public bool CanBuildReseauRecherche()
+        {
+            return CanBuildElement(Program.settings.Recherche.ReseauRecherche);
+        }
+        public void BuildTechnoGraviton()
+        {
+            Develop(Program.settings.Recherche.TechnoGraviton);
+        }
+
+        public bool CanBuildTechnoGraviton()
+        {
+            return CanBuildElement(Program.settings.Recherche.TechnoGraviton);
+        }
         #endregion
 
         #region "Recherche de combat"
-        public static void BuildTechnoArme(Actions act)
+        public void BuildTechnoArme()
         {
-                    BuildRecherche(Program.settings.Recherche.TechnoArme, act);
+            Develop(Program.settings.Recherche.TechnoArme);
         }
-        public static void BuildTechnoBouclier(Actions act)
+
+        public bool CanBuildTechnoArme()
         {
-                    BuildRecherche(Program.settings.Recherche.TechnoBouclier, act);
+            return CanBuildElement(Program.settings.Recherche.TechnoArme);
         }
-        public static void BuildTechnoProtectionVaisseaux(Actions act)
+        public void BuildTechnoBouclier()
         {
-                    BuildRecherche(Program.settings.Recherche.TechnoProtectionVaisseaux, act);
+            Develop(Program.settings.Recherche.TechnoBouclier);
+        }
+
+        public bool CanBuildTechnoBouclier()
+        {
+            return CanBuildElement(Program.settings.Recherche.TechnoBouclier);
+        }
+        public void BuildTechnoProtectionVaisseaux()
+        {
+            Develop(Program.settings.Recherche.TechnoProtectionVaisseaux);
+        }
+
+        public bool CanBuildTechnoProtectionVaisseaux()
+        {
+            return CanBuildElement(Program.settings.Recherche.TechnoProtectionVaisseaux);
         }
         #endregion
         #endregion

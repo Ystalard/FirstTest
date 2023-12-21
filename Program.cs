@@ -77,7 +77,7 @@ class Program
             SharedProperties sharedProperties = new SharedProperties{ Timer = new Timer(), TimeToBuild = TimeSpan.Zero};
             Resources resources = new(act, sharedProperties);
             Installations installations = new(act, sharedProperties);
-            Installations installations2 = new(act);
+            Recherche recherche = new(act);
         Start:
         try{ 
             if(refresh)
@@ -104,6 +104,31 @@ class Program
             
             while(true)
             {   
+                if(!recherche.IsBusy())
+                {
+                    NavigationMenu.GoTo(NavigationMenu.Menu.Recherche, act);
+                    if(recherche.CanBuildTechnoEnergie())
+                    {
+                        recherche.BuildTechnoEnergie();
+                    }
+                    else
+                    {
+                        recherche.WaitForResourcesAvailable(settings.Recherche.TechnoEnergie);
+                    }
+                }
+
+                if(!installations.IsBusy())
+                {
+                    NavigationMenu.GoTo(NavigationMenu.Menu.Installations, act);
+                    if(installations.CanBuildLaboRecherche()){
+                        installations.BuildLaboRecherche();
+                    }
+                    else if(installations.CanBuildUsineRobot())
+                    {
+                        installations.BuildUsineRobot();
+                    }
+                }   
+
                 if(!resources.IsBusy())
                 {
                     string cssSelectorNextResourceToBuild = resources.NextResourceToBuild();  
@@ -115,31 +140,12 @@ class Program
                         {
                             resources.DevelopResource(cssSelectorNextResourceToBuild);
                         }else{
-                            if(resources.CanBuildResource(settings.Supplies.CentraleSolaire))
-                            {
-                                resources.DevelopEnergie(missing_energie);
-                            }else{
-                                resources.WaitForResourcesAvailable(cssSelectorNextResourceToBuild);
-                            }
+                            resources.DevelopEnergie(missing_energie);
                         }
                     }else{
                         resources.WaitForResourcesAvailable(cssSelectorNextResourceToBuild);
                     }
-                }
-
-                if(!installations.IsBusy())
-                {
-                    if(installations.CanBuildElement(settings.Facilities.UsineRobot))
-                    {
-                        installations.BuildUsineRobot();
-                    }
-                }
-
-                if(!installations2.IsBusy())
-                {
-                    Console.WriteLine("it is not busy ! :)");
-                }
-                
+                }  
             }
         }
         catch(Exception ex)

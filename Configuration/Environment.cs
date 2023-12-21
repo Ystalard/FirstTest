@@ -600,6 +600,55 @@ public partial class Recherche
 
     [JsonProperty("details", NullValueHandling = NullValueHandling.Ignore)]
     public RechercheDetails Details { get; set; }
+
+    [JsonProperty("developTechnoEnergie")]
+    public string DevelopTechnoEnergie {get; set;}
+    
+    [JsonProperty("developTechnoLaser")]
+    public string DevelopTechnoLaser {get; set;}
+    
+    [JsonProperty("developTechnoIons")]
+    public string DevelopTechnoIons {get; set;}
+    
+    [JsonProperty("developTechnoHyperespace")]
+    public string DevelopTechnoHyperespace {get; set;}
+    
+    [JsonProperty("developTechnoPlasma")]
+    public string DevelopTechnoPlasma {get; set;}
+    
+    [JsonProperty("developReacteurCombustion")]
+    public string DevelopReacteurCombustion {get; set;}
+    
+    [JsonProperty("developReacteurImpulsion")]
+    public string DevelopReacteurImpulsion {get; set;}
+    
+    [JsonProperty("developPropulsionHyperespace")]
+    public string DevelopPropulsionHyperespace {get; set;}
+    
+    [JsonProperty("developTechnoEspionnage")]
+    public string DevelopTechnoEspionnage {get; set;}
+    
+    [JsonProperty("developTechnoOrdinateur")]
+    public string DevelopTechnoOrdinateur {get; set;}
+    
+    [JsonProperty("developTechnoAstro")]
+    public string DevelopTechnoAstro {get; set;}
+    
+    [JsonProperty("developReseauRecherche")]
+    public string DevelopReseauRecherche {get; set;}
+    
+    [JsonProperty("developTechnoGraviton")]
+    public string DevelopTechnoGraviton {get; set;}
+    
+    [JsonProperty("developTechnoArme")]
+    public string DevelopTechnoArme {get; set;}
+    
+    [JsonProperty("developTechnoBouclier")]
+    public string DevelopTechnoBouclier {get; set;}
+    
+    [JsonProperty("developTechnoProtectionVaisseaux")]
+    public string DevelopTechnoProtectionVaisseaux {get; set;}
+    
 }
 
 public class Details
@@ -722,7 +771,10 @@ public partial class TechnologyDetails
     public string EnergieNecessaire { get; set; }
 
     [JsonProperty("energieGainPerSatelitte")]
-    public string EnergieGainPerSatelitte { get; set; }
+    public string EnergieGainPerSatellite { get; set; }
+
+    [JsonProperty("energieGainFromNextCentralSolaire")]
+    public string EnergieGainFromNextCentralSolaire { get; set; }
 
     [JsonProperty("niveau")]
     public string Niveau { get; set; }

@@ -36,19 +36,37 @@ public class Resources: Buildable
         Develop(Program.settings.Supplies.CentraleSolaire);
     }
 
+    public void BuildSatellite(int number)
+    {
+        DevelopResource(Program.settings.Supplies.SatelitteSolaire, number);
+    }
+
     public void BuildCentraleFusion()
     {
         Develop(Program.settings.Supplies.CentraleFusion);
     }
 
-    public void BuildSatteliteSolaire(int missing_energie){
-        OpenDetails(Program.settings.Supplies.SatelitteSolaire);
+    public void BuildBestSuitableEnergie(int missing_energie){
+        OpenDetails(Program.settings.Supplies.CentraleSolaire);
+        IWebElement central_solaire = MyDriver.FindElement(Program.settings.Supplies.TechnologyDetails.EnergieGainPerSatellite);
+        int energieGainWithCentralSolaire = int.Parse(central_solaire.GetAttribute("data-value"));
+        int central_solaire_cost = MetalRequired() + CristalRequired();
 
-        IWebElement satelitte = MyDriver.FindElement(Program.settings.Supplies.TechnologyDetails.EnergieGainPerSatelitte);
-        int energieGainPerHour = int.Parse(satelitte.GetAttribute("data-value"));
-        int numberSatelitteToDevelop = (int)Math.Ceiling(missing_energie / (float)energieGainPerHour);
-        
-        DevelopResource(Program.settings.Supplies.SatelitteSolaire, numberSatelitteToDevelop);
+        OpenDetails(Program.settings.Supplies.SatelitteSolaire);
+        IWebElement satellite = MyDriver.FindElement(Program.settings.Supplies.TechnologyDetails.EnergieGainPerSatellite);
+        int energieGainPerSatellite = int.Parse(satellite.GetAttribute("data-value"));
+        int number_satellite_to_reach_central_solaire_energy = (int)Math.Round(energieGainWithCentralSolaire / (float)energieGainPerSatellite);
+        int satellite_cost = number_satellite_to_reach_central_solaire_energy * (CristalRequired() + DeuteriumRequired()) * 4; // let consider we might rebuild the satellite 3 times (due to three attack)
+
+        if(satellite_cost < central_solaire_cost)
+        {
+            int numberSatelitteToDevelop = (int)Math.Ceiling(missing_energie / (float)energieGainPerSatellite);
+            BuildSatellite(numberSatelitteToDevelop);
+        }
+        else
+        {
+            BuildCentraleSolaire();
+        }
     }
 
     public void DevelopEnergie(int missing_energie){
@@ -59,7 +77,7 @@ public class Resources: Buildable
                 WaitForResourcesAvailable(Program.settings.Supplies.CentraleSolaire);
             }
         }else{
-            BuildSatteliteSolaire(missing_energie);
+            BuildBestSuitableEnergie(missing_energie);
         }
     }
 

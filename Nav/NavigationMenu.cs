@@ -70,15 +70,7 @@ public class NavigationMenu
         }
 
         MyDriver.MoveToElement(target_menu, act).Click().Build().Perform();
-        int count=0;
-        while(!Opened_on(target_menu) || count > 200)
-        { //in order to wait the lag
-            count++;
-        };
-
-        if(count > 200) {
-            throw new MustRestartException($"Can't go to menu {menu} with css selector = {target_menu.ToString()}");
-        }
+        act.Pause(TimeSpan.FromSeconds( 2 + Program.random.NextDouble())).Build().Perform();
 
         IsOpened = menu;
         return;
