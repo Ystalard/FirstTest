@@ -38,7 +38,7 @@ public class Resources: Buildable
 
     public void BuildSatellite(int number)
     {
-        DevelopResource(Program.settings.Supplies.SatelitteSolaire, number);
+        Develop(Program.settings.Supplies.SatelitteSolaire, number);
     }
 
     public void BuildCentraleFusion()
@@ -96,9 +96,13 @@ public class Resources: Buildable
         Develop(Program.settings.Supplies.HangarDeuterium);
     }
 
-    public void BuildForeuse()
+    /// <summary>
+    /// (M + C + D) * 8 = max number foreuse
+    /// </summary>
+    public void BuildForeuse(int number)
     {
-        Develop(Program.settings.Supplies.Foreuse);
+        int maximum = (LevelMetal() + LevelCristal() + LevelDeuterium()) * 8 - GetCurrentLevel(Program.settings.Supplies.AmountForeuse);
+        Develop(Program.settings.Supplies.Foreuse, number > maximum ? maximum : number);
     }
 
     public int EnergieRequired()

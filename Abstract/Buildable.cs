@@ -767,22 +767,17 @@ namespace FirstTest
             Timer.StartTimer();
         }     
 
-        public void DevelopResource(string resource, int number) {
+        public void Develop(string element, int number) {
             GoTo(menu, act);
-            OpenDetails(resource);
+            OpenDetails(element);
             
-
-            int numberToBuild = 0;
-            int maximum = 0;
-            if(resource == Program.settings.Supplies.SatelitteSolaire){
-                maximum = int.Parse(MyDriver.FindElement(Program.settings.Supplies.TechnologyDetails.BuildAmount).GetAttribute("max"));
-                numberToBuild = maximum > number ? number : maximum;
-            }
-
+            int maximum = int.Parse(MyDriver.FindElement(Program.settings.Details.BuildAmount).GetAttribute("max"));
+            int numberToBuild = maximum > number ? number : maximum;
+            
             if(maximum == 0){
-                WaitForResourcesAvailable(resource);
+                WaitForResourcesAvailable(element);
             }else{
-                TimeToBuild = GetTimeToBuild(resource) * numberToBuild;
+                TimeToBuild = GetTimeToBuild(element) * numberToBuild;
                 MyDriver.MoveToElement(Program.settings.Supplies.TechnologyDetails.BuildAmount, act).Click().SendKeys(numberToBuild.ToString());
                 MyDriver.MoveToElement(Program.settings.Supplies.TechnologyDetails.Develop, act).Click().Build().Perform();
 
