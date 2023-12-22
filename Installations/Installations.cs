@@ -93,7 +93,46 @@ namespace FirstTest
             return CanBuildElement(Program.settings.Facilities.Docker);
         }
 
-
+        public int GetLevelUsineRobot()
+        {
+            return GetCurrentLevel(Program.settings.Facilities.LevelUsineRobot);
+        }
+        
+        public int GetLevelChantierSpatial()
+        {
+            return GetCurrentLevel(Program.settings.Facilities.LevelChantierSpatial);
+        }
+        
+        public int GetLevelLaboRecherche()
+        {
+            return GetCurrentLevel(Program.settings.Facilities.LevelLaboRecherche);
+        }
+        
+        public int GetLevelDepotRavitaillement()
+        {
+            return GetCurrentLevel(Program.settings.Facilities.LevelDepotRavitaillement);
+        }
+        
+        public int GetLevelSiloMissible()
+        {
+            return GetCurrentLevel(Program.settings.Facilities.LevelSiloMissible);
+        }
+        
+        public int GetLevelNanites()
+        {
+            return GetCurrentLevel(Program.settings.Facilities.LevelNanites);
+        }
+        
+        public int GetLevelTerraformeur()
+        {
+            return GetCurrentLevel(Program.settings.Facilities.LevelTerraformeur);
+        }
+        
+        public int GetLevelDocker()
+        {
+            return GetCurrentLevel(Program.settings.Facilities.LevelDocker);
+        }
+        
         #endregion
     }
 }

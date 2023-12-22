@@ -501,6 +501,66 @@ namespace FirstTest
                     }
                     buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopTechnoProtectionVaisseaux);
                 }
+                else if (cssSelector == Program.settings.ChantierSpatial.ChasseurLeger)
+                {
+                    return MyDriver.FindElement(cssSelector).GetAttribute("data-status") == "on";
+                }
+                else if (cssSelector == Program.settings.ChantierSpatial.ChasseurLourd)
+                {
+                    return MyDriver.FindElement(cssSelector).GetAttribute("data-status") == "on";
+                }
+                else if (cssSelector == Program.settings.ChantierSpatial.Croiseur)
+                {
+                    return MyDriver.FindElement(cssSelector).GetAttribute("data-status") == "on";
+                }
+                else if (cssSelector == Program.settings.ChantierSpatial.VaisseauBataille)
+                {
+                    return MyDriver.FindElement(cssSelector).GetAttribute("data-status") == "on";
+                }
+                else if (cssSelector == Program.settings.ChantierSpatial.Traqueur)
+                {
+                    return MyDriver.FindElement(cssSelector).GetAttribute("data-status") == "on";
+                }
+                else if (cssSelector == Program.settings.ChantierSpatial.Bombardier)
+                {
+                    return MyDriver.FindElement(cssSelector).GetAttribute("data-status") == "on";
+                }
+                else if (cssSelector == Program.settings.ChantierSpatial.Destructeur)
+                {
+                    return MyDriver.FindElement(cssSelector).GetAttribute("data-status") == "on";
+                }
+                else if (cssSelector == Program.settings.ChantierSpatial.Edm)
+                {
+                    return MyDriver.FindElement(cssSelector).GetAttribute("data-status") == "on";
+                }
+                else if (cssSelector == Program.settings.ChantierSpatial.Faucheur)
+                {
+                    return MyDriver.FindElement(cssSelector).GetAttribute("data-status") == "on";
+                }
+                else if (cssSelector == Program.settings.ChantierSpatial.Eclaireur)
+                {
+                    return MyDriver.FindElement(cssSelector).GetAttribute("data-status") == "on";
+                }
+                else if (cssSelector == Program.settings.ChantierSpatial.PetitTransporteur)
+                {
+                    return MyDriver.FindElement(cssSelector).GetAttribute("data-status") == "on";
+                }
+                else if (cssSelector == Program.settings.ChantierSpatial.GrandTransporteur)
+                {
+                    return MyDriver.FindElement(cssSelector).GetAttribute("data-status") == "on";
+                }
+                else if (cssSelector == Program.settings.ChantierSpatial.VaisseauColonisation)
+                {
+                    return MyDriver.FindElement(cssSelector).GetAttribute("data-status") == "on";
+                }
+                else if (cssSelector == Program.settings.ChantierSpatial.Recycleur)
+                {
+                    return MyDriver.FindElement(cssSelector).GetAttribute("data-status") == "on";
+                }
+                else if (cssSelector == Program.settings.ChantierSpatial.SondeEspionnage)
+                {
+                    return MyDriver.FindElement(cssSelector).GetAttribute("data-status") == "on";
+                }
                 else
                 {
                     throw new Handler.NotImplementedException();
@@ -542,7 +602,12 @@ namespace FirstTest
         {
             return int.Parse(MyDriver.FindElement(cssSelector).GetAttribute("data-raw"));
         }
-            
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cssSelector">selector of the level element</param>
+        /// <returns></returns>
         protected static int GetCurrentLevel(string cssSelector)
         {
             IWebElement level = MyDriver.FindElement(cssSelector);
@@ -562,21 +627,10 @@ namespace FirstTest
         /// <summary>
         /// The details tab on the element to check the time of production must be opened
         /// </summary>
-        /// <param name="cssSelector"></param>
         /// <returns>The time a construction must take.</returns>
         protected TimeSpan GetTimeToBuild()
         {  
-            return GetTimeToBuild(Program.settings.Details.TempsProduction);
-        }
-
-        /// <summary>
-        ///  
-        /// </summary>
-        /// <param name="cssSelector">the css selector of the time of production of an element.</param>
-        /// <returns>The time a construction must take.</returns>
-        protected TimeSpan GetTimeToBuild(string cssSelector)
-        {
-            return Iso8601Duration.Parse(MyDriver.FindElement(cssSelector).GetAttribute("datetime"));
+            return Iso8601Duration.Parse(MyDriver.FindElement(Program.settings.Details.TempsProduction).GetAttribute("datetime"));
         }
 
         protected int GetMetalProductionPerHour()
@@ -774,14 +828,14 @@ namespace FirstTest
             int maximum = int.Parse(MyDriver.FindElement(Program.settings.Details.BuildAmount).GetAttribute("max"));
             int numberToBuild = maximum > number ? number : maximum;
             
-            if(maximum == 0){
+            if(maximum == 0)
+            {
                 WaitForResourcesAvailable(element);
             }else{
-                TimeToBuild = GetTimeToBuild(element) * numberToBuild;
+                TimeToBuild = GetTimeToBuild() * numberToBuild;
                 MyDriver.MoveToElement(Program.settings.Supplies.TechnologyDetails.BuildAmount, act).Click().SendKeys(numberToBuild.ToString());
                 MyDriver.MoveToElement(Program.settings.Supplies.TechnologyDetails.Develop, act).Click().Build().Perform();
 
-               
                 Timer.StartTimer();
             }
         }       

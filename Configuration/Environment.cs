@@ -203,6 +203,52 @@ public partial class ChantierSpatial
 
     [JsonProperty("details")]
     public ChantierSpatialDetails Details { get; set; }
+
+    [JsonProperty("amountChasseurLeger")]
+    public string AmountChasseurLeger {get; set;}
+    
+    [JsonProperty("amountChasseurLourd")]
+    public string AmountChasseurLourd {get; set;}
+    
+    [JsonProperty("amountCroiseur")]
+    public string AmountCroiseur {get; set;}
+    
+    [JsonProperty("amountVaisseauBataille")]
+    public string AmountVaisseauBataille {get; set;}
+    
+    [JsonProperty("amountTraqueur")]
+    public string AmountTraqueur {get; set;}
+    
+    [JsonProperty("amountBombardier")]
+    public string AmountBombardier {get; set;}
+    
+    [JsonProperty("amountDestructeur")]
+    public string AmountDestructeur {get; set;}
+    
+    [JsonProperty("amountEdm")]
+    public string AmountEdm {get; set;}
+    
+    [JsonProperty("amountFaucheur")]
+    public string AmountFaucheur {get; set;}
+    
+    [JsonProperty("amountEclaireur")]
+    public string AmountEclaireur {get; set;}
+    
+    [JsonProperty("amountPetitTransporteur")]
+    public string AmountPetitTransporteur {get; set;}
+    
+    [JsonProperty("amountGrandTransporteur")]
+    public string AmountGrandTransporteur {get; set;}
+    
+    [JsonProperty("amountVaisseauColonisation")]
+    public string AmountVaisseauColonisation {get; set;}
+    
+    [JsonProperty("amountRecycleur")]
+    public string AmountRecycleur {get; set;}
+    
+    [JsonProperty("amountSondeEspionnage")]
+    public string AmountSondeEspionnage {get; set;}
+    
 }
 
 public partial class ChantierSpatialDetails
@@ -648,6 +694,55 @@ public partial class Recherche
     
     [JsonProperty("developTechnoProtectionVaisseaux")]
     public string DevelopTechnoProtectionVaisseaux {get; set;}
+
+    [JsonProperty("levelTechnoEnergie")]
+    public string LevelTechnoEnergie {get; set;}
+
+    [JsonProperty("levelTechnoLaser")]
+    public string LevelTechnoLaser {get; set;}
+
+    [JsonProperty("levelTechnoIons")]
+    public string LevelTechnoIons {get; set;}
+
+    [JsonProperty("levelTechnoHyperespace")]
+    public string LevelTechnoHyperespace {get; set;}
+
+    [JsonProperty("levelTechnoPlasma")]
+    public string LevelTechnoPlasma {get; set;}
+
+    [JsonProperty("levelReacteurCombustion")]
+    public string LevelReacteurCombustion {get; set;}
+
+    [JsonProperty("levelReacteurImpulsion")]
+    public string LevelReacteurImpulsion {get; set;}
+
+    [JsonProperty("levelPropulsionHyperespace")]
+    public string LevelPropulsionHyperespace {get; set;}
+
+    [JsonProperty("levelTechnoEspionnage")]
+    public string LevelTechnoEspionnage {get; set;}
+
+    [JsonProperty("levelTechnoOrdinateur")]
+    public string LevelTechnoOrdinateur {get; set;}
+
+    [JsonProperty("levelTechnoAstro")]
+    public string LevelTechnoAstro {get; set;}
+
+    [JsonProperty("levelReseauRecherche")]
+    public string LevelReseauRecherche {get; set;}
+
+    [JsonProperty("levelTechnoGraviton")]
+    public string LevelTechnoGraviton {get; set;}
+
+    [JsonProperty("levelTechnoArme")]
+    public string LevelTechnoArme {get; set;}
+
+    [JsonProperty("levelTechnoBouclier")]
+    public string LevelTechnoBouclier {get; set;}
+
+    [JsonProperty("levelTechnoProtectionVaisseaux    ")]
+    public string LevelTechnoProtectionVaisseaux {get; set;}
+
     
 }
 
@@ -659,7 +754,7 @@ public class Details
     public string EnergieNecessaire {get; set;}
     [JsonProperty("niveau")]
     public string Niveau {get; set;}
-    [JsonProperty("metalRequested")]
+    [JsonProperty("metalRequired")]
     public string MetalRequired {get; set;}
     [JsonProperty("cristalRequired")]
     public string CristalRequired {get; set;}
@@ -782,8 +877,8 @@ public partial class TechnologyDetails
     [JsonProperty("niveau")]
     public string Niveau { get; set; }
 
-    [JsonProperty("metalRequested")]
-    public string MetalRequested { get; set; }
+    [JsonProperty("metalRequired")]
+    public string MetalRequired { get; set; }
 
     [JsonProperty("cristalRequired")]
     public string CristalRequired { get; set; }
