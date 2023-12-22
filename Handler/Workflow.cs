@@ -46,10 +46,9 @@ namespace FirstTest.Handler
                 builder += installations.BuildChantierSpatiale;
                 builder += installations.BuildChantierSpatiale;
                 builder += installations.BuildLaboRecherche;
-                // builder += recherche.DevelopEnergyTech;
-                // builder += recherche.BuildCombustionReactor;
-                // builder += recherche.BuildCombustionReactor;
-
+                builder += recherche.BuildTechnoEnergie;
+                builder += recherche.BuildReacteurCombustion;
+                builder += recherche.BuildReacteurCombustion;
             }
         }
     }

@@ -73,12 +73,7 @@ class Program
             Connector.Connect(act);
 
             
-
-            SharedProperties sharedProperties = new SharedProperties{ Timer = new Timer(), TimeToBuild = TimeSpan.Zero};
-            Resources resources = new(act, sharedProperties);
-            Installations installations = new(act, sharedProperties);
-            Recherche recherche = new(act);
-            ChantierSpatial chantierSpatial = new(act);
+            Planet planet = new(act);
         Start:
         try{ 
             if(refresh)
@@ -97,7 +92,7 @@ class Program
                 if(initializeResources)
                 {
                     act = new(_driver);
-                    resources = new(act);
+                    planet = new(act);
                 }
                 // NavigationMenu.GoTo(NavigationMenu.Menu.Ressources, act, force: true);
                 refresh = false; //the refresh solve the issue so we reset the value;
@@ -105,77 +100,98 @@ class Program
             
             while(true)
             {   
-                if(!chantierSpatial.IsBusy())
+                if(planet.defense.CanBuildLanceurMissile() && planet.defense.AmountLanceurMissile() < 1)
                 {
-                    if(chantierSpatial.CanBuildChasseurLeger() && chantierSpatial.AmountChasseurLeger() < 1)
+                    planet.defense.DevelopLanceurMissile(1);
+                }
+
+                if(planet.defense.CanBuildLanceurMissile() && planet.defense.AmountLanceurMissile() < 1)
+                {
+                    planet.defense.DevelopLanceurMissile(4);
+                }
+
+                if(planet.defense.CanBuildLanceurMissile() && planet.defense.AmountLanceurMissile() > 4)
+                {
+                    planet.defense.DevelopLanceurMissile(4);
+                }
+
+                if(planet.defense.CanBuildLanceurMissile() && planet.defense.AmountLanceurMissile() > 8)
+                {
+                    planet.defense.DevelopLanceurMissile(4);
+                }
+
+
+                if(!planet.chantierSpatial.IsBusy())
+                {
+                    if(planet.chantierSpatial.CanBuildChasseurLeger() && planet.chantierSpatial.AmountChasseurLeger() < 1)
                     {
-                        chantierSpatial.BuildChasseurLeger(1);
+                        planet.chantierSpatial.DevelopChasseurLeger(1);
                     }
                 }
 
-                if(!recherche.IsBusy())
+                if(!planet.recherche.IsBusy())
                 {
-                    if(recherche.CanBuildTechnoEnergie() && recherche.GetLevelTechnoEnergie() < 1)
+                    if(planet.recherche.CanBuildTechnoEnergie() && planet.recherche.GetLevelTechnoEnergie() < 1)
                     {
-                        recherche.BuildTechnoEnergie();
+                        planet.recherche.BuildTechnoEnergie();
                     }
-                    else if(recherche.CanBuildReacteurCombustion() && recherche.GetLevelReacteurCombustion() < 1)
+                    else if(planet.recherche.CanBuildReacteurCombustion() && planet.recherche.GetLevelReacteurCombustion() < 1)
                     {
-                        recherche.BuildReacteurCombustion();
+                        planet.recherche.BuildReacteurCombustion();
                     }
-                    else if(recherche.GetLevelTechnoEnergie() < 1)
+                    else if(planet.recherche.GetLevelTechnoEnergie() < 1)
                     {
-                        recherche.WaitForResourcesAvailable(settings.Recherche.TechnoEnergie);
+                        planet.recherche.WaitForResourcesAvailable(settings.Recherche.TechnoEnergie);
                     }
-                    else if(recherche.GetLevelReacteurCombustion() < 1)
+                    else if(planet.recherche.GetLevelReacteurCombustion() < 1)
                     {
-                        recherche.WaitForResourcesAvailable(settings.Recherche.ReacteurCombustion);
+                        planet.recherche.WaitForResourcesAvailable(settings.Recherche.ReacteurCombustion);
                     }
                 }
 
-                if(!installations.IsBusy())
+                if(!planet.installations.IsBusy())
                 {
-                    if(installations.CanBuildUsineRobot() && installations.GetLevelUsineRobot() < 2)
+                    if(planet.installations.CanBuildUsineRobot() && planet.installations.GetLevelUsineRobot() < 2)
                     {
-                        installations.BuildUsineRobot();
+                        planet.installations.BuildUsineRobot();
                     }
-                    else if(installations.CanBuildChantierSpatial() && installations.GetLevelChantierSpatial() < 1)
+                    else if(planet.installations.CanBuildChantierSpatial() && planet.installations.GetLevelChantierSpatial() < 1)
                     {
-                        installations.BuildChantierSpatiale();
+                        planet.installations.BuildChantierSpatiale();
                     }
-                    else if(installations.CanBuildLaboRecherche() && installations.GetLevelLaboRecherche() < 1)
+                    else if(planet.installations.CanBuildLaboRecherche() && planet.installations.GetLevelLaboRecherche() < 1)
                     {
-                        installations.BuildLaboRecherche();
+                        planet.installations.BuildLaboRecherche();
                     }
-                    else if(installations.GetLevelUsineRobot() < 2)
+                    else if(planet.installations.GetLevelUsineRobot() < 2)
                     {
-                        installations.WaitForResourcesAvailable(settings.Facilities.UsineRobot);
+                        planet.installations.WaitForResourcesAvailable(settings.Facilities.UsineRobot);
                     }
-                    else if(installations.GetLevelChantierSpatial() < 1)
+                    else if(planet.installations.GetLevelChantierSpatial() < 1)
                     {
-                        installations.WaitForResourcesAvailable(settings.Facilities.ChantierSpatial);
+                        planet.installations.WaitForResourcesAvailable(settings.Facilities.ChantierSpatial);
                     }
-                    else if(installations.GetLevelLaboRecherche() < 1)
+                    else if(planet.installations.GetLevelLaboRecherche() < 1)
                     {
-                        installations.WaitForResourcesAvailable(settings.Facilities.LaboRecherche);
+                        planet.installations.WaitForResourcesAvailable(settings.Facilities.LaboRecherche);
                     }
                 }   
 
-                if(!resources.IsBusy())
+                if(!planet.resources.IsBusy())
                 {
-                    string cssSelectorNextResourceToBuild = resources.NextResourceToBuild();  
+                    string cssSelectorNextResourceToBuild = planet.resources.NextResourceToBuild();  
 
-                    if(resources.CanBuildResource(cssSelectorNextResourceToBuild))
+                    if(planet.resources.CanBuildResource(cssSelectorNextResourceToBuild))
                     {
                         int missing_energie = 0;
-                        if(resources.HaveEnoughEnergie(cssSelectorNextResourceToBuild, ref missing_energie))
+                        if(planet.resources.HaveEnoughEnergie(cssSelectorNextResourceToBuild, ref missing_energie))
                         {
-                            resources.DevelopResource(cssSelectorNextResourceToBuild);
+                            planet.resources.DevelopResource(cssSelectorNextResourceToBuild);
                         }else{
-                            resources.DevelopEnergie(missing_energie);
+                            planet.resources.DevelopEnergie(missing_energie);
                         }
                     }else{
-                        resources.WaitForResourcesAvailable(cssSelectorNextResourceToBuild);
+                        planet.resources.WaitForResourcesAvailable(cssSelectorNextResourceToBuild);
                     }
                 }  
             }

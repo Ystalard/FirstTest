@@ -7,7 +7,7 @@ namespace FirstTest
     public class ChantierSpatial: Buildable
     {
 
-        #region  "constructor"
+    #region  "constructor"
     public ChantierSpatial(Actions act): base(act, Menu.ChantierSpatial){}
 
     public ChantierSpatial(Actions act, SharedProperties sharedProperties): base(act, Menu.ChantierSpatial, sharedProperties){}
@@ -150,113 +150,68 @@ namespace FirstTest
         return CanBuildElement(Program.settings.ChantierSpatial.SondeEspionnage);
     }
 
+    #region "Amount of spaceship"
+    public int AmountChasseurLeger()
+    {
+        return GetCurrentLevel(Program.settings.ChantierSpatial.AmountChasseurLeger);
+    }
+    public int AmountChasseurLourd()
+    {
+        return GetCurrentLevel(Program.settings.ChantierSpatial.AmountChasseurLourd);
+    }
+    public int AmountCroiseur()
+    {
+        return GetCurrentLevel(Program.settings.ChantierSpatial.AmountCroiseur);
+    }
+    public int AmountVaisseauBataille()
+    {
+        return GetCurrentLevel(Program.settings.ChantierSpatial.AmountVaisseauBataille);
+    }
+    public int AmountTraqueur()
+    {
+        return GetCurrentLevel(Program.settings.ChantierSpatial.AmountTraqueur);
+    }
+    public int AmountBombardier()
+    {
+        return GetCurrentLevel(Program.settings.ChantierSpatial.AmountBombardier);
+    }
+    public int AmountDestructeur()
+    {
+        return GetCurrentLevel(Program.settings.ChantierSpatial.AmountDestructeur);
+    }
+    public int AmountEdm()
+    {
+        return GetCurrentLevel(Program.settings.ChantierSpatial.AmountEdm);
+    }
+    public int AmountFaucheur()
+    {
+        return GetCurrentLevel(Program.settings.ChantierSpatial.AmountFaucheur);
+    }
+    public int AmountEclaireur()
+    {
+        return GetCurrentLevel(Program.settings.ChantierSpatial.AmountEclaireur);
+    }
+    public int AmountPetitTransporteur()
+    {
+        return GetCurrentLevel(Program.settings.ChantierSpatial.AmountPetitTransporteur);
+    }
+    public int AmountGrandTransporteur()
+    {
+        return GetCurrentLevel(Program.settings.ChantierSpatial.AmountGrandTransporteur);
+    }
+    public int AmountVaisseauColonisation()
+    {
+        return GetCurrentLevel(Program.settings.ChantierSpatial.AmountVaisseauColonisation);
+    }
+    public int AmountRecycleur()
+    {
+        return GetCurrentLevel(Program.settings.ChantierSpatial.AmountRecycleur);
+    }
+    public int AmountSondeEspionnage()
+    {
+        return GetCurrentLevel(Program.settings.ChantierSpatial.AmountSondeEspionnage);
+    }
+    #endregion "Amount of spaceship"
     #endregion "public method"
-        private void BuildVaisseau(string cssSelector, int number)
-        {
-            GoTo(Menu.ChantierSpatial, act);
-           
-            MyDriver.MoveToElement(cssSelector, act).Click().Build().Perform();
-            
-          
-            SendKeysAmount(number);
-
-            MyDriver.MoveToElement(Program.settings.ChantierSpatial.Details.Develop, act).Click();
-            act.Build().Perform();
-        }
-
-        private Actions SendKeysAmount(int number)
-        {
-            IWebElement amount = Handler.MyDriver.FindElement(Program.settings.ChantierSpatial.Details.BuildAmount);
-            int maximum = int.Parse(amount.GetAttribute("max"));
-            number = maximum < number ? maximum : number;
-
-            MyDriver.MoveToElement(Program.settings.ChantierSpatial.Details.BuildAmount, act).Click().SendKeys(number.ToString());
-            return act;
-        }
-
-        #region "public"
-        public void BuildVaisseauColonisation(int number)
-        {
-            Develop(Program.settings.ChantierSpatial.VaisseauColonisation,number);
-        }
-
-        public void BuildPetitTransporteur(int number)
-        {
-            Develop(Program.settings.ChantierSpatial.PetitTransporteur,number);
-        }
-
-        public void BuildGrandTransporteur(int number)
-        {
-            Develop(Program.settings.ChantierSpatial.GrandTransporteur, number);
-        }
-
-        public void BuildChasseurLeger(int number)
-        {
-            Develop(Program.settings.ChantierSpatial.ChasseurLeger, number);
-        }
-
-        #region "Amount of spaceship"
-        public int AmountChasseurLeger()
-        {
-            return GetCurrentLevel(Program.settings.ChantierSpatial.AmountChasseurLeger);
-        }
-        public int AmountChasseurLourd()
-        {
-            return GetCurrentLevel(Program.settings.ChantierSpatial.AmountChasseurLourd);
-        }
-        public int AmountCroiseur()
-        {
-            return GetCurrentLevel(Program.settings.ChantierSpatial.AmountCroiseur);
-        }
-        public int AmountVaisseauBataille()
-        {
-            return GetCurrentLevel(Program.settings.ChantierSpatial.AmountVaisseauBataille);
-        }
-        public int AmountTraqueur()
-        {
-            return GetCurrentLevel(Program.settings.ChantierSpatial.AmountTraqueur);
-        }
-        public int AmountBombardier()
-        {
-            return GetCurrentLevel(Program.settings.ChantierSpatial.AmountBombardier);
-        }
-        public int AmountDestructeur()
-        {
-            return GetCurrentLevel(Program.settings.ChantierSpatial.AmountDestructeur);
-        }
-        public int AmountEdm()
-        {
-            return GetCurrentLevel(Program.settings.ChantierSpatial.AmountEdm);
-        }
-        public int AmountFaucheur()
-        {
-            return GetCurrentLevel(Program.settings.ChantierSpatial.AmountFaucheur);
-        }
-        public int AmountEclaireur()
-        {
-            return GetCurrentLevel(Program.settings.ChantierSpatial.AmountEclaireur);
-        }
-        public int AmountPetitTransporteur()
-        {
-            return GetCurrentLevel(Program.settings.ChantierSpatial.AmountPetitTransporteur);
-        }
-        public int AmountGrandTransporteur()
-        {
-            return GetCurrentLevel(Program.settings.ChantierSpatial.AmountGrandTransporteur);
-        }
-        public int AmountVaisseauColonisation()
-        {
-            return GetCurrentLevel(Program.settings.ChantierSpatial.AmountVaisseauColonisation);
-        }
-        public int AmountRecycleur()
-        {
-            return GetCurrentLevel(Program.settings.ChantierSpatial.AmountRecycleur);
-        }
-        public int AmountSondeEspionnage()
-        {
-            return GetCurrentLevel(Program.settings.ChantierSpatial.AmountSondeEspionnage);
-        }
-        #endregion "Amount of spaceship"
-        #endregion
     }
 }

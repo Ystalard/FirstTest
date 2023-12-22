@@ -250,7 +250,7 @@ namespace FirstTest
         /// </summary>
         /// <returns>true: the builder can construct an element.
         /// false: an element is being built or the builder has not enough resources to build anything.</returns>
-        public bool IsBusy()
+        public virtual bool IsBusy()
         {
             TimeSpan? remainingTime = RemainingTime;
             if (remainingTime != null && Timer.CheckIsRunning)
@@ -560,6 +560,56 @@ namespace FirstTest
                 else if (cssSelector == Program.settings.ChantierSpatial.SondeEspionnage)
                 {
                     return MyDriver.FindElement(cssSelector).GetAttribute("data-status") == "on";
+                }
+                else if(cssSelector == Program.settings.Defense.LanceurMissile)
+                {
+                    string status = MyDriver.FindElement(cssSelector).GetAttribute("data-status");
+                    return  status == "on" || status == "active";
+                }
+                else if(cssSelector == Program.settings.Defense.LaserLeger)
+                {
+                    string status = MyDriver.FindElement(cssSelector).GetAttribute("data-status");
+                    return  status == "on" || status == "active";
+                }
+                else if(cssSelector == Program.settings.Defense.LaserLourd)
+                {
+                    string status = MyDriver.FindElement(cssSelector).GetAttribute("data-status");
+                    return  status == "on" || status == "active";
+                }
+                else if(cssSelector == Program.settings.Defense.CanonDeGausse)
+                {
+                    string status = MyDriver.FindElement(cssSelector).GetAttribute("data-status");
+                    return  status == "on" || status == "active";
+                }
+                else if(cssSelector == Program.settings.Defense.ArtillerieIon)
+                {
+                    string status = MyDriver.FindElement(cssSelector).GetAttribute("data-status");
+                    return  status == "on" || status == "active";
+                }
+                else if(cssSelector == Program.settings.Defense.LanceurPlasma)
+                {
+                    string status = MyDriver.FindElement(cssSelector).GetAttribute("data-status");
+                    return  status == "on" || status == "active";
+                }
+                else if(cssSelector == Program.settings.Defense.PetitBouclier)
+                {
+                    string status = MyDriver.FindElement(cssSelector).GetAttribute("data-status");
+                    return  status == "on" || status == "active";
+                }
+                else if(cssSelector == Program.settings.Defense.GrandBouclier)
+                {
+                    string status = MyDriver.FindElement(cssSelector).GetAttribute("data-status");
+                    return  status == "on" || status == "active";
+                }
+                else if(cssSelector == Program.settings.Defense.MisileInterception)
+                {
+                    string status = MyDriver.FindElement(cssSelector).GetAttribute("data-status");
+                    return  status == "on" || status == "active";
+                }
+                else if(cssSelector == Program.settings.Defense.MissileInterplanetaire)
+                {
+                    string status = MyDriver.FindElement(cssSelector).GetAttribute("data-status");
+                    return  status == "on" || status == "active";
                 }
                 else
                 {

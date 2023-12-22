@@ -79,6 +79,9 @@ public partial class AppSettings
 
     [JsonProperty("defense")]
     public Defense Defense { get; set; }
+    
+    [JsonProperty("productionboxBottom")]
+    public ProductionboxBottom ProductionboxBottom { get; set; }
 }
 
 public partial class Nav
@@ -358,6 +361,70 @@ public partial class Defense
 
     [JsonProperty("details", NullValueHandling = NullValueHandling.Ignore)]
     public DefenseDetails Details { get; set; }
+
+    [JsonProperty("amountLanceurMissile")]
+    public string AmountLanceurMissile { get; set;}
+    [JsonProperty("amountLaserLeger")]
+    public string AmountLaserLeger { get; set;}
+    [JsonProperty("amountLaserLourd")]
+    public string AmountLaserLourd { get; set;}
+    [JsonProperty("amountCanonDeGausse")]
+    public string AmountCanonDeGausse { get; set;}
+    [JsonProperty("amountArtillerieIon")]
+    public string AmountArtillerieIon { get; set;}
+    [JsonProperty("amountLanceurPlasma")]
+    public string AmountLanceurPlasma { get; set;}
+    [JsonProperty("amountPetitBouclier")]
+    public string AmountPetitBouclier { get; set;}
+    [JsonProperty("amountGrandBouclier")]
+    public string AmountGrandBouclier { get; set;}
+    [JsonProperty("amountMisileInterception")]
+    public string AmountMisileInterception { get; set;}
+    [JsonProperty("amountMissileInterplanetaire")]
+    public string AmountMissileInterplanetaire { get; set;}
+
+    [JsonProperty("nameLanceurMissile")]
+    public string NameLanceurMissile { get; set;}
+
+    [JsonProperty("nameLaserLeger")]
+    public string NameLaserLeger { get; set;}
+
+    [JsonProperty("nameLaserLourd")]
+    public string NameLaserLourd { get; set;}
+
+    [JsonProperty("nameCanonDeGausse")]
+    public string NameCanonDeGausse { get; set;}
+    
+    [JsonProperty("nameArtillerieIon")]
+    public string NameArtillerieIon { get; set;}
+
+    [JsonProperty("nameLanceurPlasma")]
+    public string NameLanceurPlasma { get; set;}
+
+    [JsonProperty("namePetitBouclier")]
+    public string NamePetitBouclier { get; set;}
+
+    [JsonProperty("nameGrandBouclier")]
+    public string NameGrandBouclier { get; set;}
+
+    [JsonProperty("nameMisileInterception")]
+    public string NameMisileInterception { get; set;}
+
+    [JsonProperty("nameMissileInterplanetaire")]
+    public string NameMissileInterplanetaire { get; set;}
+
+}
+
+public partial class ProductionboxBottom
+{
+    [JsonProperty("activeConstructionInChantierSpatial")]
+    public string ActiveConstructionInChantierSpatial { get; set; }
+    
+    [JsonProperty("activeCountConstructionInChantierSpatial")]
+    public string ActiveCountConstructionInChantierSpatial { get; set; }
+    
+    [JsonProperty("queueTableChantierSpatial")]
+    public string QueueTableChantierSpatial { get; set; }
 }
 
 public partial class FacilitiesDetails
