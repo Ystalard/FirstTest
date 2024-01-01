@@ -18,7 +18,7 @@ namespace FirstTest
 
         public Planet(Actions act)
         {
-            sharedProperties = new SharedProperties{ Timer = new Handler.Timer(), TimeToBuild = TimeSpan.Zero};
+            sharedProperties = new SharedProperties{ Timer = new Handler.Timer()};
             resources = new(act,sharedProperties);
             installations = new(act, sharedProperties);
             recherche = new(act);

@@ -7,7 +7,6 @@ namespace FirstTest
     public class SharedProperties
     {
         public Handler.Timer Timer { get; set; }
-        public TimeSpan TimeToBuild { get; set; }
     }
 
     public abstract class Buildable: NavigationMenu
@@ -35,7 +34,6 @@ namespace FirstTest
         #region "property"
         #region "private property"
         private Handler.Timer _timer;
-        private TimeSpan _TimeToBuild;
         private Handler.Timer Timer 
         {
             get
@@ -59,58 +57,10 @@ namespace FirstTest
         #endregion "private property"
 
         #region "protected property"
-        protected TimeSpan TimeToBuild 
-        {
-            get
-            {
-                if(SharedProperties != null)
-                {
-                    return SharedProperties.TimeToBuild;
-                }
-                else
-                {
-                    return _TimeToBuild;
-                }
-            }
-            set
-            {
-                _TimeToBuild = value;
-                if(SharedProperties != null)
-                {
-                    
-                    SharedProperties.TimeToBuild = value;
-                }
-            }
-        }
         protected readonly Actions act;   
         
         protected Menu menu;
             
-        protected TimeSpan? RemainingTime {
-            get{
-                if(Timer == null)
-                {
-                    return null;
-                }
-                if(Timer.CheckIsRunning)
-                {
-                    TimeSpan time = Timer.GetTimeSpan();
-                
-                    if(TimeToBuild <= time)
-                    {
-                        Timer.StopTimer(); // the construction of the resource ends
-                        TimeToBuild = TimeSpan.Zero;
-                        return TimeSpan.Zero; // no remaining time to wait.
-                    }
-
-                    return TimeToBuild - time; // return the remaining time to wait.
-                }
-                
-                // timer is not running so there is no construction in coming.
-                return TimeSpan.Zero; // no remaining time to wait.          
-                
-            }
-        }
         #endregion "protected property"
         #endregion "property"
 
@@ -223,8 +173,7 @@ namespace FirstTest
 
             if(timeToWait != TimeSpan.Zero)
             {
-                TimeToBuild = timeToWait;
-                Timer.StartTimer();
+                Timer.StartTimer(timeToWait);
             }
         }
 
@@ -252,8 +201,7 @@ namespace FirstTest
         /// false: an element is being built or the builder has not enough resources to build anything.</returns>
         public virtual bool IsBusy()
         {
-            TimeSpan? remainingTime = RemainingTime;
-            if (remainingTime != null && Timer.CheckIsRunning)
+            if (Timer.IsRunning())
             {
                 return true;
             }
@@ -629,7 +577,7 @@ namespace FirstTest
         #region "protected method"
         protected void CheckDecompteTimer(Menu menu)
         {
-            if(Timer.CheckIsRunning)
+            if(Timer.IsRunning())
             {
                 // the timer is already running. No need to check if it needs to be started.
                 return;
@@ -639,12 +587,50 @@ namespace FirstTest
             // we want to be sure everything is loaded before checking the DecompteTempsDeConstruction element. 
             // It is important not to get wrong here as it would impact the timer process. Which is a tricky thing (timer is running on a different tread).
             act.Pause(TimeSpan.FromSeconds(Program.random.Next(1,2))).Build().Perform(); 
-
-            if(MyDriver.ElementExists(Program.settings.Supplies.DecompteTempsDeConstruction))
+            
+            switch (menu)
             {
-                IWebElement resourceInConstruction = MyDriver.FindElement(Program.settings.Supplies.DecompteTempsDeConstruction);
-                TimeToBuild = Iso8601Duration.Parse(resourceInConstruction.GetAttribute("datetime"));
-                Timer.StartTimer();
+                case Menu.Ressources:
+                    if(MyDriver.ElementExists(Program.settings.Supplies.DecompteTempsDeConstruction))
+                    {
+                        IWebElement resourceInConstruction = MyDriver.FindElement(Program.settings.Supplies.DecompteTempsDeConstruction);
+                        Timer.StartTimer(Iso8601Duration.Parse(resourceInConstruction.GetAttribute("datetime")));
+                    }
+                break;
+
+                case Menu.Installations:
+                    if(MyDriver.ElementExists(Program.settings.Facilities.DecompteTempsDeConstruction))
+                    {
+                        IWebElement resourceInConstruction = MyDriver.FindElement(Program.settings.Facilities.DecompteTempsDeConstruction);
+                        Timer.StartTimer(Iso8601Duration.Parse(resourceInConstruction.GetAttribute("datetime")));
+                    }
+                break;
+
+                case Menu.Recherche:
+                    if(MyDriver.ElementExists(Program.settings.Recherche.DecompteTempsDeConstruction))
+                    {
+                        IWebElement resourceInConstruction = MyDriver.FindElement(Program.settings.Recherche.DecompteTempsDeConstruction);
+                        Timer.StartTimer(Iso8601Duration.Parse(resourceInConstruction.GetAttribute("datetime")));
+                    }
+                break;
+
+                case Menu.ChantierSpatial:
+                    if(MyDriver.ElementExists(Program.settings.ChantierSpatial.DecompteTempsDeConstruction))
+                    {
+                        IWebElement resourceInConstruction = MyDriver.FindElement(Program.settings.ChantierSpatial.DecompteTempsDeConstruction);
+                        Timer.StartTimer(LiteralDuration.Parse(resourceInConstruction.Text));
+                    }
+                break;
+                case Menu.Defense:
+                    if(MyDriver.ElementExists(Program.settings.Defense.DecompteTempsDeConstruction))
+                    {
+                        IWebElement resourceInConstruction = MyDriver.FindElement(Program.settings.Defense.DecompteTempsDeConstruction);
+                        Timer.StartTimer(LiteralDuration.Parse(resourceInConstruction.Text));
+                    }
+                break;
+
+                default:
+                break;
             }
         }
 
@@ -746,7 +732,7 @@ namespace FirstTest
         {
             GoTo(menu, act);
             OpenDetails(cssSelectorToDevelop);
-            TimeToBuild = GetTimeToBuild();
+            TimeSpan timeToBuild = GetTimeToBuild();
             
             IWebElement buildElement;
             if (cssSelectorToDevelop == Program.settings.Supplies.MineMetal)
@@ -868,7 +854,7 @@ namespace FirstTest
 
             MyDriver.MoveToElement(buildElement, act).Click().Build().Perform();
             
-            Timer.StartTimer();
+            Timer.StartTimer(timeToBuild);
         }     
 
         public void Develop(string element, int number) {
@@ -882,11 +868,11 @@ namespace FirstTest
             {
                 WaitForResourcesAvailable(element);
             }else{
-                TimeToBuild = GetTimeToBuild() * numberToBuild;
+                TimeSpan timeToBuild = GetTimeToBuild() * numberToBuild;
                 MyDriver.MoveToElement(Program.settings.Supplies.TechnologyDetails.BuildAmount, act).Click().SendKeys(numberToBuild.ToString());
                 MyDriver.MoveToElement(Program.settings.Supplies.TechnologyDetails.Develop, act).Click().Build().Perform();
 
-                Timer.StartTimer();
+                Timer.StartTimer(timeToBuild);
             }
         }       
         #endregion "protected method"

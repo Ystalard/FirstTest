@@ -162,6 +162,9 @@ public partial class Login
 
 public partial class ChantierSpatial
 {
+    [JsonProperty("decompteTempsDeConstruction")]
+    public string DecompteTempsDeConstruction { get; set; }
+
     [JsonProperty("chasseurLeger")]
     public string ChasseurLeger { get; set; }
 
@@ -332,6 +335,9 @@ public partial class DefenseDetails
 
 public partial class Defense
 {
+    [JsonProperty("decompteTempsDeConstruction")]
+    public string DecompteTempsDeConstruction { get; set; }
+
     [JsonProperty("lanceurMissile")]
     public string LanceurMissile { get; set; }
 
@@ -672,6 +678,9 @@ public partial class RechercheDetails
 
 public partial class Recherche
 {
+    [JsonProperty("decompteTempsDeConstruction")]
+    public string DecompteTempsDeConstruction { get; set; }
+
     [JsonProperty("technoEnergie")]
     public string TechnoEnergie { get; set; }
 
