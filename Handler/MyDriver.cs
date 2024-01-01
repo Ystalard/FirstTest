@@ -19,7 +19,6 @@ namespace FirstTest.Handler
         /// </summary>
         public static IWebElement FindElement(string cssSelector)
         {
-            //use this method if you expect to find the element
             AssertStillWorking();
             WebDriverWait webDriverWait = new(Program._driver, new TimeSpan(0,0,Program.random.Next(20,30))); //after 20 ~ 30 seconds. Let consider there is an issue.
             try{
