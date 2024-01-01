@@ -82,6 +82,9 @@ public partial class AppSettings
     
     [JsonProperty("productionboxBottom")]
     public ProductionboxBottom ProductionboxBottom { get; set; }
+
+    [JsonProperty("empire")]
+    public Empire Empire { get; set; }
 }
 
 public partial class Nav
@@ -425,6 +428,12 @@ public partial class ProductionboxBottom
     
     [JsonProperty("queueTableChantierSpatial")]
     public string QueueTableChantierSpatial { get; set; }
+}
+
+public partial class Empire {
+    [JsonProperty("planetList")]
+    public string PlanetList { get; set; }
+    
 }
 
 public partial class FacilitiesDetails
