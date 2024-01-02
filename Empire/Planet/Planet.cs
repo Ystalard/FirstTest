@@ -14,16 +14,18 @@ namespace FirstTest
         public ChantierSpatial chantierSpatial;
         public Defense defense;
 
-        SharedProperties sharedProperties;
+        SharedProperties resources_and_installations_shared_timer;
+        SharedProperties chantierSpatial_and_defense_shared_timer;
 
         public Planet(Actions act)
         {
-            sharedProperties = new SharedProperties{ Timer = new Handler.Timer()};
-            resources = new(act,sharedProperties);
-            installations = new(act, sharedProperties);
+            resources_and_installations_shared_timer = new SharedProperties{ Timer = new Handler.Timer()};
+            resources = new(act,resources_and_installations_shared_timer);
+            installations = new(act, resources_and_installations_shared_timer);
             recherche = new(act);
-            chantierSpatial = new(act);
-            defense = new(act);
+            chantierSpatial_and_defense_shared_timer = new SharedProperties{ Timer = new Handler.Timer()};
+            chantierSpatial = new(act, chantierSpatial_and_defense_shared_timer);
+            defense = new(act, chantierSpatial_and_defense_shared_timer);
         }
     }
 }

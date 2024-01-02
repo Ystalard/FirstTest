@@ -4,8 +4,14 @@ using FirstTest.Handler;
 
 namespace FirstTest
 {
-    public class Defense(Actions act) : Buildable(act, Menu.Defense)
+    public class Defense : Buildable
     {
+        #region  "constructor"
+        public Defense(Actions act): base(act, Menu.Defense){}
+
+        public Defense(Actions act, SharedProperties sharedProperties): base(act, Menu.Defense, sharedProperties){}
+        #endregion "constructor"
+        
         #region "public method"
         public override bool IsBusy()
         {
