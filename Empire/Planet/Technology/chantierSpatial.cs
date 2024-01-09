@@ -4,7 +4,55 @@ using FirstTest.Handler;
 
 namespace FirstTest
 {
-    public class ChantierSpatial: Buildable
+    public interface IChantierSpatial: IBuildable
+{
+    int AmountBombardier();
+    int AmountChasseurLeger();
+    int AmountChasseurLourd();
+    int AmountCroiseur();
+    int AmountDestructeur();
+    int AmountEclaireur();
+    int AmountEdm();
+    int AmountFaucheur();
+    int AmountGrandTransporteur();
+    int AmountPetitTransporteur();
+    int AmountRecycleur();
+    int AmountSondeEspionnage();
+    int AmountTraqueur();
+    int AmountVaisseauBataille();
+    int AmountVaisseauColonisation();
+    bool CanBuildBombardier();
+    bool CanBuildChasseurLeger();
+    bool CanBuildChasseurLourd();
+    bool CanBuildCroiseur();
+    bool CanBuildDestructeur();
+    bool CanBuildEclaireur();
+    bool CanBuildEdm();
+    bool CanBuildFaucheur();
+    bool CanBuildGrandTransporteur();
+    bool CanBuildPetitTransporteur();
+    bool CanBuildRecycleur();
+    bool CanBuildSondeEspionnage();
+    bool CanBuildTraqueur();
+    bool CanBuildVaisseauBataille();
+    bool CanBuildVaisseauColonisation();
+    void DevelopBombardier(int number);
+    void DevelopChasseurLeger(int number);
+    void DevelopChasseurLourd(int number);
+    void DevelopCroiseur(int number);
+    void DevelopDestructeur(int number);
+    void DevelopEclaireur(int number);
+    void DevelopEdm(int number);
+    void DevelopFaucheur(int number);
+    void DevelopGrandTransporteur(int number);
+    void DevelopPetitTransporteur(int number);
+    void DevelopRecycleur(int number);
+    void DevelopSondeEspionnage(int number);
+    void DevelopTraqueur(int number);
+    void DevelopVaisseauBataille(int number);
+    void DevelopVaisseauColonisation(int number);
+}
+    public class ChantierSpatial: Buildable, IChantierSpatial
     {
 
     #region  "constructor"

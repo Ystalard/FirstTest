@@ -4,7 +4,42 @@ using FirstTest.Handler;
 
 namespace FirstTest
 {
-    public class Defense : Buildable
+    public interface IDefense: IBuildable
+{
+    int AmountArtillerieIon();
+    int AmountCanonDeGausse();
+    int AmountGrandBouclier();
+    int AmountLanceurMissile();
+    int AmountLanceurPlasma();
+    int AmountLaserLeger();
+    int AmountLaserLourd();
+    int AmountMisileInterception();
+    int AmountMissileInterplanetaire();
+    int AmountPetitBouclier();
+    bool CanBuildArtillerieIon();
+    bool CanBuildCanonDeGausse();
+    bool CanBuildGrandBouclier();
+    bool CanBuildLanceurMissile();
+    bool CanBuildLanceurPlasma();
+    bool CanBuildLaserLeger();
+    bool CanBuildLaserLourd();
+    bool CanBuildMisileInterception();
+    bool CanBuildMissileInterplanetaire();
+    bool CanBuildPetitBouclier();
+    void DevelopArtillerieIon(int number);
+    void DevelopCanonDeGausse(int number);
+    void DevelopGrandBouclier(int number);
+    void DevelopLanceurMissile(int number);
+    void DevelopLanceurPlasma(int number);
+    void DevelopLaserLeger(int number);
+    void DevelopLaserLourd(int number);
+    void DevelopMisileInterception(int number);
+    void DevelopMissileInterplanetaire(int number);
+    void DevelopPetitBouclier(int number);
+    List<(string name, int value)> ExtractDataFromTable(IWebElement table);
+    new bool IsBusy();
+}
+    public class Defense : Buildable, IDefense
     {
         #region  "constructor"
         public Defense(Actions act): base(act, Menu.Defense){}

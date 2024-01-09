@@ -9,6 +9,18 @@ namespace FirstTest
         public Handler.Timer Timer { get; set; }
     }
 
+    public interface IBuildable
+{
+    bool CanBuildElement(string cssSelector);
+    int CristalRequired();
+    int DeuteriumRequired();
+    void Develop(string element, int number);
+    bool HaveResourceToBuild(string cssSelector);
+    bool IsBusy();
+    int MetalRequired();
+    void WaitForResourcesAvailable(string cssSelector);
+}
+
     public abstract class Buildable: NavigationMenu
     {
         #region "constructor"

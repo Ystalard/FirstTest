@@ -72,8 +72,8 @@ class Program
             
             Connector.Connect(act);
 
-            
-            Planet planet = new(act);
+            Empire empire = new(act);
+            empire.GoToPlanet(0);
         Start:
         try{ 
             if(refresh)
@@ -92,7 +92,8 @@ class Program
                 if(initializeResources)
                 {
                     act = new(_driver);
-                    planet = new(act);
+                    empire = new(act);
+                    empire.GoToPlanet(0);
                 }
                 // NavigationMenu.GoTo(NavigationMenu.Menu.Ressources, act, force: true);
                 refresh = false; //the refresh solve the issue so we reset the value;
@@ -100,100 +101,20 @@ class Program
             
             while(true)
             {   
-                if(planet.defense.CanBuildLanceurMissile() && planet.defense.AmountLanceurMissile() < 1)
-                {
-                    planet.defense.DevelopLanceurMissile(1);
-                }
-
-                if(planet.defense.CanBuildLanceurMissile() && planet.defense.AmountLanceurMissile() < 1)
-                {
-                    planet.defense.DevelopLanceurMissile(4);
-                }
-
-                if(planet.defense.CanBuildLanceurMissile() && planet.defense.AmountLanceurMissile() > 4)
-                {
-                    planet.defense.DevelopLanceurMissile(4);
-                }
-
-                if(planet.defense.CanBuildLanceurMissile() && planet.defense.AmountLanceurMissile() > 8)
-                {
-                    planet.defense.DevelopLanceurMissile(4);
-                }
-
-
-                if(!planet.chantierSpatial.IsBusy())
-                {
-                    if(planet.chantierSpatial.CanBuildChasseurLeger() && planet.chantierSpatial.AmountChasseurLeger() < 1)
+                if(!empire.GoToPlanet(0).Defense().IsBusy()){
+                    if(empire.GoToPlanet(0).Defense().CanBuildLanceurMissile())
                     {
-                        planet.chantierSpatial.DevelopChasseurLeger(1);
+                        empire.GoToPlanet(0).Defense().DevelopLanceurMissile(1);
                     }
                 }
 
-                if(!planet.recherche.IsBusy())
+                if(!empire.GoToPlanet(0).ChantierSpatial().IsBusy())
                 {
-                    if(planet.recherche.CanBuildTechnoEnergie() && planet.recherche.GetLevelTechnoEnergie() < 1)
+                    if(empire.GoToPlanet(0).ChantierSpatial().CanBuildChasseurLeger() && empire.GoToPlanet(0).ChantierSpatial().AmountChasseurLeger() < 1)
                     {
-                        planet.recherche.BuildTechnoEnergie();
-                    }
-                    else if(planet.recherche.CanBuildReacteurCombustion() && planet.recherche.GetLevelReacteurCombustion() < 1)
-                    {
-                        planet.recherche.BuildReacteurCombustion();
-                    }
-                    else if(planet.recherche.GetLevelTechnoEnergie() < 1)
-                    {
-                        planet.recherche.WaitForResourcesAvailable(settings.Recherche.TechnoEnergie);
-                    }
-                    else if(planet.recherche.GetLevelReacteurCombustion() < 1)
-                    {
-                        planet.recherche.WaitForResourcesAvailable(settings.Recherche.ReacteurCombustion);
+                        empire.GoToPlanet(0).ChantierSpatial().DevelopChasseurLeger(1);
                     }
                 }
-
-                if(!planet.installations.IsBusy())
-                {
-                    if(planet.installations.CanBuildUsineRobot() && planet.installations.GetLevelUsineRobot() < 2)
-                    {
-                        planet.installations.BuildUsineRobot();
-                    }
-                    else if(planet.installations.CanBuildChantierSpatial() && planet.installations.GetLevelChantierSpatial() < 1)
-                    {
-                        planet.installations.BuildChantierSpatiale();
-                    }
-                    else if(planet.installations.CanBuildLaboRecherche() && planet.installations.GetLevelLaboRecherche() < 1)
-                    {
-                        planet.installations.BuildLaboRecherche();
-                    }
-                    else if(planet.installations.GetLevelUsineRobot() < 2)
-                    {
-                        planet.installations.WaitForResourcesAvailable(settings.Facilities.UsineRobot);
-                    }
-                    else if(planet.installations.GetLevelChantierSpatial() < 1)
-                    {
-                        planet.installations.WaitForResourcesAvailable(settings.Facilities.ChantierSpatial);
-                    }
-                    else if(planet.installations.GetLevelLaboRecherche() < 1)
-                    {
-                        planet.installations.WaitForResourcesAvailable(settings.Facilities.LaboRecherche);
-                    }
-                }   
-
-                if(!planet.resources.IsBusy())
-                {
-                    string cssSelectorNextResourceToBuild = planet.resources.NextResourceToBuild();  
-
-                    if(planet.resources.CanBuildResource(cssSelectorNextResourceToBuild))
-                    {
-                        int missing_energie = 0;
-                        if(planet.resources.HaveEnoughEnergie(cssSelectorNextResourceToBuild, ref missing_energie))
-                        {
-                            planet.resources.DevelopResource(cssSelectorNextResourceToBuild);
-                        }else{
-                            planet.resources.DevelopEnergie(missing_energie);
-                        }
-                    }else{
-                        planet.resources.WaitForResourcesAvailable(cssSelectorNextResourceToBuild);
-                    }
-                }  
             }
         }
         catch(Exception ex)

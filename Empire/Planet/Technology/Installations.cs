@@ -3,7 +3,34 @@ using FirstTest.Handler;
 
 namespace FirstTest
 {
-    public class Installations: Buildable
+    public interface IInstallations: IBuildable
+{
+    void BuildChantierSpatiale();
+    void BuildDepotRavitaillement();
+    void BuildDocker();
+    void BuildLaboRecherche();
+    void BuildNanites();
+    void BuildSiloMissible();
+    void BuildTerraformeur();
+    void BuildUsineRobot();
+    bool CanBuildChantierSpatial();
+    bool CanBuildDepotRavitaillement();
+    bool CanBuildDocker();
+    bool CanBuildLaboRecherche();
+    bool CanBuildNanites();
+    bool CanBuildSiloMissible();
+    bool CanBuildTerraformeur();
+    bool CanBuildUsineRobot();
+    int GetLevelChantierSpatial();
+    int GetLevelDepotRavitaillement();
+    int GetLevelDocker();
+    int GetLevelLaboRecherche();
+    int GetLevelNanites();
+    int GetLevelSiloMissible();
+    int GetLevelTerraformeur();
+    int GetLevelUsineRobot();
+}
+    public class Installations: Buildable, IInstallations
     {
         #region "constructor"
         public Installations(Actions act): base(act, Menu.Installations){}

@@ -5,7 +5,28 @@ using OpenQA.Selenium.Interactions;
 using FirstTest.Handler;
 using OpenQA.Selenium;
 
-public class Resources: Buildable
+public interface IResources: IBuildable
+{
+    void BuildBestSuitableEnergie(int missing_energie);
+    void BuildCentraleFusion();
+    void BuildCentraleSolaire();
+    void BuildForeuse(int number);
+    void BuildHangarCristal();
+    void BuildHangarDeut();
+    void BuildHangarMetal();
+    void BuildSatellite(int number);
+    bool CanBuildResource(string cssSelector);
+    void DevelodDeuterium();
+    void DevelopCristal();
+    void DevelopEnergie(int missing_energie);
+    void DevelopMetal();
+    void DevelopResource(string resource);
+    int EnergieRequired();
+    bool HaveEnoughEnergie(string cssSelector, ref int missing_energie);
+    string NextResourceToBuild();
+}
+
+public class Resources: Buildable, IResources
 {
     #region  "constructor"
     public Resources(Actions act): base(act, Menu.Ressources){}

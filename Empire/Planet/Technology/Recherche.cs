@@ -3,7 +3,58 @@ using FirstTest.Handler;
 
 namespace FirstTest
 {
-    public class Recherche: Buildable
+    public interface IRecherche: IBuildable
+{
+    void BuildPropulsionHyperespace();
+    void BuildReacteurCombustion();
+    void BuildReacteurImpulsion();
+    void BuildReseauRecherche();
+    void BuildTechnoArme();
+    void BuildTechnoAstro();
+    void BuildTechnoBouclier();
+    void BuildTechnoEnergie();
+    void BuildTechnoEspionnage();
+    void BuildTechnoGraviton();
+    void BuildTechnoHyperespace();
+    void BuildTechnoIons();
+    void BuildTechnoLaser();
+    void BuildTechnoOrdinateur();
+    void BuildTechnoPlasma();
+    void BuildTechnoProtectionVaisseaux();
+    bool CanBuildPropulsionHyperespace();
+    bool CanBuildReacteurCombustion();
+    bool CanBuildReacteurImpulsion();
+    bool CanBuildReseauRecherche();
+    bool CanBuildTechnoArme();
+    bool CanBuildTechnoAstro();
+    bool CanBuildTechnoBouclier();
+    bool CanBuildTechnoEnergie();
+    bool CanBuildTechnoEspionnage();
+    bool CanBuildTechnoGraviton();
+    bool CanBuildTechnoHyperespace();
+    bool CanBuildTechnoIons();
+    bool CanBuildTechnoLaser();
+    bool CanBuildTechnoOrdinateur();
+    bool CanBuildTechnoPlasma();
+    bool CanBuildTechnoProtectionVaisseaux();
+    int GetLevelPropulsionHyperespace();
+    int GetLevelReacteurCombustion();
+    int GetLevelReacteurImpulsion();
+    int GetLevelReseauRecherche();
+    int GetLevelTechnoArme();
+    int GetLevelTechnoAstro();
+    int GetLevelTechnoBouclier();
+    int GetLevelTechnoEnergie();
+    int GetLevelTechnoEspionnage();
+    int GetLevelTechnoGraviton();
+    int GetLevelTechnoHyperespace();
+    int GetLevelTechnoIons();
+    int GetLevelTechnoLaser();
+    int GetLevelTechnoOrdinateur();
+    int GetLevelTechnoPlasma();
+    int GetLevelTechnoProtectionVaisseaux();
+}
+    public class Recherche: Buildable, IRecherche
     {
 
         #region "Constructor"
