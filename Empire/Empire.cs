@@ -10,7 +10,7 @@ using System.Reflection.Metadata;
 
 namespace FirstTest
 {
-    public class Empire
+    public class Empire : NavigationMenu
     {
         private List<(string id,Planet planet)> planets = [];
         Actions act;
@@ -79,37 +79,16 @@ namespace FirstTest
         }
         #endregion "constructor"
 
-        public IPlanet GoToPlanet(string planetName)
-        {
-            IWebElement planet = MyDriver.FindElement(planets.Find(planet => planet.planet.name == planetName).id);
-            MyDriver.MoveToElement(planet, act).Click().Build().Perform();
-            
-            bool planetSelected = false;
-            while(!planetSelected)
-            {
-                planet = MyDriver.FindElement(planets.Find(planet => planet.planet.name == planetName).id);
-                planetSelected = planet.GetAttribute("class").Contains("hightlightPlanet");
-            };
-
-            return planets.Find(planet => planet.planet.name == planetName).planet;
-        }
-
+        #region public methods
         public IPlanet GoToPlanet(int position)
         {
-            IWebElement planet = MyDriver.FindElement(planets[position].id);
-            MyDriver.MoveToElement(planet, act).Click().Build().Perform();
-            bool planetSelected = false;
-            while(!planetSelected)
-            {
-                planet = MyDriver.FindElement(planets[position].id);
-                planetSelected = planet.GetAttribute("class").Contains("hightlightPlanet");
-            };
-
-            return planets[position].planet;
+            return GoToPlanet(position, planets, act);
         }
-    
-        #region "private"
-        
-        #endregion "private"
+
+        public IPlanet GoToPlanet(string planetName)
+        {
+            return GoToPlanet(planetName, planets, act);
+        }
+        #endregion
     }
 }

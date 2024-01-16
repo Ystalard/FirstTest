@@ -51,17 +51,23 @@ namespace FirstTest
     void DevelopTraqueur(int number);
     void DevelopVaisseauBataille(int number);
     void DevelopVaisseauColonisation(int number);
+    new bool IsBusy();
 }
     public class ChantierSpatial: Buildable, IChantierSpatial
     {
 
     #region  "constructor"
-    public ChantierSpatial(Actions act): base(act, Menu.ChantierSpatial){}
+    public ChantierSpatial(Actions act, IPlanet planet): base(act, Menu.ChantierSpatial, planet){}
 
-    public ChantierSpatial(Actions act, SharedProperties sharedProperties): base(act, Menu.ChantierSpatial, sharedProperties){}
+    public ChantierSpatial(Actions act, SharedProperties sharedProperties, IPlanet planet): base(act, Menu.ChantierSpatial, sharedProperties, planet){}
     #endregion "constructor"
 
     #region "public method"
+    public override bool IsBusy()
+    {
+        return GetPlanet().Installations().GetInstallationsInConstruction() == Program.settings.Facilities.ChantierSpatial ? true : base.IsBusy();
+    }
+
     public void DevelopChasseurLeger(int number)
     {
         Develop(Program.settings.ChantierSpatial.ChasseurLeger, number);

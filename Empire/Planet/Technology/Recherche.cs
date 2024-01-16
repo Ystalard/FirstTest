@@ -53,15 +53,20 @@ namespace FirstTest
     int GetLevelTechnoOrdinateur();
     int GetLevelTechnoPlasma();
     int GetLevelTechnoProtectionVaisseaux();
+    new bool IsBusy();
 }
     public class Recherche: Buildable, IRecherche
     {
 
         #region "Constructor"
-        public Recherche(Actions act): base(act, Menu.Recherche){}
+        public Recherche(Actions act, IPlanet planet): base(act, Menu.Recherche, planet){}
         #endregion
 
         #region "public"
+        public override bool IsBusy()
+        {
+            return GetPlanet().Installations().GetInstallationsInConstruction() == Program.settings.Facilities.LaboRecherche ? true : base.IsBusy();
+        }
         #region "Recherche fondamentales"
         public void BuildTechnoEnergie()
         {

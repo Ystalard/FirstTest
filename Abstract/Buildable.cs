@@ -14,7 +14,6 @@ namespace FirstTest
     bool CanBuildElement(string cssSelector);
     int CristalRequired();
     int DeuteriumRequired();
-    void Develop(string element, int number);
     bool HaveResourceToBuild(string cssSelector);
     bool IsBusy();
     int MetalRequired();
@@ -24,20 +23,22 @@ namespace FirstTest
     public abstract class Buildable: NavigationMenu
     {
         #region "constructor"
-        public Buildable(Actions act, NavigationMenu.Menu menu, SharedProperties sharedProperties)
+        public Buildable(Actions act, NavigationMenu.Menu menu, SharedProperties sharedProperties, IPlanet planet)
         {
             this.SharedProperties = sharedProperties;
             this.act = act;
             this.menu = menu;
+            this.planet = planet;
             GoTo(menu, act);
             CheckDecompteTimer(menu);
         }
 
-        public Buildable(Actions act, NavigationMenu.Menu menu)
+        public Buildable(Actions act, NavigationMenu.Menu menu, IPlanet planet)
         {
             Timer = new();
             this.act = act;
             this.menu = menu;
+            this.planet = planet;
             GoTo(menu, act);
             CheckDecompteTimer(menu);
         }
@@ -72,7 +73,7 @@ namespace FirstTest
         protected readonly Actions act;   
         
         protected Menu menu;
-            
+        protected IPlanet planet;    
         #endregion "protected property"
         #endregion "property"
 
@@ -587,6 +588,11 @@ namespace FirstTest
         #endregion "public method"
 
         #region "protected method"
+        protected IPlanet GetPlanet()
+        {
+            return planet;
+        }
+        
         protected void CheckDecompteTimer(Menu menu)
         {
             if(Timer.IsRunning())
@@ -869,7 +875,7 @@ namespace FirstTest
             Timer.StartTimer(timeToBuild);
         }     
 
-        public void Develop(string element, int number) {
+        protected void Develop(string element, int number) {
             GoTo(menu, act);
             OpenDetails(element);
             

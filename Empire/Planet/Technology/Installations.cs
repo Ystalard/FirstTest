@@ -29,20 +29,39 @@ namespace FirstTest
     int GetLevelSiloMissible();
     int GetLevelTerraformeur();
     int GetLevelUsineRobot();
+    string GetInstallationsInConstruction();
 }
     public class Installations: Buildable, IInstallations
     {
-        #region "constructor"
-        public Installations(Actions act): base(act, Menu.Installations){}
+        #region properties
+        #region private properties
+        private string installations_in_construction;
+        #endregion private properties
+        #endregion properties
 
-        public Installations(Actions act, SharedProperties sharedProperties): base(act, Menu.Installations, sharedProperties){}
+        #region "constructor"
+        public Installations(Actions act, IPlanet planet): base(act, Menu.Installations, planet){}
+
+        public Installations(Actions act, SharedProperties sharedProperties, IPlanet planet): base(act, Menu.Installations, sharedProperties, planet){}
         #endregion "constructor"
 
-
         #region "public"
+        public string GetInstallationsInConstruction()
+        {
+            if(!base.IsBusy())
+            {
+                installations_in_construction = string.Empty;
+            }
+            return installations_in_construction;
+        }
+
         public void BuildUsineRobot()
         {
             Develop(Program.settings.Facilities.UsineRobot);
+            if(base.IsBusy())
+            {
+                installations_in_construction = Program.settings.Facilities.UsineRobot;
+            }
         }
 
         public bool CanBuildUsineRobot()
@@ -53,26 +72,47 @@ namespace FirstTest
         public void BuildChantierSpatiale()
         {
             Develop(Program.settings.Facilities.ChantierSpatial);
+            if(base.IsBusy())
+            {
+                installations_in_construction = Program.settings.Facilities.ChantierSpatial;
+            }
         }
 
         public bool CanBuildChantierSpatial()
         {
+            if(GetPlanet().Defense().IsBusy() || GetPlanet().ChantierSpatial().IsBusy())
+            {
+                return false;
+            }
             return CanBuildElement(Program.settings.Facilities.ChantierSpatial);
         }
 
         public void BuildLaboRecherche()
         {
             Develop(Program.settings.Facilities.LaboRecherche);
+            if(base.IsBusy())
+            {
+                installations_in_construction = Program.settings.Facilities.LaboRecherche;
+            }
         }
 
         public bool CanBuildLaboRecherche()
         {
+            if(GetPlanet().Recherche().IsBusy())
+            {
+                return false;
+            }
+            
             return CanBuildElement(Program.settings.Facilities.LaboRecherche);
         }
 
         public  void BuildDepotRavitaillement()
         {
             Develop(Program.settings.Facilities.DepotRavitaillement);
+            if(base.IsBusy())
+            {
+                installations_in_construction = Program.settings.Facilities.DepotRavitaillement;
+            }
         }
 
         public bool CanBuildDepotRavitaillement()
@@ -83,6 +123,10 @@ namespace FirstTest
         public void BuildSiloMissible()
         {
             Develop(Program.settings.Facilities.SiloMissible);
+            if(base.IsBusy())
+            {
+                installations_in_construction = Program.settings.Facilities.SiloMissible;
+            }
         }
 
         public bool CanBuildSiloMissible()
@@ -93,6 +137,10 @@ namespace FirstTest
         public void BuildNanites()
         {
             Develop(Program.settings.Facilities.Nanites);
+            if(base.IsBusy())
+            {
+                installations_in_construction = Program.settings.Facilities.Nanites;
+            }
         }
 
         public bool CanBuildNanites()
@@ -103,6 +151,10 @@ namespace FirstTest
         public void BuildTerraformeur()
         {
             Develop(Program.settings.Facilities.Terraformeur);
+            if(base.IsBusy())
+            {
+                installations_in_construction = Program.settings.Facilities.Terraformeur;
+            }
         }
 
         public bool CanBuildTerraformeur()
@@ -113,6 +165,10 @@ namespace FirstTest
         public void BuildDocker()
         {
             Develop(Program.settings.Facilities.Docker);
+            if(base.IsBusy())
+            {
+                installations_in_construction = Program.settings.Facilities.Docker;
+            }
         }
 
         public bool CanBuildDocker()

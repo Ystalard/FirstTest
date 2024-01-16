@@ -29,13 +29,12 @@ public interface IResources: IBuildable
 public class Resources: Buildable, IResources
 {
     #region  "constructor"
-    public Resources(Actions act): base(act, Menu.Ressources){}
+    public Resources(Actions act, IPlanet planet): base(act, Menu.Ressources, planet){}
 
-    public Resources(Actions act, SharedProperties sharedProperties): base(act, Menu.Ressources, sharedProperties){}
+    public Resources(Actions act, SharedProperties sharedProperties, IPlanet planet): base(act, Menu.Ressources, sharedProperties, planet){}
     #endregion "constructor"
 
     #region "method"
-
     #region "public method"
     #region "Develop"
     public void DevelopMetal()

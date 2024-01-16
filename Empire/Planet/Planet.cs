@@ -19,6 +19,8 @@ namespace FirstTest
 
     public class Planet: IPlanet
     {
+        #region "properties"
+        #region "public properties"
         public string name;
         public int galaxy;
         public int solarSystem;
@@ -37,7 +39,9 @@ namespace FirstTest
                 position = value.position;
             }
         }
+        #endregion "public property"
 
+        #region "private properties"
         private Resources resources;
         private Installations installations;
         private Recherche recherche;
@@ -46,7 +50,10 @@ namespace FirstTest
 
         SharedProperties resources_and_installations_shared_timer;
         SharedProperties chantierSpatial_and_defense_shared_timer;
-
+        #endregion "private properties"
+        #endregion "properties"
+        
+        #region "constructor"
         public Planet(Actions act, string name, (int min, int max) temperatureRange, (int used, int max) cases, (int galaxy, int solarSystem, int position) coordinates)
         {
             this.name = name;
@@ -54,14 +61,17 @@ namespace FirstTest
             this.cases = cases;
             this.Coordinate = coordinates;
             resources_and_installations_shared_timer = new SharedProperties{ Timer = new Handler.Timer()};
-            resources = new Resources(act,resources_and_installations_shared_timer);
-            installations = new Installations(act, resources_and_installations_shared_timer);
-            recherche = new Recherche(act);
+            resources = new Resources(act,resources_and_installations_shared_timer, this);
+            installations = new Installations(act, resources_and_installations_shared_timer, this);
+            recherche = new Recherche(act, this);
             chantierSpatial_and_defense_shared_timer = new SharedProperties{ Timer = new Handler.Timer()};
-            chantierSpatial = new ChantierSpatial(act, chantierSpatial_and_defense_shared_timer);
-            defense = new Defense(act, chantierSpatial_and_defense_shared_timer);
+            chantierSpatial = new ChantierSpatial(act, chantierSpatial_and_defense_shared_timer, this);
+            defense = new Defense(act, chantierSpatial_and_defense_shared_timer, this);
         }
+        #endregion "constructor"
 
+        #region "methods"
+        #region "public methods"
         public IResources Resources()
         {
             return resources;
@@ -82,5 +92,7 @@ namespace FirstTest
         {
             return recherche;
         }
+        #endregion "public methods"
+        #endregion "methods"
     }
 }

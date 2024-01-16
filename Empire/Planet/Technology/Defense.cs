@@ -36,21 +36,20 @@ namespace FirstTest
     void DevelopMisileInterception(int number);
     void DevelopMissileInterplanetaire(int number);
     void DevelopPetitBouclier(int number);
-    List<(string name, int value)> ExtractDataFromTable(IWebElement table);
     new bool IsBusy();
 }
     public class Defense : Buildable, IDefense
     {
         #region  "constructor"
-        public Defense(Actions act): base(act, Menu.Defense){}
+        public Defense(Actions act, IPlanet planet): base(act, Menu.Defense, planet){}
 
-        public Defense(Actions act, SharedProperties sharedProperties): base(act, Menu.Defense, sharedProperties){}
+        public Defense(Actions act, SharedProperties sharedProperties, IPlanet planet): base(act, Menu.Defense, sharedProperties, planet){}
         #endregion "constructor"
         
         #region "public method"
         public override bool IsBusy()
         {
-            return false; //never busy, construction gets into the pile of defense construction.
+            return GetPlanet().Installations().GetInstallationsInConstruction() == Program.settings.Facilities.ChantierSpatial ? true : base.IsBusy();
         }
 
         public void DevelopLanceurMissile(int number)
@@ -206,7 +205,7 @@ namespace FirstTest
             return GetCurrentLevel(Program.settings.Defense.AmountMissileInterplanetaire) + number_in_construction;
         }
 
-        public List<(string name,int value)> ExtractDataFromTable(IWebElement table)
+        private List<(string name,int value)> ExtractDataFromTable(IWebElement table)
         {
             // Find all td elements within the table
             IList<IWebElement> tds = table.FindElements(By.TagName("td"));

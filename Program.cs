@@ -8,9 +8,6 @@ using Microsoft.Extensions.Configuration;
 using FirstTest.Handler;
 using System.Diagnostics;
 
-
-
-
 class Program
 {
     public static IWebDriver _driver;
@@ -101,18 +98,18 @@ class Program
             
             while(true)
             {   
-                if(!empire.GoToPlanet(0).Defense().IsBusy()){
-                    if(empire.GoToPlanet(0).Defense().CanBuildLanceurMissile())
+                if(!empire.GoToPlanet(0).Installations().IsBusy()){
+                    if(empire.GoToPlanet(0).Installations().CanBuildLaboRecherche())
                     {
-                        empire.GoToPlanet(0).Defense().DevelopLanceurMissile(1);
+                        empire.GoToPlanet(0).Installations().BuildLaboRecherche();
                     }
                 }
 
-                if(!empire.GoToPlanet(0).ChantierSpatial().IsBusy())
+                if(!empire.GoToPlanet(0).Recherche().IsBusy())
                 {
-                    if(empire.GoToPlanet(0).ChantierSpatial().CanBuildChasseurLeger() && empire.GoToPlanet(0).ChantierSpatial().AmountChasseurLeger() < 1)
+                    if(empire.GoToPlanet(0).Recherche().CanBuildTechnoEnergie())
                     {
-                        empire.GoToPlanet(0).ChantierSpatial().DevelopChasseurLeger(1);
+                        empire.GoToPlanet(0).Recherche().BuildTechnoEnergie();
                     }
                 }
             }
