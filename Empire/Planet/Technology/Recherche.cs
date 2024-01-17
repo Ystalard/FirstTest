@@ -70,7 +70,7 @@ namespace FirstTest
         #region "Recherche fondamentales"
         public void BuildTechnoEnergie()
         {
-            Develop(Program.settings.Recherche.TechnoEnergie);
+            Develop(Program.settings.Recherche.DevelopTechnoEnergie);
         }
 
         public bool CanBuildTechnoEnergie()
@@ -80,7 +80,7 @@ namespace FirstTest
 
         public void BuildTechnoLaser()
         {
-            Develop(Program.settings.Recherche.TechnoLaser);
+            Develop(Program.settings.Recherche.DevelopTechnoLaser);
         }
 
         public bool CanBuildTechnoLaser()
@@ -90,7 +90,7 @@ namespace FirstTest
 
         public void BuildTechnoIons()
         {
-            Develop(Program.settings.Recherche.TechnoIons);
+            Develop(Program.settings.Recherche.DevelopTechnoIons);
         }
 
         public bool CanBuildTechnoIons()
@@ -100,7 +100,7 @@ namespace FirstTest
 
         public void BuildTechnoHyperespace()
         {
-            Develop(Program.settings.Recherche.TechnoHyperespace);
+            Develop(Program.settings.Recherche.DevelopTechnoHyperespace);
         }
 
         public bool CanBuildTechnoHyperespace()
@@ -109,7 +109,7 @@ namespace FirstTest
         }
         public void BuildTechnoPlasma()
         {
-            Develop(Program.settings.Recherche.TechnoPlasma);
+            Develop(Program.settings.Recherche.DevelopTechnoPlasma);
         }
 
         public bool CanBuildTechnoPlasma()
@@ -121,7 +121,7 @@ namespace FirstTest
         #region "Recherche en Propulsion"
         public void BuildReacteurCombustion()
         {
-            Develop(Program.settings.Recherche.ReacteurCombustion);
+            Develop(Program.settings.Recherche.DevelopReacteurCombustion);
         }
 
         public bool CanBuildReacteurCombustion()
@@ -130,7 +130,7 @@ namespace FirstTest
         }
         public void BuildReacteurImpulsion()
         {
-            Develop(Program.settings.Recherche.ReacteurImpulsion);
+            Develop(Program.settings.Recherche.DevelopReacteurImpulsion);
         }
 
         public bool CanBuildReacteurImpulsion()
@@ -139,7 +139,7 @@ namespace FirstTest
         }
         public void BuildPropulsionHyperespace()
         {
-            Develop(Program.settings.Recherche.PropulsionHyperespace);
+            Develop(Program.settings.Recherche.DevelopPropulsionHyperespace);
         }
 
         public bool CanBuildPropulsionHyperespace()
@@ -151,7 +151,7 @@ namespace FirstTest
         #region "Recherche avancée"
         public void BuildTechnoEspionnage()
         {
-            Develop(Program.settings.Recherche.TechnoEspionnage);
+            Develop(Program.settings.Recherche.DevelopTechnoEspionnage);
         }
 
         public bool CanBuildTechnoEspionnage()
@@ -160,7 +160,7 @@ namespace FirstTest
         }
         public void BuildTechnoOrdinateur()
         {
-            Develop(Program.settings.Recherche.TechnoOrdinateur);
+            Develop(Program.settings.Recherche.DevelopTechnoOrdinateur);
         }
 
         public bool CanBuildTechnoOrdinateur()
@@ -169,7 +169,7 @@ namespace FirstTest
         }
         public void BuildTechnoAstro()
         {
-            Develop(Program.settings.Recherche.TechnoAstro);
+            Develop(Program.settings.Recherche.DevelopTechnoAstro);
         }
 
         public bool CanBuildTechnoAstro()
@@ -178,7 +178,7 @@ namespace FirstTest
         }
         public void BuildReseauRecherche()
         {
-            Develop(Program.settings.Recherche.ReseauRecherche);
+            Develop(Program.settings.Recherche.DevelopReseauRecherche);
         }
 
         public bool CanBuildReseauRecherche()
@@ -187,7 +187,7 @@ namespace FirstTest
         }
         public void BuildTechnoGraviton()
         {
-            Develop(Program.settings.Recherche.TechnoGraviton);
+            Develop(Program.settings.Recherche.DevelopTechnoGraviton);
         }
 
         public bool CanBuildTechnoGraviton()
@@ -199,7 +199,7 @@ namespace FirstTest
         #region "Recherche de combat"
         public void BuildTechnoArme()
         {
-            Develop(Program.settings.Recherche.TechnoArme);
+            Develop(Program.settings.Recherche.DevelopTechnoArme);
         }
 
         public bool CanBuildTechnoArme()
@@ -208,7 +208,7 @@ namespace FirstTest
         }
         public void BuildTechnoBouclier()
         {
-            Develop(Program.settings.Recherche.TechnoBouclier);
+            Develop(Program.settings.Recherche.DevelopTechnoBouclier);
         }
 
         public bool CanBuildTechnoBouclier()
@@ -217,7 +217,7 @@ namespace FirstTest
         }
         public void BuildTechnoProtectionVaisseaux()
         {
-            Develop(Program.settings.Recherche.TechnoProtectionVaisseaux);
+            Develop(Program.settings.Recherche.DevelopTechnoProtectionVaisseaux);
         }
 
         public bool CanBuildTechnoProtectionVaisseaux()

@@ -57,7 +57,7 @@ namespace FirstTest
 
         public void BuildUsineRobot()
         {
-            Develop(Program.settings.Facilities.UsineRobot);
+            Develop(Program.settings.Facilities.DevelopUsineRobot);
             if(base.IsBusy())
             {
                 installations_in_construction = Program.settings.Facilities.UsineRobot;
@@ -71,7 +71,7 @@ namespace FirstTest
 
         public void BuildChantierSpatiale()
         {
-            Develop(Program.settings.Facilities.ChantierSpatial);
+            Develop(Program.settings.Facilities.DevelopChantierSpatial);
             if(base.IsBusy())
             {
                 installations_in_construction = Program.settings.Facilities.ChantierSpatial;
@@ -89,7 +89,7 @@ namespace FirstTest
 
         public void BuildLaboRecherche()
         {
-            Develop(Program.settings.Facilities.LaboRecherche);
+            Develop(Program.settings.Facilities.DevelopLaboRecherche);
             if(base.IsBusy())
             {
                 installations_in_construction = Program.settings.Facilities.LaboRecherche;
@@ -102,13 +102,13 @@ namespace FirstTest
             {
                 return false;
             }
-            
+
             return CanBuildElement(Program.settings.Facilities.LaboRecherche);
         }
 
         public  void BuildDepotRavitaillement()
         {
-            Develop(Program.settings.Facilities.DepotRavitaillement);
+            Develop(Program.settings.Facilities.DevelopDepotRavitaillement);
             if(base.IsBusy())
             {
                 installations_in_construction = Program.settings.Facilities.DepotRavitaillement;
@@ -122,7 +122,7 @@ namespace FirstTest
 
         public void BuildSiloMissible()
         {
-            Develop(Program.settings.Facilities.SiloMissible);
+            Develop(Program.settings.Facilities.DevelopSiloMissible);
             if(base.IsBusy())
             {
                 installations_in_construction = Program.settings.Facilities.SiloMissible;
@@ -136,7 +136,7 @@ namespace FirstTest
 
         public void BuildNanites()
         {
-            Develop(Program.settings.Facilities.Nanites);
+            Develop(Program.settings.Facilities.DevelopNanites);
             if(base.IsBusy())
             {
                 installations_in_construction = Program.settings.Facilities.Nanites;
@@ -150,7 +150,7 @@ namespace FirstTest
 
         public void BuildTerraformeur()
         {
-            Develop(Program.settings.Facilities.Terraformeur);
+            Develop(Program.settings.Facilities.DevelopTerraformeur);
             if(base.IsBusy())
             {
                 installations_in_construction = Program.settings.Facilities.Terraformeur;
@@ -164,7 +164,7 @@ namespace FirstTest
 
         public void BuildDocker()
         {
-            Develop(Program.settings.Facilities.Docker);
+            Develop(Program.settings.Facilities.DevelopDocker);
             if(base.IsBusy())
             {
                 installations_in_construction = Program.settings.Facilities.Docker;

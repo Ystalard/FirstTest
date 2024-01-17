@@ -172,5 +172,24 @@ namespace FirstTest.Handler
             stopwatch.Stop();
             return true;
         }
+
+        public static bool CheckElementContains(IWebElement element, string attribute, string content)
+        {
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+
+            while (!element.GetAttribute(attribute).Contains(content))
+            {
+                if (stopwatch.Elapsed.TotalSeconds > 2)
+                {
+                    stopwatch.Stop();
+
+                    return false;
+                }
+            }
+
+            stopwatch.Stop();
+            return true;
+        }
     }
 }

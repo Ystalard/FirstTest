@@ -106,7 +106,7 @@ public abstract class NavigationMenu
 
     public IPlanet GoToPlanet(int position, List<(string id, Planet planet)> planets, Actions act)
     {
-        if(current_planet != null && position == current_planet.position)
+        if(current_planet != null && planets[position].planet.name == current_planet.name)
         {
             return current_planet;
         }
@@ -132,6 +132,84 @@ public abstract class NavigationMenu
     }
     #endregion
 
+    #region protected
+    /// <summary>
+    /// Open the details tab of the element
+    /// </summary>
+    /// <param name="element">cssSelector of the element to check</param>
+    protected void OpenDetails(string element, Menu menu, Actions act)
+    { 
+        GoTo(menu, act);
+        //when the details tab is opened there is a closebutton visible.
+        if(MyDriver.ElementExists(Program.settings.Details.CloseButton))
+        {
+            //close the details as it needs to be refreshed, the wrong details might be opened.
+            MyDriver.MoveToElement(Program.settings.Details.CloseButton, act).Click().Build().Perform();
+            MyDriver.AssertElementDisappear(Program.settings.Details.CloseButton);
+            act.Pause(TimeSpan.FromSeconds(1 + Program.random.NextDouble())).Build().Perform();
+        }
+
+        // open the details by clicking on the resource.
+        MyDriver.MoveToElement(element, act).Click().Build().Perform();
+        act.Pause(TimeSpan.FromSeconds(2 + Program.random.NextDouble())).Build().Perform();
+        act.Pause(TimeSpan.FromSeconds(1 + Program.random.NextDouble())).Build().Perform();
+
+        if(!Details_opened(Program.settings.Details.CloseButton))
+        {
+            GoTo(menu, act);//re-load the resources page by clicking on the resources nav button.
+            MyDriver.MoveToElement(element, act).Click().Build().Perform();// open the details by clicking on the resource.
+
+            act.Pause(TimeSpan.FromSeconds(2 + Program.random.NextDouble())).Build().Perform();
+
+            if(!Details_opened(Program.settings.Details.CloseButton))
+            {
+                throw new MustRestartException();
+            }
+        }
+
+        if(!Details_opened_on(element))
+        {
+            throw new MustRestartException();
+        }
+    }
+
+    protected void OpenDetails(IWebElement element, Menu menu, Actions act)
+    { 
+        GoTo(menu, act);
+        //when the details tab is opened there is a closebutton visible.
+        if(MyDriver.ElementExists(Program.settings.Details.CloseButton))
+        {
+            //close the details as it needs to be refreshed, the wrong details might be opened.
+            MyDriver.MoveToElement(element, act).Click().Build().Perform();
+            MyDriver.AssertElementDisappear(Program.settings.Details.CloseButton);
+            act.Pause(TimeSpan.FromSeconds(1 + Program.random.NextDouble())).Build().Perform();
+        }
+
+        // open the details by clicking on the resource.
+        MyDriver.MoveToElement(element, act).Click().Build().Perform();
+        act.Pause(TimeSpan.FromSeconds(2 + Program.random.NextDouble())).Build().Perform();
+        act.Pause(TimeSpan.FromSeconds(1 + Program.random.NextDouble())).Build().Perform();
+
+        if(!Details_opened(Program.settings.Details.CloseButton))
+        {
+            GoTo(menu, act);//re-load the resources page by clicking on the resources nav button.
+            MyDriver.MoveToElement(element, act).Click().Build().Perform();// open the details by clicking on the resource.
+
+            act.Pause(TimeSpan.FromSeconds(2 + Program.random.NextDouble())).Build().Perform();
+
+            if(!Details_opened(Program.settings.Details.CloseButton))
+            {
+                throw new MustRestartException();
+            }
+        }
+
+        if(!Details_opened_on(element))
+        {
+            throw new MustRestartException();
+        }
+    }
+    #endregion
+
     #region  private
     private static bool Opened_on(string cssSelector)
     {
@@ -144,6 +222,21 @@ public abstract class NavigationMenu
             throw new MustRestartException();
         }
         
+    }
+
+    private static bool Details_opened(string cssSelector)
+    {
+        return MyDriver.FindElement(cssSelector) != null;
+    }        
+
+    private static bool Details_opened_on(string element_to_check)
+    {
+        return MyDriver.CheckElementContains(cssSelector: element_to_check, attribute: "class", content: "showsDetails");
+    }
+
+    private static bool Details_opened_on(IWebElement element_to_check)
+    {
+        return MyDriver.CheckElementContains(element: element_to_check, attribute: "class", content: "showsDetails");
     }
     #endregion
 }

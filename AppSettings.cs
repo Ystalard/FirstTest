@@ -908,6 +908,19 @@ public partial class Supplies
     [JsonProperty("levelCentralFusion")]
     public string LevelCentralFusion { get; set; }
 
+    [JsonProperty("developCentralFusion")]
+    public string DevelopCentralFusion {get; set;}
+    
+    [JsonProperty("developHangarMetal")]
+    public string DevelopHangarMetal {get; set;}
+    
+    [JsonProperty("developHangarCristal")]
+    public string DevelopHangarCristal {get; set;}
+    
+    [JsonProperty("developHangarDeuterium")]
+    public string DevelopHangarDeuterium {get; set;}
+    
+
     [JsonProperty("satelitteSolaire")]
     public string SatelitteSolaire { get; set; }
 

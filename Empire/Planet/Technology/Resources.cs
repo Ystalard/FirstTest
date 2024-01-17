@@ -20,7 +20,7 @@ public interface IResources: IBuildable
     void DevelopCristal();
     void DevelopEnergie(int missing_energie);
     void DevelopMetal();
-    void DevelopResource(string resource);
+    void BuildResource(string resource);
     int EnergieRequired();
     bool HaveEnoughEnergie(string cssSelector, ref int missing_energie);
     string NextResourceToBuild();
@@ -39,21 +39,21 @@ public class Resources: Buildable, IResources
     #region "Develop"
     public void DevelopMetal()
     {
-        Develop(Program.settings.Supplies.MineMetal);
+        Develop(Program.settings.Supplies.DevelopMetal);
     }
     
     public void DevelopCristal()
     {
-        Develop(Program.settings.Supplies.MineCristal);
+        Develop(Program.settings.Supplies.DevelopCristal);
     }
     
     public void DevelodDeuterium()
     {
-        Develop(Program.settings.Supplies.MineDeuterium);
+        Develop(Program.settings.Supplies.DevelopDeuterium);
     }
     public void BuildCentraleSolaire()
     {
-        Develop(Program.settings.Supplies.CentraleSolaire);
+        Develop(Program.settings.Supplies.DevelopCentralSolaire);
     }
 
     public void BuildSatellite(int number)
@@ -63,16 +63,16 @@ public class Resources: Buildable, IResources
 
     public void BuildCentraleFusion()
     {
-        Develop(Program.settings.Supplies.CentraleFusion);
+        Develop(Program.settings.Supplies.DevelopCentralFusion);
     }
 
     public void BuildBestSuitableEnergie(int missing_energie){
-        OpenDetails(Program.settings.Supplies.CentraleSolaire);
+        OpenDetails(Program.settings.Supplies.CentraleSolaire, menu, act);
         IWebElement central_solaire = MyDriver.FindElement(Program.settings.Supplies.TechnologyDetails.EnergieGainPerSatellite);
         int energieGainWithCentralSolaire = int.Parse(central_solaire.GetAttribute("data-value"));
         int central_solaire_cost = MetalRequired() + CristalRequired();
 
-        OpenDetails(Program.settings.Supplies.SatelitteSolaire);
+        OpenDetails(Program.settings.Supplies.SatelitteSolaire, menu, act);
         IWebElement satellite = MyDriver.FindElement(Program.settings.Supplies.TechnologyDetails.EnergieGainPerSatellite);
         int energieGainPerSatellite = int.Parse(satellite.GetAttribute("data-value"));
         int number_satellite_to_reach_central_solaire_energy = (int)Math.Round(energieGainWithCentralSolaire / (float)energieGainPerSatellite);
@@ -103,17 +103,17 @@ public class Resources: Buildable, IResources
 
     public void BuildHangarMetal()
     {
-        Develop(Program.settings.Supplies.HangarMetal);
+        Develop(Program.settings.Supplies.DevelopHangarMetal);
     }
 
     public void BuildHangarCristal()
     {
-        Develop(Program.settings.Supplies.HangarCristal);
+        Develop(Program.settings.Supplies.DevelopHangarCristal);
     }
 
     public void BuildHangarDeut()
     {
-        Develop(Program.settings.Supplies.HangarDeuterium);
+        Develop(Program.settings.Supplies.DevelopHangarDeuterium);
     }
 
     /// <summary>
@@ -233,8 +233,7 @@ public class Resources: Buildable, IResources
     
     public bool HaveEnoughEnergie(string cssSelector, ref int missing_energie)
     {
-        GoTo(menu, act);
-        OpenDetails(cssSelector);
+        OpenDetails(cssSelector, menu, act);
         
         missing_energie = GetCurrentEnergie() - EnergieRequired();
         if(missing_energie > - 3)
@@ -245,7 +244,39 @@ public class Resources: Buildable, IResources
         return false;
     }
 
-    public void DevelopResource(string resource) {
+    public void BuildResource(string resource) {
+        if(resource == Program.settings.Supplies.MineMetal)
+        {
+            resource = Program.settings.Supplies.DevelopMetal;
+        }
+        else if(resource == Program.settings.Supplies.MineCristal)
+        {
+            resource = Program.settings.Supplies.DevelopCristal;
+        }
+        else if(resource == Program.settings.Supplies.MineDeuterium)
+        {
+            resource = Program.settings.Supplies.DevelopDeuterium;
+        }
+        else if(resource == Program.settings.Supplies.CentraleSolaire)
+        {
+            resource = Program.settings.Supplies.DevelopCentralSolaire;
+        }
+        else if(resource == Program.settings.Supplies.CentraleFusion)
+        {
+            resource = Program.settings.Supplies.DevelopCentralFusion;
+        }
+        else if(resource == Program.settings.Supplies.HangarMetal)
+        {
+            resource = Program.settings.Supplies.DevelopHangarMetal;
+        }
+        else if(resource == Program.settings.Supplies.HangarCristal)
+        {
+            resource = Program.settings.Supplies.DevelopHangarCristal;
+        }
+        else if(resource == Program.settings.Supplies.HangarDeuterium)
+        {
+            resource = Program.settings.Supplies.DevelopHangarDeuterium;
+        }
         Develop(resource);
     }
 

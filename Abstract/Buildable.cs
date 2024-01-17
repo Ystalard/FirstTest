@@ -11,7 +11,7 @@ namespace FirstTest
 
     public interface IBuildable
 {
-    bool CanBuildElement(string cssSelector);
+    bool CanBuildElement(string cssSelector, bool force = false);
     int CristalRequired();
     int DeuteriumRequired();
     bool HaveResourceToBuild(string cssSelector);
@@ -152,8 +152,7 @@ namespace FirstTest
         /// <param name="cssSelector">css selector of the element you aim to develop.</param>
         public virtual void WaitForResourcesAvailable(string cssSelector)
         {
-            GoTo(menu, act);
-            OpenDetails(cssSelector);
+            OpenDetails(cssSelector, menu, act);
 
             int metal = GetCurrentMetal();
             int cristal = GetCurrentCristal();
@@ -197,7 +196,7 @@ namespace FirstTest
         /// <returns>true if you have the resources, false otherwise</returns>
         public bool HaveResourceToBuild(string cssSelector)
         {
-            OpenDetails(cssSelector);
+            OpenDetails(cssSelector, menu, act);
         
             if(MetalRequired() <= GetCurrentMetal() && CristalRequired() <= GetCurrentCristal())
             {
@@ -222,14 +221,15 @@ namespace FirstTest
         }
 
         /// <summary>
-        /// Check the "develop" button exists. If it exist then the element can be built. This method can't work for enumerable element (a ship or a defense for instance)
+        /// Check the element status is valid. When force is true then the timer is not checked as the element can be built even if something is already in construction.
         /// </summary>
         /// <param name="cssSelector">the css selector of the element to build</param>
+        /// <param name="force">force the validation according to 'on' and 'active' status</param>
         /// <returns></returns>
         /// <exception cref="Handler.NotImplementedException">the element is not implemented in the Buidable abstract class</exception>
-        public bool CanBuildElement(string cssSelector)
+        public bool CanBuildElement(string cssSelector, bool force = false)
         {
-            if(IsBusy())
+            if(!force && IsBusy())
             {
                 return false;
             } 
@@ -237,352 +237,12 @@ namespace FirstTest
             GoTo(menu, act);
 
             try{
-                IWebElement buildElement;
-                if (cssSelector == Program.settings.Supplies.MineMetal)
-                {
-                    if(!MyDriver.ElementExists(Program.settings.Supplies.DevelopMetal))
-                    {
-                        return false;
-                    }
-                    buildElement = MyDriver.FindElement(Program.settings.Supplies.DevelopMetal);
-                }
-                else if (cssSelector == Program.settings.Supplies.MineCristal)
-                {
-                    if(!MyDriver.ElementExists(Program.settings.Supplies.DevelopCristal))
-                    {
-                        return false;
-                    }
-                    buildElement = MyDriver.FindElement(Program.settings.Supplies.DevelopCristal);
-                }
-                else if (cssSelector == Program.settings.Supplies.MineDeuterium)
-                {
-                    if(!MyDriver.ElementExists(Program.settings.Supplies.DevelopDeuterium))
-                    {
-                        return false;
-                    }
-                    buildElement = MyDriver.FindElement(Program.settings.Supplies.DevelopDeuterium);
-                }
-                else if (cssSelector == Program.settings.Supplies.CentraleSolaire)
-                {
-                    if(!MyDriver.ElementExists(Program.settings.Supplies.DevelopCentralSolaire))
-                    {
-                        return false;
-                    }
-                    buildElement = MyDriver.FindElement(Program.settings.Supplies.DevelopCentralSolaire);
-                }
-                else if( cssSelector == Program.settings.Facilities.UsineRobot)
-                {
-                    if(!MyDriver.ElementExists(Program.settings.Facilities.DevelopUsineRobot))
-                    {
-                        return false;
-                    }
-                    buildElement = MyDriver.FindElement(Program.settings.Facilities.DevelopUsineRobot);
-                }
-                else if( cssSelector == Program.settings.Facilities.ChantierSpatial)
-                {
-                    if(!MyDriver.ElementExists(Program.settings.Facilities.DevelopChantierSpatial))
-                    {
-                        return false;
-                    }
-                    buildElement = MyDriver.FindElement(Program.settings.Facilities.DevelopChantierSpatial);
-                }
-                else if( cssSelector == Program.settings.Facilities.LaboRecherche)
-                {
-                    if(!MyDriver.ElementExists(Program.settings.Facilities.DevelopLaboRecherche))
-                    {
-                        return false;
-                    }
-                    buildElement = MyDriver.FindElement(Program.settings.Facilities.DevelopLaboRecherche);
-                }
-                else if( cssSelector == Program.settings.Facilities.DepotRavitaillement)
-                {
-                    if(!MyDriver.ElementExists(Program.settings.Facilities.DevelopDepotRavitaillement))
-                    {
-                        return false;
-                    }
-                    buildElement = MyDriver.FindElement(Program.settings.Facilities.DevelopDepotRavitaillement);
-                }
-                else if( cssSelector == Program.settings.Facilities.SiloMissible)
-                {
-                    if(!MyDriver.ElementExists(Program.settings.Facilities.DevelopSiloMissible))
-                    {
-                        return false;
-                    }
-                    buildElement = MyDriver.FindElement(Program.settings.Facilities.DevelopSiloMissible);
-                }
-                else if( cssSelector == Program.settings.Facilities.Nanites)
-                {
-                    if(!MyDriver.ElementExists(Program.settings.Facilities.DevelopNanites))
-                    {
-                        return false;
-                    }
-                    buildElement = MyDriver.FindElement(Program.settings.Facilities.DevelopNanites);
-                }
-                else if( cssSelector == Program.settings.Facilities.Terraformeur)
-                {
-                    if(!MyDriver.ElementExists(Program.settings.Facilities.DevelopTerraformeur))
-                    {
-                        return false;
-                    }
-                    buildElement = MyDriver.FindElement(Program.settings.Facilities.DevelopTerraformeur);
-                }
-                else if( cssSelector == Program.settings.Facilities.Docker)
-                {
-                    if(!MyDriver.ElementExists(Program.settings.Facilities.DevelopDocker))
-                    {
-                        return false;
-                    }
-                    buildElement = MyDriver.FindElement(Program.settings.Facilities.DevelopDocker);
-                }
-                else if (cssSelector == Program.settings.Recherche.TechnoEnergie)
-                {
-                    if(!MyDriver.ElementExists(Program.settings.Recherche.DevelopTechnoEnergie))
-                    {
-                        return false;
-                    }
-                    buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopTechnoEnergie);
-                }
-                else if (cssSelector == Program.settings.Recherche.TechnoLaser)
-                {
-                    if(!MyDriver.ElementExists(Program.settings.Recherche.DevelopTechnoLaser))
-                    {
-                        return false;
-                    }
-                    buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopTechnoLaser);
-                }
-                else if (cssSelector == Program.settings.Recherche.TechnoIons)
-                {
-                    if(!MyDriver.ElementExists(Program.settings.Recherche.DevelopTechnoIons))
-                    {
-                        return false;
-                    }
-                    buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopTechnoIons);
-                }
-                else if (cssSelector == Program.settings.Recherche.TechnoHyperespace)
-                {
-                    if(!MyDriver.ElementExists(Program.settings.Recherche.DevelopTechnoHyperespace))
-                    {
-                        return false;
-                    }
-                    buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopTechnoHyperespace);
-                }
-                else if (cssSelector == Program.settings.Recherche.TechnoPlasma)
-                {
-                    if(!MyDriver.ElementExists(Program.settings.Recherche.DevelopTechnoPlasma))
-                    {
-                        return false;
-                    }
-                    buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopTechnoPlasma);
-                }
-                else if (cssSelector == Program.settings.Recherche.ReacteurCombustion)
-                {
-                    if(!MyDriver.ElementExists(Program.settings.Recherche.DevelopReacteurCombustion))
-                    {
-                        return false;
-                    }
-                    buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopReacteurCombustion);
-                }
-                else if (cssSelector == Program.settings.Recherche.ReacteurImpulsion)
-                {
-                    if(!MyDriver.ElementExists(Program.settings.Recherche.DevelopReacteurImpulsion))
-                    {
-                        return false;
-                    }
-                    buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopReacteurImpulsion);
-                }
-                else if (cssSelector == Program.settings.Recherche.PropulsionHyperespace)
-                {
-                    if(!MyDriver.ElementExists(Program.settings.Recherche.DevelopPropulsionHyperespace))
-                    {
-                        return false;
-                    }
-                    buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopPropulsionHyperespace);
-                }
-                else if (cssSelector == Program.settings.Recherche.TechnoEspionnage)
-                {
-                    if(!MyDriver.ElementExists(Program.settings.Recherche.DevelopTechnoEspionnage))
-                    {
-                        return false;
-                    }
-                    buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopTechnoEspionnage);
-                }
-                else if (cssSelector == Program.settings.Recherche.TechnoOrdinateur)
-                {
-                    if(!MyDriver.ElementExists(Program.settings.Recherche.DevelopTechnoOrdinateur))
-                    {
-                        return false;
-                    }
-                    buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopTechnoOrdinateur);
-                }
-                else if (cssSelector == Program.settings.Recherche.TechnoAstro)
-                {
-                    if(!MyDriver.ElementExists(Program.settings.Recherche.DevelopTechnoAstro))
-                    {
-                        return false;
-                    }
-                    buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopTechnoAstro);
-                }
-                else if (cssSelector == Program.settings.Recherche.ReseauRecherche)
-                {
-                    if(!MyDriver.ElementExists(Program.settings.Recherche.DevelopReseauRecherche))
-                    {
-                        return false;
-                    }
-                    buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopReseauRecherche);
-                }
-                else if (cssSelector == Program.settings.Recherche.TechnoGraviton)
-                {
-                    if(!MyDriver.ElementExists(Program.settings.Recherche.DevelopTechnoGraviton))
-                    {
-                        return false;
-                    }
-                    buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopTechnoGraviton);
-                }
-                else if (cssSelector == Program.settings.Recherche.TechnoArme)
-                {
-                    if(!MyDriver.ElementExists(Program.settings.Recherche.DevelopTechnoArme))
-                    {
-                        return false;
-                    }
-                    buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopTechnoArme);
-                }
-                else if (cssSelector == Program.settings.Recherche.TechnoBouclier)
-                {
-                    if(!MyDriver.ElementExists(Program.settings.Recherche.DevelopTechnoBouclier))
-                    {
-                        return false;
-                    }
-                    buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopTechnoBouclier);
-                }
-                else if (cssSelector == Program.settings.Recherche.TechnoProtectionVaisseaux)
-                {
-                    if(!MyDriver.ElementExists(Program.settings.Recherche.DevelopTechnoProtectionVaisseaux))
-                    {
-                        return false;
-                    }
-                    buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopTechnoProtectionVaisseaux);
-                }
-                else if (cssSelector == Program.settings.ChantierSpatial.ChasseurLeger)
-                {
-                    return MyDriver.FindElement(cssSelector).GetAttribute("data-status") == "on";
-                }
-                else if (cssSelector == Program.settings.ChantierSpatial.ChasseurLourd)
-                {
-                    return MyDriver.FindElement(cssSelector).GetAttribute("data-status") == "on";
-                }
-                else if (cssSelector == Program.settings.ChantierSpatial.Croiseur)
-                {
-                    return MyDriver.FindElement(cssSelector).GetAttribute("data-status") == "on";
-                }
-                else if (cssSelector == Program.settings.ChantierSpatial.VaisseauBataille)
-                {
-                    return MyDriver.FindElement(cssSelector).GetAttribute("data-status") == "on";
-                }
-                else if (cssSelector == Program.settings.ChantierSpatial.Traqueur)
-                {
-                    return MyDriver.FindElement(cssSelector).GetAttribute("data-status") == "on";
-                }
-                else if (cssSelector == Program.settings.ChantierSpatial.Bombardier)
-                {
-                    return MyDriver.FindElement(cssSelector).GetAttribute("data-status") == "on";
-                }
-                else if (cssSelector == Program.settings.ChantierSpatial.Destructeur)
-                {
-                    return MyDriver.FindElement(cssSelector).GetAttribute("data-status") == "on";
-                }
-                else if (cssSelector == Program.settings.ChantierSpatial.Edm)
-                {
-                    return MyDriver.FindElement(cssSelector).GetAttribute("data-status") == "on";
-                }
-                else if (cssSelector == Program.settings.ChantierSpatial.Faucheur)
-                {
-                    return MyDriver.FindElement(cssSelector).GetAttribute("data-status") == "on";
-                }
-                else if (cssSelector == Program.settings.ChantierSpatial.Eclaireur)
-                {
-                    return MyDriver.FindElement(cssSelector).GetAttribute("data-status") == "on";
-                }
-                else if (cssSelector == Program.settings.ChantierSpatial.PetitTransporteur)
-                {
-                    return MyDriver.FindElement(cssSelector).GetAttribute("data-status") == "on";
-                }
-                else if (cssSelector == Program.settings.ChantierSpatial.GrandTransporteur)
-                {
-                    return MyDriver.FindElement(cssSelector).GetAttribute("data-status") == "on";
-                }
-                else if (cssSelector == Program.settings.ChantierSpatial.VaisseauColonisation)
-                {
-                    return MyDriver.FindElement(cssSelector).GetAttribute("data-status") == "on";
-                }
-                else if (cssSelector == Program.settings.ChantierSpatial.Recycleur)
-                {
-                    return MyDriver.FindElement(cssSelector).GetAttribute("data-status") == "on";
-                }
-                else if (cssSelector == Program.settings.ChantierSpatial.SondeEspionnage)
-                {
-                    return MyDriver.FindElement(cssSelector).GetAttribute("data-status") == "on";
-                }
-                else if(cssSelector == Program.settings.Defense.LanceurMissile)
-                {
-                    string status = MyDriver.FindElement(cssSelector).GetAttribute("data-status");
-                    return  status == "on" || status == "active";
-                }
-                else if(cssSelector == Program.settings.Defense.LaserLeger)
-                {
-                    string status = MyDriver.FindElement(cssSelector).GetAttribute("data-status");
-                    return  status == "on" || status == "active";
-                }
-                else if(cssSelector == Program.settings.Defense.LaserLourd)
-                {
-                    string status = MyDriver.FindElement(cssSelector).GetAttribute("data-status");
-                    return  status == "on" || status == "active";
-                }
-                else if(cssSelector == Program.settings.Defense.CanonDeGausse)
-                {
-                    string status = MyDriver.FindElement(cssSelector).GetAttribute("data-status");
-                    return  status == "on" || status == "active";
-                }
-                else if(cssSelector == Program.settings.Defense.ArtillerieIon)
-                {
-                    string status = MyDriver.FindElement(cssSelector).GetAttribute("data-status");
-                    return  status == "on" || status == "active";
-                }
-                else if(cssSelector == Program.settings.Defense.LanceurPlasma)
-                {
-                    string status = MyDriver.FindElement(cssSelector).GetAttribute("data-status");
-                    return  status == "on" || status == "active";
-                }
-                else if(cssSelector == Program.settings.Defense.PetitBouclier)
-                {
-                    string status = MyDriver.FindElement(cssSelector).GetAttribute("data-status");
-                    return  status == "on" || status == "active";
-                }
-                else if(cssSelector == Program.settings.Defense.GrandBouclier)
-                {
-                    string status = MyDriver.FindElement(cssSelector).GetAttribute("data-status");
-                    return  status == "on" || status == "active";
-                }
-                else if(cssSelector == Program.settings.Defense.MisileInterception)
-                {
-                    string status = MyDriver.FindElement(cssSelector).GetAttribute("data-status");
-                    return  status == "on" || status == "active";
-                }
-                else if(cssSelector == Program.settings.Defense.MissileInterplanetaire)
-                {
-                    string status = MyDriver.FindElement(cssSelector).GetAttribute("data-status");
-                    return  status == "on" || status == "active";
-                }
-                else
-                {
-                    throw new Handler.NotImplementedException();
-                }
-
+                string status = MyDriver.FindElement(cssSelector).GetAttribute("data-status");
+                return  status == "on" || force && status == "active";
             }catch(WebDriverTimeoutException)
             {
                 return false;
-            }
-
-            return true;   
+            }  
         }
         
         #endregion "public method"
@@ -592,7 +252,7 @@ namespace FirstTest
         {
             return planet;
         }
-        
+
         protected void CheckDecompteTimer(Menu menu)
         {
             if(Timer.IsRunning())
@@ -702,182 +362,20 @@ namespace FirstTest
         }
 
         /// <summary>
-        /// Open the details tab of the element
-        /// </summary>
-        /// <param name="element">cssSelector of the element to check</param>
-        protected void OpenDetails(string element)
-        { 
-            //when the details tab is opened there is a closebutton visible.
-            if(MyDriver.ElementExists(Program.settings.Details.CloseButton))
-            {
-                //close the details as it needs to be refreshed, the wrong details might be opened.
-                MyDriver.MoveToElement(Program.settings.Details.CloseButton, act).Click().Build().Perform();
-                MyDriver.AssertElementDisappear(Program.settings.Details.CloseButton);
-                act.Pause(TimeSpan.FromSeconds(1 + Program.random.NextDouble())).Build().Perform();
-            }
-
-            // open the details by clicking on the resource.
-            MyDriver.MoveToElement(element, act).Click().Build().Perform();
-            act.Pause(TimeSpan.FromSeconds(2 + Program.random.NextDouble())).Build().Perform();
-            act.Pause(TimeSpan.FromSeconds(1 + Program.random.NextDouble())).Build().Perform();
-
-            if(!Details_opened(Program.settings.Details.CloseButton))
-            {
-                GoTo(menu, act);//re-load the resources page by clicking on the resources nav button.
-                MyDriver.MoveToElement(element, act).Click().Build().Perform();// open the details by clicking on the resource.
-
-                act.Pause(TimeSpan.FromSeconds(2 + Program.random.NextDouble())).Build().Perform();
-
-                if(!Details_opened(Program.settings.Details.CloseButton))
-                {
-                    throw new MustRestartException();
-                }
-            }
-
-            if(!Details_opened_on(element))
-            {
-                throw new MustRestartException();
-            }
-        }
-
-       
-
-        /// <summary>
         /// Must click on the button which would develop the element chosen.
         /// </summary>
-        /// <param name="cssSelectorToDevelop">css selector of the element to develop.</param>
+        /// <param name="cssSelectorToDevelop">css selector of the develop button of the element.</param>
         protected void Develop(string cssSelectorToDevelop)
-        {
-            GoTo(menu, act);
-            OpenDetails(cssSelectorToDevelop);
-            TimeSpan timeToBuild = GetTimeToBuild();
-            
-            IWebElement buildElement;
-            if (cssSelectorToDevelop == Program.settings.Supplies.MineMetal)
-            {
-                buildElement = MyDriver.FindElement(Program.settings.Supplies.DevelopMetal);
-            }
-            else if (cssSelectorToDevelop == Program.settings.Supplies.MineCristal)
-            {
-                buildElement = MyDriver.FindElement(Program.settings.Supplies.DevelopCristal);
-            }
-            else if (cssSelectorToDevelop == Program.settings.Supplies.MineDeuterium)
-            {
-                buildElement = MyDriver.FindElement(Program.settings.Supplies.DevelopDeuterium);
-            }
-            else if (cssSelectorToDevelop == Program.settings.Supplies.CentraleSolaire)
-            {
-                buildElement = MyDriver.FindElement(Program.settings.Supplies.DevelopCentralSolaire);
-            }
-            else if ( cssSelectorToDevelop == Program.settings.Facilities.UsineRobot)
-            {
-                buildElement = MyDriver.FindElement(Program.settings.Facilities.DevelopUsineRobot);
-            }
-            else if ( cssSelectorToDevelop == Program.settings.Facilities.ChantierSpatial)
-            {
-                buildElement = MyDriver.FindElement(Program.settings.Facilities.DevelopChantierSpatial);
-            }
-            else if ( cssSelectorToDevelop == Program.settings.Facilities.LaboRecherche)
-            {
-                buildElement = MyDriver.FindElement(Program.settings.Facilities.DevelopLaboRecherche);
-            }
-            else if ( cssSelectorToDevelop == Program.settings.Facilities.DepotRavitaillement)
-            {
-                buildElement = MyDriver.FindElement(Program.settings.Facilities.DevelopDepotRavitaillement);
-            }
-            else if ( cssSelectorToDevelop == Program.settings.Facilities.SiloMissible)
-            {
-                buildElement = MyDriver.FindElement(Program.settings.Facilities.DevelopSiloMissible);
-            }
-            else if ( cssSelectorToDevelop == Program.settings.Facilities.Nanites)
-            {
-                buildElement = MyDriver.FindElement(Program.settings.Facilities.DevelopNanites);
-            }
-            else if ( cssSelectorToDevelop == Program.settings.Facilities.Terraformeur)
-            {
-                buildElement = MyDriver.FindElement(Program.settings.Facilities.DevelopTerraformeur);
-            }
-            else if ( cssSelectorToDevelop == Program.settings.Facilities.Docker)
-            {
-                buildElement = MyDriver.FindElement(Program.settings.Facilities.DevelopDocker);
-            }
-            else if ( cssSelectorToDevelop == Program.settings.Recherche.TechnoEnergie)
-            {
-                buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopTechnoEnergie);
-            }
-            else if ( cssSelectorToDevelop == Program.settings.Recherche.TechnoLaser)
-            {
-                buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopTechnoLaser);
-            }
-            else if ( cssSelectorToDevelop == Program.settings.Recherche.TechnoIons)
-            {
-                buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopTechnoIons);
-            }
-            else if ( cssSelectorToDevelop == Program.settings.Recherche.TechnoHyperespace)
-            {
-                buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopTechnoHyperespace);
-            }
-            else if ( cssSelectorToDevelop == Program.settings.Recherche.TechnoPlasma)
-            {
-                buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopTechnoPlasma);
-            }
-            else if ( cssSelectorToDevelop == Program.settings.Recherche.ReacteurCombustion)
-            {
-                buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopReacteurCombustion);
-            }
-            else if ( cssSelectorToDevelop == Program.settings.Recherche.ReacteurImpulsion)
-            {
-                buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopReacteurImpulsion);
-            }
-            else if ( cssSelectorToDevelop == Program.settings.Recherche.PropulsionHyperespace)
-            {
-                buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopPropulsionHyperespace);
-            }
-            else if ( cssSelectorToDevelop == Program.settings.Recherche.TechnoEspionnage)
-            {
-                buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopTechnoEspionnage);
-            }
-            else if ( cssSelectorToDevelop == Program.settings.Recherche.TechnoOrdinateur)
-            {
-                buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopTechnoOrdinateur);
-            }
-            else if ( cssSelectorToDevelop == Program.settings.Recherche.TechnoAstro)
-            {
-                buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopTechnoAstro);
-            }
-            else if ( cssSelectorToDevelop == Program.settings.Recherche.ReseauRecherche)
-            {
-                buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopReseauRecherche);
-            }
-            else if ( cssSelectorToDevelop == Program.settings.Recherche.TechnoGraviton)
-            {
-                buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopTechnoGraviton);
-            }
-            else if ( cssSelectorToDevelop == Program.settings.Recherche.TechnoArme)
-            {
-                buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopTechnoArme);
-            }
-            else if ( cssSelectorToDevelop == Program.settings.Recherche.TechnoBouclier)
-            {
-                buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopTechnoBouclier);
-            }
-            else if ( cssSelectorToDevelop == Program.settings.Recherche.TechnoProtectionVaisseaux)
-            {
-                buildElement = MyDriver.FindElement(Program.settings.Recherche.DevelopTechnoProtectionVaisseaux);
-            }
-            else
-            {
-                throw new Handler.NotImplementedException();
-            }
+        {            
+            IWebElement buildElement = MyDriver.FindElement(cssSelectorToDevelop);
 
             MyDriver.MoveToElement(buildElement, act).Click().Build().Perform();
             
-            Timer.StartTimer(timeToBuild);
+            CheckDecompteTimer(menu);
         }     
 
         protected void Develop(string element, int number) {
-            GoTo(menu, act);
-            OpenDetails(element);
+            OpenDetails(element, menu, act);
             
             int maximum = int.Parse(MyDriver.FindElement(Program.settings.Details.BuildAmount).GetAttribute("max"));
             int numberToBuild = maximum > number ? number : maximum;
@@ -907,16 +405,6 @@ namespace FirstTest
             act.Pause(TimeSpan.FromSeconds(2)).Build().Perform(); // wait for js to display the tooltip
             IWebElement tooltip = MyDriver.FindElement(Program.settings.ProductionTooltip); // access tooltip
             return int.Parse(tooltip.Text.TrimStart('+'));
-        }
-
-        private static bool Details_opened(string cssSelector)
-        {
-            return MyDriver.FindElement(cssSelector) != null;
-        }        
-
-        private static bool Details_opened_on(string element_to_check)
-        {
-            return MyDriver.CheckElementContains(cssSelector: element_to_check, attribute: "class", content: "showsDetails");
         }
         #endregion
         #endregion

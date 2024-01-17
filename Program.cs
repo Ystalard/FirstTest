@@ -98,10 +98,10 @@ class Program
             
             while(true)
             {   
-                if(!empire.GoToPlanet(0).Installations().IsBusy()){
-                    if(empire.GoToPlanet(0).Installations().CanBuildLaboRecherche())
+                if(!empire.GoToPlanet(0).Defense().IsBusy()){
+                    if(empire.GoToPlanet(0).Defense().CanBuildLanceurMissile())
                     {
-                        empire.GoToPlanet(0).Installations().BuildLaboRecherche();
+                        empire.GoToPlanet(0).Defense().DevelopLanceurMissile(1);
                     }
                 }
 
@@ -110,6 +110,24 @@ class Program
                     if(empire.GoToPlanet(0).Recherche().CanBuildTechnoEnergie())
                     {
                         empire.GoToPlanet(0).Recherche().BuildTechnoEnergie();
+                    }
+                }
+
+                if(!empire.GoToPlanet(0).Resources().IsBusy())
+                {
+                    string resource_to_build = empire.GoToPlanet(0).Resources().NextResourceToBuild();
+                    if(empire.GoToPlanet(0).Resources().CanBuildResource(resource_to_build))
+                    {
+                        int missing_energie = 0;
+                        if(empire.GoToPlanet(0).Resources().HaveEnoughEnergie(resource_to_build, ref missing_energie))
+                        {
+                            empire.GoToPlanet(0).Resources().BuildResource(resource_to_build);
+                        }
+                        else
+                        {
+                            empire.GoToPlanet(0).Resources().WaitForResourcesAvailable(resource_to_build);
+                        }
+                        
                     }
                 }
             }
