@@ -136,28 +136,41 @@ public abstract class NavigationMenu
     /// <summary>
     /// Open the details tab of the element
     /// </summary>
-    /// <param name="element">cssSelector of the element to check</param>
-    protected void OpenDetails(string element, Menu menu, Actions act)
+    /// <param name="cssSelector">cssSelector of the element to check</param>
+    protected void OpenDetails(string cssSelector, Menu menu, Actions act)
     { 
         GoTo(menu, act);
         //when the details tab is opened there is a closebutton visible.
         if(MyDriver.ElementExists(Program.settings.Details.CloseButton))
         {
-            //close the details as it needs to be refreshed, the wrong details might be opened.
-            MyDriver.MoveToElement(Program.settings.Details.CloseButton, act).Click().Build().Perform();
-            MyDriver.AssertElementDisappear(Program.settings.Details.CloseButton);
-            act.Pause(TimeSpan.FromSeconds(1 + Program.random.NextDouble())).Build().Perform();
-        }
+            IWebElement element = MyDriver.FindElement(cssSelector);
 
-        // open the details by clicking on the resource.
-        MyDriver.MoveToElement(element, act).Click().Build().Perform();
-        act.Pause(TimeSpan.FromSeconds(2 + Program.random.NextDouble())).Build().Perform();
-        act.Pause(TimeSpan.FromSeconds(1 + Program.random.NextDouble())).Build().Perform();
+            // check either details tab is the correct one
+            if(!element.GetAttribute("class").Contains("showsDetails") || !MyDriver.ElementExists(Program.settings.Details.Develop))
+            {
+                //close the details as the wrong details is opened or must be refreshed
+                MyDriver.MoveToElement(Program.settings.Details.CloseButton, act).Click().Build().Perform();
+                MyDriver.AssertElementDisappear(Program.settings.Details.CloseButton);
+                act.Pause(TimeSpan.FromSeconds(1 + Program.random.NextDouble())).Build().Perform();
+
+                // open the details by clicking on the element.
+                MyDriver.MoveToElement(cssSelector, act).Click().Build().Perform();
+                act.Pause(TimeSpan.FromSeconds(2 + Program.random.NextDouble())).Build().Perform();
+                act.Pause(TimeSpan.FromSeconds(1 + Program.random.NextDouble())).Build().Perform();
+            }
+        }
+        else
+        {
+            // open the details by clicking on the element.
+            MyDriver.MoveToElement(cssSelector, act).Click().Build().Perform();
+            act.Pause(TimeSpan.FromSeconds(2 + Program.random.NextDouble())).Build().Perform();
+            act.Pause(TimeSpan.FromSeconds(1 + Program.random.NextDouble())).Build().Perform();
+        }        
 
         if(!Details_opened(Program.settings.Details.CloseButton))
         {
             GoTo(menu, act);//re-load the resources page by clicking on the resources nav button.
-            MyDriver.MoveToElement(element, act).Click().Build().Perform();// open the details by clicking on the resource.
+            MyDriver.MoveToElement(cssSelector, act).Click().Build().Perform();// open the details by clicking on the resource.
 
             act.Pause(TimeSpan.FromSeconds(2 + Program.random.NextDouble())).Build().Perform();
 
@@ -167,7 +180,7 @@ public abstract class NavigationMenu
             }
         }
 
-        if(!Details_opened_on(element))
+        if(!Details_opened_on(cssSelector))
         {
             throw new MustRestartException();
         }
@@ -179,16 +192,27 @@ public abstract class NavigationMenu
         //when the details tab is opened there is a closebutton visible.
         if(MyDriver.ElementExists(Program.settings.Details.CloseButton))
         {
-            //close the details as it needs to be refreshed, the wrong details might be opened.
+            // check either details tab is the correct one
+            if(!element.GetAttribute("class").Contains("showsDetails") || !MyDriver.ElementExists(Program.settings.Details.Develop))
+            {
+                //close the details as the wrong details is opened or must be refreshed
+                MyDriver.MoveToElement(element, act).Click().Build().Perform();
+                MyDriver.AssertElementDisappear(Program.settings.Details.CloseButton);
+                act.Pause(TimeSpan.FromSeconds(1 + Program.random.NextDouble())).Build().Perform();
+
+                // open the details by clicking on the resource.
             MyDriver.MoveToElement(element, act).Click().Build().Perform();
-            MyDriver.AssertElementDisappear(Program.settings.Details.CloseButton);
+            act.Pause(TimeSpan.FromSeconds(2 + Program.random.NextDouble())).Build().Perform();
+            act.Pause(TimeSpan.FromSeconds(1 + Program.random.NextDouble())).Build().Perform();
+            }
+        }
+        else
+        {
+            // open the details by clicking on the resource.
+            MyDriver.MoveToElement(element, act).Click().Build().Perform();
+            act.Pause(TimeSpan.FromSeconds(2 + Program.random.NextDouble())).Build().Perform();
             act.Pause(TimeSpan.FromSeconds(1 + Program.random.NextDouble())).Build().Perform();
         }
-
-        // open the details by clicking on the resource.
-        MyDriver.MoveToElement(element, act).Click().Build().Perform();
-        act.Pause(TimeSpan.FromSeconds(2 + Program.random.NextDouble())).Build().Perform();
-        act.Pause(TimeSpan.FromSeconds(1 + Program.random.NextDouble())).Build().Perform();
 
         if(!Details_opened(Program.settings.Details.CloseButton))
         {
