@@ -6,21 +6,21 @@ namespace FirstTest
 {
     public interface IChantierSpatial: IBuildable
 {
-    int AmountBombardier();
-    int AmountChasseurLeger();
-    int AmountChasseurLourd();
-    int AmountCroiseur();
-    int AmountDestructeur();
-    int AmountEclaireur();
-    int AmountEdm();
-    int AmountFaucheur();
-    int AmountGrandTransporteur();
-    int AmountPetitTransporteur();
-    int AmountRecycleur();
-    int AmountSondeEspionnage();
-    int AmountTraqueur();
-    int AmountVaisseauBataille();
-    int AmountVaisseauColonisation();
+    int CountBombardier();
+    int CountChasseurLeger();
+    int CountChasseurLourd();
+    int CountCroiseur();
+    int CountDestructeur();
+    int CountEclaireur();
+    int CountEdm();
+    int CountFaucheur();
+    int CountGrandTransporteur();
+    int CountPetitTransporteur();
+    int CountRecycleur();
+    int CountSondeEspionnage();
+    int CountTraqueur();
+    int CountVaisseauBataille();
+    int CountVaisseauColonisation();
     bool CanBuildBombardier();
     bool CanBuildChasseurLeger();
     bool CanBuildChasseurLourd();
@@ -205,63 +205,63 @@ namespace FirstTest
     }
 
     #region "Amount of spaceship"
-    public int AmountChasseurLeger()
+    public int CountChasseurLeger()
     {
         return GetCurrentLevel(Program.settings.ChantierSpatial.AmountChasseurLeger);
     }
-    public int AmountChasseurLourd()
+    public int CountChasseurLourd()
     {
         return GetCurrentLevel(Program.settings.ChantierSpatial.AmountChasseurLourd);
     }
-    public int AmountCroiseur()
+    public int CountCroiseur()
     {
         return GetCurrentLevel(Program.settings.ChantierSpatial.AmountCroiseur);
     }
-    public int AmountVaisseauBataille()
+    public int CountVaisseauBataille()
     {
         return GetCurrentLevel(Program.settings.ChantierSpatial.AmountVaisseauBataille);
     }
-    public int AmountTraqueur()
+    public int CountTraqueur()
     {
         return GetCurrentLevel(Program.settings.ChantierSpatial.AmountTraqueur);
     }
-    public int AmountBombardier()
+    public int CountBombardier()
     {
         return GetCurrentLevel(Program.settings.ChantierSpatial.AmountBombardier);
     }
-    public int AmountDestructeur()
+    public int CountDestructeur()
     {
         return GetCurrentLevel(Program.settings.ChantierSpatial.AmountDestructeur);
     }
-    public int AmountEdm()
+    public int CountEdm()
     {
         return GetCurrentLevel(Program.settings.ChantierSpatial.AmountEdm);
     }
-    public int AmountFaucheur()
+    public int CountFaucheur()
     {
         return GetCurrentLevel(Program.settings.ChantierSpatial.AmountFaucheur);
     }
-    public int AmountEclaireur()
+    public int CountEclaireur()
     {
         return GetCurrentLevel(Program.settings.ChantierSpatial.AmountEclaireur);
     }
-    public int AmountPetitTransporteur()
+    public int CountPetitTransporteur()
     {
         return GetCurrentLevel(Program.settings.ChantierSpatial.AmountPetitTransporteur);
     }
-    public int AmountGrandTransporteur()
+    public int CountGrandTransporteur()
     {
         return GetCurrentLevel(Program.settings.ChantierSpatial.AmountGrandTransporteur);
     }
-    public int AmountVaisseauColonisation()
+    public int CountVaisseauColonisation()
     {
         return GetCurrentLevel(Program.settings.ChantierSpatial.AmountVaisseauColonisation);
     }
-    public int AmountRecycleur()
+    public int CountRecycleur()
     {
         return GetCurrentLevel(Program.settings.ChantierSpatial.AmountRecycleur);
     }
-    public int AmountSondeEspionnage()
+    public int CountSondeEspionnage()
     {
         return GetCurrentLevel(Program.settings.ChantierSpatial.AmountSondeEspionnage);
     }

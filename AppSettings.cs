@@ -1,6 +1,7 @@
 ﻿namespace FirstTest.Configuration;
 
 using System.Globalization;
+using FirstTest.Empire.Planet.Menu;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -83,6 +84,8 @@ public partial class AppSettings
     [JsonProperty("productionboxBottom")]
     public ProductionboxBottom ProductionboxBottom { get; set; }
 
+    [JsonProperty("fleet")]
+    public Fleet Fleet {get; set;}
     [JsonProperty("empire")]
     public Empire Empire { get; set; }
 }
@@ -434,6 +437,132 @@ public partial class ProductionboxBottom
     
     [JsonProperty("queueTableChantierSpatial")]
     public string QueueTableChantierSpatial { get; set; }
+}
+
+public partial class Fleet {
+    [JsonProperty("ChasseurLeger")]
+    public string ChasseurLeger {get; set;}
+    [JsonProperty("ChasseurLourd")]
+    public string ChasseurLourd {get; set;}
+    [JsonProperty("Croiseur")]
+    public string Croiseur {get; set;}
+    [JsonProperty("VaisseauBataille")]
+    public string VaisseauBataille {get; set;}
+    [JsonProperty("Traqueur")]
+    public string Traqueur {get; set;}
+    [JsonProperty("Bombardier")]
+    public string Bombardier {get; set;}
+    [JsonProperty("Destructeur")]
+    public string Destructeur {get; set;}
+    [JsonProperty("Edm")]
+    public string Edm {get; set;}
+    [JsonProperty("Faucheur")]
+    public string Faucheur {get; set;}
+    [JsonProperty("Eclaireur")]
+    public string Eclaireur {get; set;}
+    [JsonProperty("PetitTransporteur")]
+    public string PetitTransporteur {get; set;}
+    [JsonProperty("GrandTransporteur")]
+    public string GrandTransporteur {get; set;}
+    [JsonProperty("VaisseauColonisation")]
+    public string VaisseauColonisation {get; set;}
+    [JsonProperty("Recycleur")]
+    public string Recycleur {get; set;}
+    [JsonProperty("SondeEspionnage")]
+    public string SondeEspionnage {get; set;}
+    [JsonProperty("nextButton")]
+    public string NextButton {get; set;}
+    
+    [JsonProperty("sendFleetButton")]
+    public string SendFleetButton {get; set;}
+    [JsonProperty("loading")]
+    public string Loading {get; set;}
+
+    [JsonProperty("mission")]
+    public Mission Mission {get; set;}
+    [JsonProperty("to")]
+    public To To {get; set;}
+    [JsonProperty("resourcesToLoad")]
+    public ResourcesToLoad ResourcesToLoad {get; set;}
+    [JsonProperty("time")]
+    public Time Time {get; set;}
+
+    
+}
+
+public partial class Mission {
+    [JsonProperty("expedition")]
+    public string Expedition {get; set;}
+    
+    [JsonProperty("colonize")]
+    public string Colonize {get; set;}
+    
+    [JsonProperty("recycle")]
+    public string Recycle {get; set;}
+    
+    [JsonProperty("transport")]
+    public string Transport {get; set;}
+    
+    [JsonProperty("park")]
+    public string Park {get; set;}
+    
+    [JsonProperty("spy")]
+    public string Spy {get; set;}
+    
+    [JsonProperty("parkOutSideEmpire")]
+    public string ParkOutSideEmpire {get; set;}
+    
+    [JsonProperty("attack")]
+    public string Attack {get; set;}
+    
+    [JsonProperty("groupAttack")]
+    public string GroupAttack {get; set;}
+    
+    [JsonProperty("destroyMoon")]
+    public string DestroyMoon {get; set;}
+    
+}
+public partial class To {
+    [JsonProperty("galaxy")]
+    public string Galaxy {get; set;}
+
+    [JsonProperty("system")]
+    public string System {get; set;}
+
+    [JsonProperty("position")]
+    public string Position {get; set;}
+
+    [JsonProperty("playerName")]
+    public string PlayerName {get; set;}
+
+}
+public partial class ResourcesToLoad {
+    [JsonProperty("metal")]
+    public string Metal {get; set;}
+
+    [JsonProperty("crystal")]
+    public string Crystal {get; set;}
+
+    [JsonProperty("deuterium")]
+    public string Deuterium {get; set;}
+
+    [JsonProperty("food")]
+    public string Food {get; set;}
+
+    [JsonProperty("remainingResources")]
+    public string RemainingResources {get; set;}
+
+    [JsonProperty("maxResources")]
+    public string MaxResources {get; set;}
+
+    [JsonProperty("allResources")]
+    public string AllResources {get; set;}
+
+}
+public partial class Time {
+    public string ArrivalTime {get; set;}
+    public string ReturnTime {get; set;}
+    public string Steps {get; set;}
 }
 
 public partial class Empire {
