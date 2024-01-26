@@ -12,7 +12,8 @@ namespace FirstTest
 {
     public class Empire : NavigationMenu
     {
-        private List<(string id,Planet planet)> planets = [];
+        List<(string id,Planet planet)> planets = [];
+        List<MovingFleet> movingFleets = new();
         Actions act;
 
         #region "constructor"
@@ -73,7 +74,8 @@ namespace FirstTest
                 }
                 
                 act.Click().Build().Perform();
-                Planet planet1 = new Planet(act, name, temperatureRange, cases, coordinates);
+                
+                Planet planet1 = new Planet(act, name, temperatureRange, cases, coordinates, AddFleet);
                 planets.Add((id, planet1));
             }
         }
@@ -88,6 +90,17 @@ namespace FirstTest
         public IPlanet GoToPlanet(string planetName)
         {
             return GoToPlanet(planetName, planets, act);
+        }
+
+        public void AddFleet(MovingFleet movingFleet)
+        {
+            movingFleets.Add(movingFleet);
+        }
+
+        public void RemoveFleet(MovingFleet movingFleet)
+        {
+            movingFleets.Remove(movingFleet);
+            movingFleet.Dispose();
         }
         #endregion
     }

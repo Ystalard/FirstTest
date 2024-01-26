@@ -1,7 +1,6 @@
 ﻿namespace FirstTest.Configuration;
 
 using System.Globalization;
-using FirstTest.Empire.Planet.Menu;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -51,6 +50,9 @@ public partial class AppSettings
     [JsonProperty("productionTooltip")]
     public string ProductionTooltip { get; set; }
 
+    [JsonProperty("univers")]
+    public Univers Univers { get; set; }
+
     [JsonProperty("Nav")]
     public Nav Nav { get; set; }
 
@@ -88,6 +90,15 @@ public partial class AppSettings
     public Fleet Fleet {get; set;}
     [JsonProperty("empire")]
     public Empire Empire { get; set; }
+}
+
+public partial class Univers
+{
+    [JsonProperty("galaxyCount")]
+    public string GalaxyCount {get; set;}
+
+    [JsonProperty("solarSystemCount")]
+    public string SolarSystemCount {get; set;}
 }
 
 public partial class Nav

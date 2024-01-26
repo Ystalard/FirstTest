@@ -1,23 +1,30 @@
 namespace FirstTest.Handler
 {
-    public class Timer
+    public class Timer: IDisposable
     {
-        private System.Threading.Timer timer;
-        
+        #region public property
+        public event EventHandler timerStop;
+        #endregion
+        #region private properties
+        private System.Threading.Timer timer;        
         private readonly object lockObject = new object();
-
         private bool isRunning = false;
         private bool lastKnownRunningState = false;
-
         private DateTime targetTime;
         private List<TimeSpan> intervals = [];
         private int currentIndex = 0;
-        
-        public Timer()
+        private bool raiseTimerStop;
+        #endregion private properties
+
+        #region constructors
+        public Timer(bool raiseTimerStop = false)
         {
+            this.raiseTimerStop = raiseTimerStop;
             timer = new System.Threading.Timer(OnTimedEvent); // set the callback but do not start the timer
         }
+        #endregion constructors
 
+        #region public methods
         public void StartTimer(TimeSpan timeTobuild)
         {
             if(IsRunning()) throw new MustRestartException("Timer can't be overrided.");
@@ -55,7 +62,7 @@ namespace FirstTest.Handler
             if(!IsRunning()) throw new MustRestartException("Timer should not be stopped");
             
             timer.Change(Timeout.Infinite, Timeout.Infinite); // Stop the timer
-
+            
             //reset properties to initial value
             currentIndex = 0;
             intervals = [];
@@ -85,6 +92,13 @@ namespace FirstTest.Handler
             return lastKnownRunningState; // Return the last known TimeSpan
         }
 
+        public void Dispose()
+        {
+            timer.Dispose();
+        }
+        #endregion public methods
+
+        #region private methods
         private void OnTimedEvent(Object state)
         {
             lock (lockObject)
@@ -92,6 +106,10 @@ namespace FirstTest.Handler
                 if (DateTime.Now > targetTime)
                 {
                     StopTimer();
+                    if(raiseTimerStop)
+                    {
+                        timerStop?.Invoke(null,null);
+                    }
                 }
                 else
                 {
@@ -119,5 +137,6 @@ namespace FirstTest.Handler
                 }
             }
         }
+        #endregion private methods
     }
 }

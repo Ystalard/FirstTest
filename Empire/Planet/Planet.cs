@@ -8,15 +8,35 @@ namespace FirstTest
 {
     public interface IPlanet
 {
-    (int galaxy, int solarSystem, int position) Coordinate { get; set; }
+    Coordinates Coordinates { get; set; }
 
     IChantierSpatial ChantierSpatial();
     IDefense Defense();
     IInstallations Installations();
     IRecherche Recherche();
     IResources Resources();
+    IFleet Flotte(Actions act);
 }
 
+    public class Coordinates
+    {
+        public int galaxy;
+        public int solarSystem;
+        public int position;
+
+        public Coordinates(int galaxy, int solarSystem, int position)
+        {
+            this.galaxy = galaxy;
+            this.solarSystem = solarSystem;
+            this.position = position;
+        }
+
+        public static implicit operator Coordinates((int galaxy, int solarSystem, int position) tuple)
+        {
+            return new Coordinates(tuple.galaxy, tuple.solarSystem, tuple.position);
+        }
+    }
+    
     public class Planet: IPlanet
     {
         #region "properties"
@@ -29,7 +49,7 @@ namespace FirstTest
         public (int min, int max) temperatureRange;
         public (int used, int max) cases;
 
-        public (int galaxy, int solarSystem, int position) Coordinate {
+        public Coordinates Coordinates {
             get{
                 return (galaxy, solarSystem, position);
             }
@@ -47,19 +67,21 @@ namespace FirstTest
         private Recherche recherche;
         private ChantierSpatial chantierSpatial;
         private Defense defense;
+        private Fleet flotte;
 
         SharedProperties resources_and_installations_shared_timer;
         SharedProperties chantierSpatial_and_defense_shared_timer;
         #endregion "private properties"
         #endregion "properties"
         
+        
         #region "constructor"
-        public Planet(Actions act, string name, (int min, int max) temperatureRange, (int used, int max) cases, (int galaxy, int solarSystem, int position) coordinates)
+        public Planet(Actions act, string name, (int min, int max) temperatureRange, (int used, int max) cases, (int galaxy, int solarSystem, int position) coordinates, Delegate.MovingFleetEventHandler addMovingFleet)
         {
             this.name = name;
             this.temperatureRange = temperatureRange;
             this.cases = cases;
-            this.Coordinate = coordinates;
+            this.Coordinates = coordinates;
             resources_and_installations_shared_timer = new SharedProperties{ Timer = new Handler.Timer()};
             resources = new Resources(act,resources_and_installations_shared_timer, this);
             installations = new Installations(act, resources_and_installations_shared_timer, this);
@@ -67,6 +89,7 @@ namespace FirstTest
             chantierSpatial_and_defense_shared_timer = new SharedProperties{ Timer = new Handler.Timer()};
             chantierSpatial = new ChantierSpatial(act, chantierSpatial_and_defense_shared_timer, this);
             defense = new Defense(act, chantierSpatial_and_defense_shared_timer, this);
+            flotte = new Fleet(act, this, addMovingFleet);
         }
         #endregion "constructor"
 
@@ -91,6 +114,12 @@ namespace FirstTest
         public IRecherche Recherche()
         {
             return recherche;
+        }
+
+        public IFleet Flotte(Actions act)
+        {
+            NavigationMenu.GoTo(NavigationMenu.Menu.Flotte, act);
+            return flotte;
         }
         #endregion "public methods"
         #endregion "methods"

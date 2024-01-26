@@ -98,37 +98,36 @@ class Program
             
             while(true)
             {   
-                if(!empire.GoToPlanet(0).Defense().IsBusy()){
-                    if(empire.GoToPlanet(0).Defense().CanBuildLanceurMissile())
-                    {
-                        empire.GoToPlanet(0).Defense().DevelopLanceurMissile(1);
-                    }
-                }
+                IFleet fleet = empire.GoToPlanet(0).Flotte(act);
+                int count_chasseur_leger_available = fleet.GetChasseurLegerAvailable;
+                if(count_chasseur_leger_available > 0){
+                    fleet.AddChasseurLeger(count_chasseur_leger_available);
+                    fleet.Continue();
 
-                if(!empire.GoToPlanet(0).Recherche().IsBusy())
-                {
-                    if(empire.GoToPlanet(0).Recherche().CanBuildTechnoEnergie())
-                    {
-                        empire.GoToPlanet(0).Recherche().BuildTechnoEnergie();
-                    }
-                }
+                    Coordinates coord = empire.GoToPlanet(0).Coordinates;
 
-                if(!empire.GoToPlanet(0).Resources().IsBusy())
-                {
-                    string resource_to_build = empire.GoToPlanet(0).Resources().NextResourceToBuild();
-                    if(empire.GoToPlanet(0).Resources().CanBuildResource(resource_to_build))
+                    fleet.TargetPlanet(coord.galaxy, coord.solarSystem, coord.position + 2);
+
+                    DateTime arrival = fleet.GetArrivalTime();
+                    DateTime returnTime = fleet.GetArrivalTime();
+            
+                    if(fleet.GetStatus() == Fleet.TargetStatus.noob)
                     {
-                        int missing_energie = 0;
-                        if(empire.GoToPlanet(0).Resources().HaveEnoughEnergie(resource_to_build, ref missing_energie))
-                        {
-                            empire.GoToPlanet(0).Resources().BuildResource(resource_to_build);
-                        }
-                        else
-                        {
-                            empire.GoToPlanet(0).Resources().WaitForResourcesAvailable(resource_to_build);
-                        }
-                        
+                        fleet.SelectAttack();
                     }
+                    else
+                    {
+                        fleet.SelectTransport();
+                    }
+
+                    fleet.LoadAllResources();
+
+                    fleet.selectStep(2);
+                    DateTime arrival2 = fleet.GetArrivalTime();
+                    DateTime returnTime2 = fleet.GetArrivalTime();
+
+                    fleet.SendFleet();
+
                 }
             }
         }
