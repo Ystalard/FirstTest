@@ -30,7 +30,6 @@ namespace FirstTest
         public int GetCrystalLoad { get;}
         public int GetDeuteriumLoad { get;}
         public int GetFoodLoad { get;}
-        public enum TargetStatus;
         public void AddChasseurLeger(int count);
         public void AddChasseurLourd(int count);
         public void AddCroiseur(int count);
@@ -66,7 +65,7 @@ namespace FirstTest
         public bool IsMissionGroupAttackAvailable();
         public void SelectDestroyMoon();
         public bool IsMissionDestroyMoonAvailable();
-        public Fleet.TargetStatus GetStatus();
+        public Fleet.Status GetStatus();
         public void TargetPlanet(int galaxy, int system, int position);
         public DateTime GetArrivalTime();
         public DateTime GetReturnTime();
@@ -80,7 +79,7 @@ namespace FirstTest
         public void selectStep(int step);
         public void SendFleet();
     }
-    public class Fleet : NavigationMenu, IFleet
+    public partial class Fleet : NavigationMenu, IFleet
     {
         #region constructor
         public Fleet(Actions act, IPlanet planetFrom, Delegate.MovingFleetEventHandler addMovingFleet)
@@ -118,30 +117,7 @@ namespace FirstTest
         private int FoodLoad;
         #endregion private properties
 
-        #region enum
-        public class ScanOptions
-        {
-            public class Range
-            {
-                public int min;
-                public int max; 
-            }
-
-            [Flags]
-            public enum InRange
-            {
-                galaxy,
-                solarSystem_of_the_planet_which_scans,
-                position,
-                nearest,
-                all
-            }
-
-            public InRange inRange;
-            public List<Range> range;
-        }
-
-        #endregion enum
+       
         #region public properties
         public event Delegate.MovingFleetEventHandler AddMovingFleet;
         public int GetChasseurLegerAvailable
@@ -299,16 +275,6 @@ namespace FirstTest
         public int GetDeuteriumLoad { get => DeuteriumLoad;}
         public int GetFoodLoad { get => FoodLoad;}
         #endregion public properties
-
-        #region enum
-        public enum TargetStatus
-        {
-            common,
-            noob,
-            strong,
-            inactive
-        }
-        #endregion
 
         #region public method
         #region Add ship to the fleet
@@ -599,31 +565,31 @@ namespace FirstTest
         }
         #endregion select type of mission
 
-        public TargetStatus GetStatus()
+        public Status GetStatus()
         {
             IWebElement player = MyDriver.FindElement(Program.settings.Fleet.To.PlayerName);
             IWebElement spanChild = player.FindElement(By.TagName("span"));
             if (spanChild == null)
             {
-                return TargetStatus.common;
+                return Status.common;
             }
             else
             {
                 if(spanChild.GetAttribute("class").Contains("status_abbr_strong"))
                 {
-                    return TargetStatus.strong;
+                    return Status.strong;
                 }
                 else if(spanChild.GetAttribute("class").Contains("status_abbr_inactive") || spanChild.GetAttribute("class").Contains("status_abbr_longinactive"))
                 {
-                    return TargetStatus.inactive;
+                    return Status.inactive;
                 }
                 else if(spanChild.GetAttribute("class").Contains("status_abbr_noob"))
                 {
-                    return TargetStatus.noob;
+                    return Status.noob;
                 }
                 else
                 {
-                    return TargetStatus.common;
+                    return Status.common;
                 }
             }
         }
@@ -727,391 +693,6 @@ namespace FirstTest
                     MyDriver.MoveToElement(steps[9], act).Click().Build().Perform();
                 break;
             }
-        }
-
-#region scan
-        public List<Coordinates> ScanGalaxyInRange(Delegate.ScanPrerogative ScanPrerogative, ScanOptions scanOptions)
-        {
-            Coordinates coordinates_from = planetFrom.Coordinates;
-            int galaxyFrom = coordinates_from.galaxy;
-            int solarSystemFrom = coordinates_from.solarSystem;
-            int positionFrom = coordinates_from.position;
-            List<Coordinates> validCoordinates = new();
-            bool returnNearest = (scanOptions.inRange & ScanOptions.InRange.nearest) == ScanOptions.InRange.nearest;
-
-            for (int galaxy = scanOptions.range.First().min; galaxy <= scanOptions.range.First().max; galaxy++)
-            {
-                for (int solarSystem_offset = 0; solarSystem_offset < int.Parse(Program.settings.Univers.SolarSystemCount); solarSystem_offset++)
-                {
-                    bool solar_system_being_scanned_on_positive_offset = solarSystemFrom + solarSystem_offset <= int.Parse(Program.settings.Univers.SolarSystemCount);
-                    bool solar_system_being_scanned_on_negative_offset = solarSystemFrom - solarSystem_offset > 0;
-                    
-                    if (!solar_system_being_scanned_on_positive_offset && !solar_system_being_scanned_on_negative_offset)
-                    {
-                        // scan of the current galaxy ends
-                        break;
-                    }
-
-                    for (int position_offset = 0; position_offset <= 15; position_offset++)
-                    {
-                        bool planets_being_scanned_on_positive_offset = positionFrom + position_offset <= 16;
-                        if (solar_system_being_scanned_on_positive_offset && planets_being_scanned_on_positive_offset)
-                        {
-                            TargetPlanet(galaxyFrom + galaxy, solarSystemFrom + solarSystem_offset, positionFrom + position_offset);
-                            if(ScanPrerogative.Invoke())
-                            {
-                                if(returnNearest && validCoordinates.Count > 0)
-                                {
-                                    return validCoordinates;    
-                                }
-
-                                validCoordinates.Add(new Coordinates(galaxyFrom + galaxy, solarSystemFrom + solarSystem_offset, positionFrom + position_offset));
-                            }
-                        }
-
-                        bool planets_being_scanned_on_negative_offset = positionFrom - position_offset > 0;
-                        if (solar_system_being_scanned_on_negative_offset && planets_being_scanned_on_negative_offset)
-                        {
-                            TargetPlanet(galaxyFrom - galaxy, solarSystemFrom - solarSystem_offset, positionFrom - position_offset);
-                            if(ScanPrerogative.Invoke())
-                            {   
-                                if(returnNearest)
-                                {
-                                    validCoordinates.Add(new Coordinates(galaxyFrom - galaxy, solarSystemFrom - solarSystem_offset, positionFrom - position_offset));
-                                    return validCoordinates;
-                                }
-                                else
-                                {
-                                    validCoordinates.Add(new Coordinates(galaxyFrom - galaxy, solarSystemFrom - solarSystem_offset, positionFrom - position_offset));
-                                }
-                            }
-                        }
-
-                        if(planets_being_scanned_on_positive_offset && planets_being_scanned_on_negative_offset)
-                        {
-                            //scan of the current solar system ends
-                            break;
-                        }
-                    }
-                }
-            }
-
-            return validCoordinates;
-        }
-        public List<Coordinates> ScanSolarSyst                                                                                                                   emInRange(Delegate.ScanPrerogative ScanPrerogative, ScanOptions scanOptions)
-        {
-            Coordinates coordinates_from = planetFrom.Coordinates;
-            int galaxyFrom = coordinates_from.galaxy;
-            int solarSystemFrom = coordinates_from.solarSystem;
-            int positionFrom = coordinates_from.position;
-            List<Coordinates> result = new();
-            bool returnNearest = (scanOptions.inRange & ScanOptions.InRange.nearest) == ScanOptions.InRange.nearest;
-            
-            int galaxy_offset_limit = (scanOptions.inRange & ScanOptions.InRange.solarSystem_of_the_planet_which_scans)
-                                      == ScanOptions.InRange.solarSystem_of_the_planet_which_scans ? 
-                                      1 : int.Parse(Program.settings.Univers.GalaxyCount);
-            
-            for (int galaxy_offset = 0; galaxy_offset < galaxy_offset_limit; galaxy_offset++)
-            {
-                bool galaxies_being_scanned_on_positive_offset = galaxyFrom + galaxy_offset <= int.Parse(Program.settings.Univers.GalaxyCount);
-                bool galaxies_being_scanned_on_negative_offset = galaxyFrom - galaxy_offset > 0;
-
-                if (!galaxies_being_scanned_on_positive_offset && !galaxies_being_scanned_on_negative_offset)
-                {
-                    // scan of the univers ends.
-                    break;
-                }
-
-                for (int solarSytem = scanOptions.range.First().min; solarSytem <= scanOptions.range.First().max; solarSytem++)
-                {
-                    for (int position_offset = 0; position_offset <= 15; position_offset++)
-                    {
-                        bool planets_being_scanned_on_positive_offset = positionFrom + position_offset <= 16;
-                        if (galaxies_being_scanned_on_positive_offset && planets_being_scanned_on_positive_offset)
-                        {
-                            TargetPlanet(galaxyFrom + galaxy_offset, solarSytem, positionFrom + position_offset);
-                            if(ScanPrerogative.Invoke())
-                            {
-                                if(returnNearest && result.Count > 0)
-                                {
-                                    return result;    
-                                }
-
-                                result.Add(new Coordinates(galaxyFrom + galaxy_offset, solarSystemFrom + solarSytem, positionFrom + position_offset));
-                            }
-                        }
-
-                        bool planets_being_scanned_on_negative_offset = positionFrom - position_offset > 0;
-                        if (galaxies_being_scanned_on_negative_offset && planets_being_scanned_on_negative_offset)
-                        {
-                            TargetPlanet(galaxyFrom - galaxy_offset, solarSytem, positionFrom - position_offset);
-                            if(ScanPrerogative.Invoke())
-                            {   
-                                result.Add(new Coordinates(galaxyFrom - galaxy_offset, solarSystemFrom - solarSytem, positionFrom - position_offset));
-                                if(returnNearest)
-                                {
-                                    return result;
-                                }
-                            }
-                        }
-
-                        if(planets_being_scanned_on_positive_offset && planets_being_scanned_on_negative_offset)
-                        {
-                            //scan of the current solar system ends
-                            break;
-                        }
-                    }
-                }
-            }
-
-            return result;
-        }
-
-        private List<Coordinates> ScanPositionInRange(Delegate.ScanPrerogative ScanPrerogative, ScanOptions scanOptions)
-        {
-            Coordinates coordinates_from = planetFrom.Coordinates;
-            int galaxyFrom = coordinates_from.galaxy;
-            int solarSystemFrom = coordinates_from.solarSystem;
-            int positionFrom = coordinates_from.position;
-            List<Coordinates> result = new();
-            bool returnNearest = (scanOptions.inRange & ScanOptions.InRange.nearest) == ScanOptions.InRange.nearest;
-
-            for (int galaxy_offset = 0; galaxy_offset < int.Parse(Program.settings.Univers.GalaxyCount); galaxy_offset++)
-            {
-                bool univers_being_scanned_on_positive_offset = galaxyFrom + galaxy_offset <= int.Parse(Program.settings.Univers.GalaxyCount);
-                bool univers_being_scanned_on_negative_offset = galaxyFrom - galaxy_offset > 0;
-
-                if (!univers_being_scanned_on_positive_offset && !univers_being_scanned_on_negative_offset)
-                {
-                    // scan of the univers ends.
-                    break;
-                }
-
-                for (int solarSystem_offset = 0; solarSystem_offset < int.Parse(Program.settings.Univers.SolarSystemCount); solarSystem_offset++)
-                {
-                    bool solar_system_being_scanned_on_positive_offset = solarSystemFrom + solarSystem_offset <= int.Parse(Program.settings.Univers.SolarSystemCount);
-                    bool solar_system_being_scanned_on_negative_offset = solarSystemFrom - solarSystem_offset > 0;
-                    
-                    if (!solar_system_being_scanned_on_positive_offset && !solar_system_being_scanned_on_negative_offset)
-                    {
-                        // scan of the current galaxy ends
-                        break;
-                    }
-
-                    for (int position = scanOptions.range.First().min; position <= scanOptions.range.First().max; position++)
-                    {
-                        if (univers_being_scanned_on_positive_offset && solar_system_being_scanned_on_positive_offset)
-                        {
-                            TargetPlanet(galaxyFrom + galaxy_offset, solarSystemFrom + solarSystem_offset, position);
-                            if(ScanPrerogative.Invoke())
-                            {
-                                if(returnNearest && result.Count > 0)
-                                {
-                                    return result;
-                                }
-
-                                result.Add(new Coordinates(galaxyFrom + galaxy_offset, solarSystemFrom + solarSystem_offset, positionFrom + position));                               
-                            }
-                        }
-
-                        if (univers_being_scanned_on_negative_offset && solar_system_being_scanned_on_negative_offset)
-                        {
-                            TargetPlanet(galaxyFrom - galaxy_offset, solarSystemFrom - solarSystem_offset, position);
-                            if(ScanPrerogative.Invoke())
-                            {   
-                                if(returnNearest)
-                                {
-                                    result.Add(new Coordinates(galaxyFrom - galaxy_offset, solarSystemFrom - solarSystem_offset, positionFrom - position));
-                                    return result;
-                                }
-                                    
-                                result.Add(new Coordinates(galaxyFrom - galaxy_offset, solarSystemFrom - solarSystem_offset, positionFrom - position));
-                            }
-                        }
-                    }
-                }
-            }
-
-            return null;
-        }
-
-        private List<Coordinates> ScanNearest(Delegate.ScanPrerogative ScanPrerogative)
-        {
-            Coordinates coordinates_from = planetFrom.Coordinates;
-            int galaxyFrom = coordinates_from.galaxy;
-            int solarSystemFrom = coordinates_from.solarSystem;
-            int positionFrom = coordinates_from.position;
-            List<Coordinates> result = new();
-
-            for (int galaxy_offset = 0; galaxy_offset < int.Parse(Program.settings.Univers.GalaxyCount); galaxy_offset++)
-            {
-                bool univers_being_scanned_on_positive_offset = galaxyFrom + galaxy_offset <= int.Parse(Program.settings.Univers.GalaxyCount);
-                bool univers_being_scanned_on_negative_offset = galaxyFrom - galaxy_offset > 0;
-
-                if (!univers_being_scanned_on_positive_offset && !univers_being_scanned_on_negative_offset)
-                {
-                    // scan of the univers ends.
-                    break;
-                }
-
-                for (int solarSystem_offset = 0; solarSystem_offset < int.Parse(Program.settings.Univers.SolarSystemCount); solarSystem_offset++)
-                {
-                    bool solar_system_being_scanned_on_positive_offset = solarSystemFrom + solarSystem_offset <= int.Parse(Program.settings.Univers.SolarSystemCount);
-                    bool solar_system_being_scanned_on_negative_offset = solarSystemFrom - solarSystem_offset > 0;
-                    
-                    if (!solar_system_being_scanned_on_positive_offset && !solar_system_being_scanned_on_negative_offset)
-                    {
-                        // scan of the current galaxy ends
-                        break;
-                    }
-
-                    for (int position_offset = 0; position_offset <= 15; position_offset++)
-                    {
-                        bool planets_being_scanned_on_positive_offset = positionFrom + position_offset <= 16;
-                        if (univers_being_scanned_on_positive_offset && solar_system_being_scanned_on_positive_offset && planets_being_scanned_on_positive_offset)
-                        {
-                            TargetPlanet(galaxyFrom + galaxy_offset, solarSystemFrom + solarSystem_offset, positionFrom + position_offset);
-                            if(ScanPrerogative.Invoke())
-                            {
-                                if(result.Count > 0)
-                                {
-                                    return result;
-                                }
-
-                                result.Add(new Coordinates(galaxyFrom + galaxy_offset, solarSystemFrom + solarSystem_offset, positionFrom + position_offset));
-                            }
-                        }
-
-                        bool planets_being_scanned_on_negative_offset = positionFrom - position_offset > 0;
-                        if (univers_being_scanned_on_negative_offset && solar_system_being_scanned_on_negative_offset && planets_being_scanned_on_negative_offset)
-                        {
-                            TargetPlanet(galaxyFrom - galaxy_offset, solarSystemFrom - solarSystem_offset, positionFrom - position_offset);
-                            if(ScanPrerogative.Invoke())
-                            {   
-                                result.Add(new Coordinates(galaxyFrom - galaxy_offset, solarSystemFrom - solarSystem_offset, positionFrom - position_offset));
-                                return result;                                
-                            }
-                        }
-
-                        if(planets_being_scanned_on_positive_offset && planets_being_scanned_on_negative_offset)
-                        {
-                            //scan of the current solar system ends
-                            break;
-                        }
-                    }
-                }
-            }
-
-            return null;
-        }
-
-        public List<Coordinates> ScanAll(Delegate.ScanPrerogative ScanPrerogative)
-        {
-            Coordinates coordinates_from = planetFrom.Coordinates;
-            int galaxyFrom = coordinates_from.galaxy;
-            int solarSystemFrom = coordinates_from.solarSystem;
-            int positionFrom = coordinates_from.position;
-            List<Coordinates> validCoordinates = new();
-
-            for (int galaxy_offset = 0; galaxy_offset < int.Parse(Program.settings.Univers.GalaxyCount); galaxy_offset++)
-            {
-                bool univers_being_scanned_on_positive_offset = galaxyFrom + galaxy_offset <= int.Parse(Program.settings.Univers.GalaxyCount);
-                bool univers_being_scanned_on_negative_offset = galaxyFrom - galaxy_offset > 0;
-
-                if (!univers_being_scanned_on_positive_offset && !univers_being_scanned_on_negative_offset)
-                {
-                    // scan of the univers ends.
-                    break;
-                }
-
-                for (int solarSystem_offset = 0; solarSystem_offset < int.Parse(Program.settings.Univers.SolarSystemCount); solarSystem_offset++)
-                {
-                    bool solar_system_being_scanned_on_positive_offset = solarSystemFrom + solarSystem_offset <= int.Parse(Program.settings.Univers.SolarSystemCount);
-                    bool solar_system_being_scanned_on_negative_offset = solarSystemFrom - solarSystem_offset > 0;
-                    
-                    if (!solar_system_being_scanned_on_positive_offset && !solar_system_being_scanned_on_negative_offset)
-                    {
-                        // scan of the current galaxy ends
-                        break;
-                    }
-
-                    for (int position_offset = 0; position_offset <= 15; position_offset++)
-                    {
-                        bool planets_being_scanned_on_positive_offset = positionFrom + position_offset <= 16;
-                        if (univers_being_scanned_on_positive_offset && solar_system_being_scanned_on_positive_offset && planets_being_scanned_on_positive_offset)
-                        {
-                            TargetPlanet(galaxyFrom + galaxy_offset, solarSystemFrom + solarSystem_offset, positionFrom + position_offset);
-                            if(ScanPrerogative.Invoke())
-                            {
-                                validCoordinates.Add(new Coordinates(galaxyFrom + galaxy_offset, solarSystemFrom + solarSystem_offset, positionFrom + position_offset));
-                            }
-                        }
-
-                        bool planets_being_scanned_on_negative_offset = positionFrom - position_offset > 0;
-                        if (univers_being_scanned_on_negative_offset && solar_system_being_scanned_on_negative_offset && planets_being_scanned_on_negative_offset)
-                        {
-                            TargetPlanet(galaxyFrom - galaxy_offset, solarSystemFrom - solarSystem_offset, positionFrom - position_offset);
-                            if(ScanPrerogative.Invoke())
-                            {   
-                                validCoordinates.Add(new Coordinates(galaxyFrom - galaxy_offset, solarSystemFrom - solarSystem_offset, positionFrom - position_offset));
-                            }
-                        }
-
-                        if(planets_being_scanned_on_positive_offset && planets_being_scanned_on_negative_offset)
-                        {
-                            //scan of the current solar system ends
-                            break;
-                        }
-                    }
-                }
-            }
-
-            return validCoordinates;
-        }
-#endregion
-        public Coordinates FindNearestTargetType(TargetStatus status)
-        {
-            List<Coordinates> list_result = ScanNearest(() => {return GetStatus() == status;});
-            if(list_result.Count > 0)
-            {
-                return list_result[0];
-            }
-
-            return null;
-        }
-
-        public Coordinates FindNearestInSolarSystem_targetType(TargetStatus status)
-        {
-            ScanOptions scanOptions = new();
-            scanOptions.inRange = ScanOptions.InRange.solarSystem_of_the_planet_which_scans & ScanOptions.InRange.nearest;
-            scanOptions.range = new();
-            scanOptions.range.First().min = 1;
-            scanOptions.range.First().max = 16;
-
-            List<Coordinates> list_result = ScanSolarSystemInRange(() => {return GetStatus() == status;}, scanOptions);
-            
-            if(list_result.Count > 0)
-            {
-                return list_result[0];
-            }
-
-            return null;
-        }
-
-        public Coordinates FindNearestInTheGalaxy_targetType(TargetStatus status)
-        {
-            ScanOptions scanOptions = new();
-            scanOptions.inRange = ScanOptions.InRange.solarSystem_of_the_planet_which_scans & ScanOptions.InRange.nearest;
-            scanOptions.range.First().min = 1;
-            scanOptions.range.First().max = 16;
-            List<Coordinates> list_result = ScanPositionInRange(() => {return GetStatus() == status;}, scanOptions);
-            
-            if(list_result.Count > 0)
-            {
-                return list_result[0];
-            }
-
-            return null;
         }
 
         public void SendFleet()
